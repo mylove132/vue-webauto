@@ -5,10 +5,9 @@
                 <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col" style="margin-left: -30px">
                     <div class="tm-bg-primary-dark tm-block tm-block-products">
                         <div class="tm-product-table-container">
-                            <table class="table table-hover tm-table-small tm-product-table" style='table-layout: fixed'>
+                            <table class="table table-hover tm-table-small tm-product-table" style=''>
                                 <thead>
                                 <tr>
-                                    <th scope="col">&nbsp;</th>
                                     <th  nowrap="nowrap" scope="col">脚本名称</th>
                                     <th nowrap="nowrap" scope="col">请求方式</th>
                                     <th nowrap="nowrap" scope="col">接口类型</th>
@@ -28,10 +27,9 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="script in scriptList">
-                                    <th scope="row"><input type="checkbox"/></th>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.pre_interface_name}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{reuqetType[script.pre_interface_request_type]}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{interfaceType[script.pre_type]}},
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{interfaceType[script.pre_type]}}
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.create_time}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.update_time}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.pre_time}}</td>
@@ -42,17 +40,17 @@
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.pre_interface_param_type}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.pre_interface_param_value}}</td>
                                     <td>
-                                        <a href="#" class="tm-product-delete-link" @click="delModule(module.id)">
+                                        <a href="#" class="tm-product-delete-link" @click="delScript(script.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="editModal(module)" class="tm-product-delete-link" >
+                                        <a href="#" @click="editScript(script)" class="tm-product-delete-link" >
                                             <i class="fa fa-align-left tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="runProject(module.id)" class="tm-product-delete-link">
+                                        <a href="#" @click="runScript(script.id)" class="tm-product-delete-link">
                                             <i class="fa fa-play-circle tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -71,8 +69,8 @@
                 <p class="text-center text-white mb-0 px-4 small">
                     Copyright &copy; <b>2018</b> All rights reserved.
 
-                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect
-                    from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="模板之家">OK教育</a> - Collect
+                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
                 </p>
             </div>
         </footer>
@@ -84,6 +82,8 @@
         name: "Scripts",
         data(){
             return {
+                id:0,
+                headerIndex:0,
                 scriptList:[],
                 reuqetType:{
                     1:"GET",
@@ -100,6 +100,9 @@
         created:function () {
            this.getScriptsList()
         },
+        mounted:function(){
+
+        },
         methods:{
             getScriptsList:function () {
                 this.$fetch(this.$api.queryScriptUrl+this.$route.query.module_id).then(response => {
@@ -112,6 +115,47 @@
                     query:{
                         module_id:this.$route.query.module_id
                     }
+                })
+            },
+            delScript:function (id) {
+                let self = this
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to delete this!",
+                    type: 'warning',
+                    background:'#EEEEE0',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#f5a623',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function(isConfirm) {
+                    if (isConfirm) {
+                        self.$del(self.$api.scriptUrl+id).then(response => {
+                            if (response.code == 0) {
+                                swal(
+                                    'Deleted!',
+                                    'this script have delete.',
+                                    'success'
+                                );
+                                self.getScriptsList();
+                            }
+                        })
+                    }
+                })
+            },
+            editScript:function (script) {
+                //$('#mainModal').modal()
+                this.$router.push({
+                    path:'editScript',
+                    query:{
+                        script:script,
+                        module_id:this.$route.query.module_id
+                    }
+                })
+            },
+            runScript:function (id) {
+                this.$fetch(this.$api.execScriptUrl+id).then(response => {
+
                 })
             }
         }

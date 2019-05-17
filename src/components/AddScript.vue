@@ -57,8 +57,29 @@
                                                 <label class="control-label" for="requestParam">参数</label>
                                                 <div class="controls">
                                                     <textarea type="text" id="requestParam" placeholder="请输入参数（json格式）" class="input-xlarge" style="width: 200px;height: 80px"></textarea>
-                                                    <p class="help-block"></p>
                                                 </div>
+                                            </div>
+                                            <div class="control-group http">
+                                                <label class="control-label"></label>
+                                                <div class="controls">
+                                                    <!-- Multiple Checkboxes -->
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="isCookie" value="是否包含cookie" @click="addCookie()">
+                                                        是否包含cookie
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="control-group http">
+                                                <label class="control-label"></label>
+                                                <div class="controls">
+                                                    <!-- Multiple Checkboxes -->
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="isHeader" value="是否包含header" @click="addHeader()">
+                                                        是否包含header
+                                                    </label>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -154,14 +175,49 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" id="addCookieModal" role="dialog" aria-labelledby="gridSystemModalLabel" >
+                <div class="modal-dialog modal-lg" role="document" style="width: 1200px">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #567086;">
+                            <h4 class="modal-title" id="gridSystemModalLabel1" style="color: white">添加Cookie</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body cookieBody" style="background-color: #2c3e50;">
+                            <button type="button" class="btn btn-default addBtn" style="float: left" @click="addCookieBtn()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="modal-footer" style="background-color: #567086;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color:#ffeeba;border-radius: 10px">Close</button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 10px" id="addCookieSubmit">Add Cookie</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" id="addHeaderModal" role="dialog" aria-labelledby="gridSystemModalLabel" >
+                <div class="modal-dialog modal-lg" role="document" style="width: 1200px">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #567086;">
+                            <h4 class="modal-title" id="gridSystemModalLabel12" style="color: white">添加Header</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body header-body" style="background-color: #2c3e50;">
+                            <button type="button" class="btn btn-default addBtn" style="float: left" @click="addHeaderBtn()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            <label style="color: white">如需使用随机字符串用$random代替</label>
+                        </div>
+                        <div class="modal-footer" style="background-color: #567086;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color:#ffeeba;border-radius: 10px">Close</button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 10px" id="addHeaderSubmit">Add Header</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
         </div>
         <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
                 <p class="text-center text-white mb-0 px-4 small">
                     Copyright &copy; <b>2018</b> All rights reserved.
 
-                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect
-                    from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="模板之家">OK教育</a> - Collect
+                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
                 </p>
             </div>
         </footer>
@@ -173,6 +229,8 @@
         name: "AddScript",
         data() {
             return {
+                id:0,
+                headerIndex:0,
                 bg1: 'rgba(120, 155, 255, 0.1)',
                 bg2: 'rgba(210,105,30, 0.1)',
                 bg3: 'rgba(0,100,0, 0.1)',
@@ -288,10 +346,18 @@
             },
             addScript:function () {
                 if(this.isShowHttp === true){
-                    this.$post(this.$api.addcriptUrl,this.qs.stringify({
+                    let cookies;
+                    let header;
+                    if ($('#isCookie').prop("checked") == true){
+                        cookies = localStorage.getItem('cookieStore')
+                        header = localStorage.getItem('headerStore')
+                    }
+                    this.$post(this.$api.scriptUrl,this.qs.stringify({
                         pre_interface_name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
                         pre_type:1,
+                        cookies:cookies,
+                        header:header,
                         pre_interface_request_type:$('#requestType').val(),
                         pre_interface_param_value:$('#requestParam').val(),
                         pre_interface_timeout_time:$('#timeOut').val(),
@@ -304,7 +370,7 @@
                         }
                     })
                 }else if (this.isShowDubbo === true){
-                    this.$post(this.$api.addcriptUrl,this.qs.stringify({
+                    this.$post(this.$api.scriptUrl,this.qs.stringify({
                         pre_interface_name:$('#interfaceName').val(),
                         pre_interface_param_type:$('#paramType').val(),
                         pre_type:2,
@@ -322,7 +388,7 @@
                         }
                     })
                 }else if(this.isShowSocket == true){
-                    this.$post(this.$api.addcriptUrl,this.qs.stringify({
+                    this.$post(this.$api.scriptUrl,this.qs.stringify({
                         pre_interface_name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
                         pre_type:3,
@@ -346,6 +412,84 @@
                         module_id:this.$route.query.module_id
                     }
                 })
+            },
+            addCookie:function () {
+                $("#addCookieModal").modal()
+            },
+            addHeader:function(){
+                $('#addHeaderModal').modal()
+            },
+            addCookieBtn:function () {
+                let index = this.id
+                let $cookieHtml = '<div class="form-group cookieHead" style="clear: both;">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px">\n' +
+                    '                                    <input class="form-control cookieKey" name="cookieName" placeholder="cookie key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <input class="form-control cookieValue" name="cookieValue" placeholder="cookie value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('.cookieBody').append($cookieHtml)
+                index++;
+                this.id = index;
+                let idNum = this.id
+                let self = this
+                document.getElementsByClassName('removeButton')[idNum-1].onclick = function () {
+                    document.getElementsByClassName('cookieHead')[idNum-1].remove();
+                    self.id -= 1
+                }
+                document.getElementById('addCookieSubmit').onclick = function () {
+                    localStorage.removeItem('cookieStore')
+                    let cookieKey = document.getElementsByClassName('cookieKey')
+                    let cookieValue = document.getElementsByClassName('cookieValue')
+                    let cookieStore = [];
+                    for (let i = 0;i<cookieKey.length;i++){
+                        cookieStore.push({"cookieKey":cookieKey[i].value,"cookieValue":cookieValue[i].value})
+                    }
+                    localStorage.setItem('cookieStore',JSON.stringify(cookieStore))
+                    $("#addCookieModal").modal('hide')
+                }
+            },
+            addHeaderBtn:function () {
+                let index = this.headerIndex
+                let $cookieHtml = '<div class="form-group headers" style="clear: both;">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px">\n' +
+                    '                                    <input class="form-control headerKey" name="headerName" placeholder="header key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <input class="form-control headerValue" name="headerValue" placeholder="header value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeHeaderButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('.header-body').append($cookieHtml)
+                index++;
+                this.headerIndex = index;
+                let idNum = this.headerIndex
+                let self = this
+                document.getElementsByClassName('removeHeaderButton')[idNum-1].onclick = function () {
+                    document.getElementsByClassName('headers')[idNum-1].remove();
+                    self.headerIndex -= 1
+                }
+                document.getElementById('addHeaderSubmit').onclick = function () {
+                    localStorage.removeItem('headerStore')
+                    let headerKey = document.getElementsByClassName('headerKey')
+                    let headerValue = document.getElementsByClassName('headerValue')
+                    let headerStore = [];
+                    for (let i = 0;i<headerKey.length;i++){
+                        headerStore.push({"headerKey":headerKey[i].value,"headerValue":headerValue[i].value})
+                    }
+                    localStorage.setItem('headerStore',JSON.stringify(headerStore))
+                    $("#addHeaderModal").modal('hide')
+                }
             }
         }
     }

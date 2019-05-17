@@ -5,12 +5,12 @@
                 <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col" style="margin-left: -30px">
                     <div class="tm-bg-primary-dark tm-block tm-block-products">
                         <div class="tm-product-table-container" >
-                            <table class="table table-hover tm-table-small tm-product-table" style='table-layout: fixed'>
+                            <table class="table table-hover tm-table-small tm-product-table" style=''>
                                 <thead>
                                 <tr>
-                                    <th scope="col">&nbsp;</th>
                                     <th scope="col">项目</th>
                                     <th scope="col">项目名称</th>
+                                    <th scope="col">创建人</th>
                                     <th scope="col">创建时间</th>
                                     <th scope="col">更新时间</th>
                                     <th scope="col">项目环境</th>
@@ -22,9 +22,9 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="module in moduleList">
-                                    <th scope="row"><input type="checkbox"/></th>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleType[module.module_type]}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{module.module_name}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.user.username}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.create_time}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.update_time}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleEnv[module.module_env]}}</td>
@@ -149,8 +149,8 @@
                 <p class="text-center text-white mb-0 px-4 small">
                     Copyright &copy; <b>2018</b> All rights reserved.
 
-                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect
-                    from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="模板之家">OK教育</a> - Collect
+                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
                 </p>
             </div>
         </footer>
@@ -184,7 +184,7 @@
         },
         methods: {
             getProjectByUser: function () {
-                this.$fetch(this.$api.projectUrl + localStorage.user).then(response => {
+                this.$fetch(this.$api.projectListUrl).then(response => {
                     console.log(response)
                     this.moduleList = response.moduleList
                 })
@@ -234,12 +234,17 @@
                 })).then(response => {
                     if (response.code == 0){
                         $('#mainModal').modal('hide')
+                        swal(
+                            'Edited!',
+                            'this project save done.',
+                            'success'
+                        );
                         this.getProjectByUser()
                     }else {
-                        swal ( "Oops" ,  response.msg ,  "error" )
+                        swal ( "Error" ,  response.msg ,  "error" )
                     }
                 }).catch( error => {
-                    swal ( "Oops" ,  error ,  "error" )
+                    swal ( "Error" ,  error ,  "error" )
                 })
             },
             addModule:function () {
@@ -257,10 +262,10 @@
                         $('#addModal').modal('hide')
                         this.getProjectByUser()
                     }else {
-                        swal ( "Oops" ,  response.msg ,  "error" )
+                        swal ( "Error" ,  response.msg ,  "error" )
                     }
                 }).catch( error => {
-                    swal ( "Oops" ,  error ,  "error" )
+                    swal ( "Error" ,  error ,  "error" )
                 })
             },
             runProject:function (id) {
