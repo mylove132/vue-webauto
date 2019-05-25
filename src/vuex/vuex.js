@@ -26,6 +26,7 @@ const store = new Vuex.Store({
         logout(state) {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
+            localStorage.removeItem('user_id')
             state.token = ''
             state.user = ''
         },
@@ -37,9 +38,11 @@ const store = new Vuex.Store({
                 axios.post(api.login, user)
                     .then(resp => {
                         const token = resp.data.data.token
-                        const user = resp.data.data.user
+                        const user = resp.data.data.name
+                        const id = resp.data.data.id
                         localStorage.setItem('token', token)
                         localStorage.setItem('user', user)
+                        localStorage.setItem('user_id', id)
                         // 更新token
                         commit('auth_success', token, user)
                         resolve(resp)

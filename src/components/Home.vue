@@ -1,14 +1,38 @@
 <template>
     <div id="home">
         <div class="container mt-5">
+            <div class="row">
+                <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-12 " style=" vertical-align: middle;height:100px;margin-left: -30px">
+                    <select style="width: 150px;height: 40px;border-radius: 3px" id="select_platform" @change="filterPlatform">
+                        <option value="0">==请选择平台==</option>
+                        <option value="1">教师空间</option>
+                        <option value="2">教师pad</option>
+                        <option value="3">学生pad</option>
+                        <option value="4">商城</option>
+                    </select>
+                    <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px" id="select_env" @change="filterEnv">
+                        <option value="0">==请选择环境==</option>
+                        <option value="1">dev</option>
+                    <option value="2">docker-dev</option>
+                    <option value="3">docker-hotfix</option>
+                    <option value="4">stress</option>
+                </select>
+                    <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px" id="select_user" @change="filterUser">
+                        <option value="0">==请选择用户==</option>
+                        <option v-for="user in users" v-bind:value="user.id">{{user.name}}</option>
+                    </select>
+                    <input type="text" style="width: 160px;height: 40px;margin-left: 100px;border-radius: 3px" id="search" placeholder="模糊匹配项目名" v-on:keyup="search">
+                    <input type="button" value="SEARCH" style="height: 40px;background-color: #f5a623;border-radius: 3px" @click="search">
+                </div>
+            </div>
             <div class="row tm-content-row">
-                <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col" style="margin-left: -30px">
+                <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col" style="margin-left: -30px;margin-top: -30px">
                     <div class="tm-bg-primary-dark tm-block tm-block-products">
                         <div class="tm-product-table-container" >
                             <table class="table table-hover tm-table-small tm-product-table" style=''>
                                 <thead>
                                 <tr>
-                                    <th scope="col">项目</th>
+                                    <th scope="col">平台</th>
                                     <th scope="col">项目名称</th>
                                     <th scope="col">创建人</th>
                                     <th scope="col">创建时间</th>
@@ -22,13 +46,13 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="module in moduleList">
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleType[module.module_type]}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{module.module_name}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.user.username}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.create_time}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleType[module.type]}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{module.name}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.username}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.ctime}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.update_time}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleEnv[module.module_env]}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.module_desc}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{moduleEnv[module.env]}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.desc}}</td>
                                     <td>
                                         <a href="#" class="tm-product-delete-link" @click="delModule(module.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
@@ -106,7 +130,7 @@
                                         <div class="row" style="margin-left: 150px;margin-top: 35px">
                                             <div class="col-md-4">
                                                 <nobr>
-                                                    <strong style="color: white">项目:&nbsp;&nbsp;  </strong>
+                                                    <strong style="color: white">平台:&nbsp;&nbsp;  </strong>
                                                     <select style="width: 130px" id="addModuleType">
                                                         <option value="1">教师空间</option>
                                                         <option value="2">教师pad</option>
@@ -176,17 +200,25 @@
                     3:'docker-hotfix',
                     4:'stress'
                 },
-                moduleList: []
+                moduleList: [],
+                users:[]
             }
         },
         created: function () {
-            this.getProjectByUser()
+            this.getProject();
+            this.$fetch(this.$api.userUrl).then(resonse => {
+                    console.log(resonse.data)
+                    if (resonse.code == 0){
+                        this.users =  resonse.data
+                    }else {
+                        return []
+                    }
+                })
         },
         methods: {
-            getProjectByUser: function () {
-                this.$fetch(this.$api.projectListUrl).then(response => {
-                    console.log(response)
-                    this.moduleList = response.moduleList
+            getProject: function () {
+                this.$fetch(this.$api.projectUrl).then(response => {
+                    this.moduleList = response.data
                 })
             },
             delModule: function (id) {
@@ -202,14 +234,14 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then(function(isConfirm) {
                     if (isConfirm) {
-                        self.$del(self.$api.projectDetailUrl + id).then(response => {
+                        self.$del(self.$api.projectUrl + id+'/').then(response => {
                             if (response.code == 0) {
                                 swal(
                                     'Deleted!',
                                     'this project have delete.',
                                     'success'
                                 );
-                                self.getProjectByUser()
+                                self.getProject()
                             }
                         })
                     }
@@ -218,19 +250,18 @@
             },
             editModal:function(module){
                 $('#mainModal').modal()
-                $('#moduleName').val(module.module_name)
-                $('#moduleDesc').val(module.module_desc)
-                $('#moduleType').val(module.module_type)
-                $('#moduleEnv').val(module.module_env)
+                $('#moduleName').val(module.name)
+                $('#moduleDesc').val(module.desc)
+                $('#moduleType').val(module.type)
+                $('#moduleEnv').val(module.env)
             },
             editProject: function (module) {
-                this.$post(this.$api.projectDetailUrl, this.qs.stringify({
-                    id: module.id,
-                    module_name: $('#moduleName').val(),
-                    module_desc: $('#moduleDesc').val(),
-                    module_type: $('#moduleType').val(),
-                    module_env: $('#moduleEnv').val(),
-                    user: localStorage.user
+                this.$put(this.$api.projectUrl+module.id+"/", this.qs.stringify({
+                    name: $('#moduleName').val(),
+                    desc: $('#moduleDesc').val(),
+                    type: $('#moduleType').val(),
+                    env: $('#moduleEnv').val(),
+                    user: localStorage.user_id
                 })).then(response => {
                     if (response.code == 0){
                         $('#mainModal').modal('hide')
@@ -239,7 +270,7 @@
                             'this project save done.',
                             'success'
                         );
-                        this.getProjectByUser()
+                        this.getProject()
                     }else {
                         swal ( "Error" ,  response.msg ,  "error" )
                     }
@@ -251,16 +282,21 @@
                 $('#addModal').modal()
             },
             addProject: function () {
-                this.$post(this.$api.projectDetailUrl, this.qs.stringify({
-                    module_name: $('#addModuleName').val(),
-                    module_desc: $('#addModuleDesc').val(),
-                    module_type: $('#addModuleType').val(),
-                    module_env: $('#addModuleEnv').val(),
-                    user: localStorage.user
+                this.$post(this.$api.projectUrl, this.qs.stringify({
+                    name: $('#addModuleName').val(),
+                    desc: $('#addModuleDesc').val(),
+                    type: $('#addModuleType').val(),
+                    env: $('#addModuleEnv').val(),
+                    user: localStorage.user_id
                 })).then(response => {
                     if (response.code == 0){
+                        swal(
+                            'Add!',
+                            'this project have added.',
+                            'success'
+                        );
                         $('#addModal').modal('hide')
-                        this.getProjectByUser()
+                        this.getProject()
                     }else {
                         swal ( "Error" ,  response.msg ,  "error" )
                     }
@@ -268,10 +304,97 @@
                     swal ( "Error" ,  error ,  "error" )
                 })
             },
+            filterPlatform:function(){
+                const platformIndex = $('#select_platform').val();
+                const envIndex = $('#select_env').val();
+                const userIndex = $('#select_user').val();
+                    if (envIndex != 0 && userIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(envIndex != 0 && userIndex == 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(envIndex == 0 && userIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                        this.$fetch(this.$api.projectUrl).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }
+                    else{
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                }
+            },
+            filterEnv:function(){
+                const platformIndex = $('#select_platform').val();
+                const envIndex = $('#select_env').val();
+                const userIndex = $('#select_user').val();
+                    if (platformIndex != 0 && userIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex != 0 && userIndex == 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex).then(response => {
+                            console.log(response)
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex == 0 && userIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                        this.$fetch(this.$api.projectUrl).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else{
+                        this.$fetch(this.$api.projectUrl+"?env="+envIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                }
+            },
+            filterUser:function(){
+                const platformIndex = $('#select_platform').val();
+                const envIndex = $('#select_env').val();
+                const userIndex = $('#select_user').val();
+                    if (platformIndex != 0 && envIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex != 0 && envIndex == 0){
+                        this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&user="+userIndex).then(response => {
+                            console.log(response)
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex == 0 && envIndex != 0){
+                        this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                        this.$fetch(this.$api.projectUrl).then(response => {
+                            this.moduleList = response.data
+                        })
+                    }else{
+                        this.$fetch(this.$api.projectUrl+"?user="+userIndex).then(response => {
+                            this.moduleList = response.data
+                        })
+                }
+            },
+            search:function(){
+                const search_text = $('#search').val()
+                this.$fetch(this.$api.projectUrl+"?search="+search_text).then(response => {
+                    this.moduleList = response.data
+                })
+            },
             runProject:function (id) {
-                this.$fetch(this.$api.queryScriptUrl+id).then(response => {
+                this.$fetch(this.$api.scriptUrl+"?project="+id).then(response => {
                     console.log(response)
-                    if (response.code == 0 && (response.scriptsList).length == 0){
+                    if (response.code == 0 && (response.data).length == 0){
                         let self = this
                         swal({
                             title: 'Are you need add scripts?',
@@ -293,7 +416,7 @@
                             }
                         })
                     }
-                    else if (response.code == 0 && (response.scriptsList).length != 0) {
+                    else if (response.code == 0 && (response.data).length != 0) {
                         this.$router.push({
                             name:'scripts',
                             query:{

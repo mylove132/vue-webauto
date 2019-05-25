@@ -56,7 +56,7 @@
         methods: {
             login: function () {
                 let params = this.qs.stringify({
-                    user: $('#username').val(),
+                    email: $('#username').val(),
                     password: $("#password").val()
                 });
                 this.$store.dispatch('Login',params).then(response => {

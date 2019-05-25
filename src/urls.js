@@ -1,10 +1,8 @@
 const base = {
     login : '/api/login/',
-    projectUrl: '/api/module/user/',
-    projectListUrl: '/api/module/list/',
-    projectDetailUrl:'/api/module/',
-    queryScriptUrl:'/api/testScripts/mo/',
-    scriptUrl:'/api/testScripts/',
+    projectUrl: '/api/project/',
+    userUrl:'/api/user/',
+    scriptUrl:'/api/script/',
     execScriptUrl:'/api/execScripts/'
 }
 

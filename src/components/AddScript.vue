@@ -59,6 +59,14 @@
                                                     <textarea type="text" id="requestParam" placeholder="请输入参数（json格式）" class="input-xlarge" style="width: 200px;height: 80px"></textarea>
                                                 </div>
                                             </div>
+                                            <div class="control-group http socket dubbo">
+
+                                                <!-- Text input-->
+                                                <label class="control-label" for="requestParam">断言</label>
+                                                <div class="controls">
+                                                    <textarea type="text" id="assert" placeholder="请输入响应断言" class="input-xlarge" style="width: 200px;height: 80px"></textarea>
+                                                </div>
+                                            </div>
                                             <div class="control-group http">
                                                 <label class="control-label"></label>
                                                 <div class="controls">
@@ -350,57 +358,70 @@
                     let header;
                     if ($('#isCookie').prop("checked") == true){
                         cookies = localStorage.getItem('cookieStore')
+                    }
+                    if ($('#isHeader').prop("checked") == true){
                         header = localStorage.getItem('headerStore')
                     }
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
-                        pre_interface_name:$('#interfaceName').val(),
+                        name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
-                        pre_type:1,
-                        cookies:cookies,
+                        protocol:1,
+                        assert_text:$('#assert').val(),
+                        cookie:cookies,
                         header:header,
-                        pre_interface_request_type:$('#requestType').val(),
-                        pre_interface_param_value:$('#requestParam').val(),
-                        pre_interface_timeout_time:$('#timeOut').val(),
+                        request_type:$('#requestType').val(),
+                        params:$('#requestParam').val(),
+                        time_out:$('#timeOut').val(),
                         pre_time:$('#pre_time').val(),
-                        pre_num:$('#pre_num').val(),
-                        module_id:this.module_id
+                        pre_number:$('#pre_num').val(),
+                        project:this.module_id,
+                        user:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){
                             swal ( "添加成功" ,  $('#interfaceName').val()+"添加成功!" ,  "success" )
+                        }else {
+                            swal ( "错误" ,  response.msg ,  "error" )
                         }
                     })
                 }else if (this.isShowDubbo === true){
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
-                        pre_interface_name:$('#interfaceName').val(),
-                        pre_interface_param_type:$('#paramType').val(),
-                        pre_type:2,
-                        pre_interface:$('#interface').val(),
-                        pre_interface_method:$('#methodName').val(),
-                        pre_interface_version:$('#interfaceVersion').val(),
-                        pre_interface_param_value:$('#requestParam').val(),
-                        pre_interface_timeout_time:$('#timeOut').val(),
+                        name:$('#interfaceName').val(),
+                        param_type:$('#paramType').val(),
+                        protocol:2,
+                        assert_text:$('#assert').val(),
+                        ins:$('#interface').val(),
+                        method:$('#methodName').val(),
+                        version:$('#interfaceVersion').val(),
+                        params:$('#requestParam').val(),
+                        time_out:$('#timeOut').val(),
                         pre_time:$('#pre_time').val(),
-                        pre_num:$('#pre_num').val(),
-                        module_id:this.module_id
+                        pre_number:$('#pre_num').val(),
+                        project:this.module_id,
+                        user:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){
                             swal ( "添加成功" ,  $('#interfaceName').val()+"添加成功!" ,  "success" )
+                        }else {
+                            swal ( "错误" ,  response.msg ,  "error" )
                         }
                     })
                 }else if(this.isShowSocket == true){
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
-                        pre_interface_name:$('#interfaceName').val(),
+                        name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
-                        pre_type:3,
-                        pre_interface_request_type:$('#requestType').val(),
-                        pre_interface_param_value:$('#requestParam').val(),
-                        pre_interface_timeout_time:$('#timeOut').val(),
+                        protocol:3,
+                        request_type:$('#requestType').val(),
+                        params:$('#requestParam').val(),
+                        time_out:$('#timeOut').val(),
                         pre_time:$('#pre_time').val(),
-                        pre_num:$('#pre_num').val(),
-                        module_id:this.module_id
+                        pre_number:$('#pre_num').val(),
+                        project:this.module_id,
+                        user:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){
                             swal ( "添加成功" ,  $('#interfaceName').val()+"添加成功!" ,  "success" )
+                        }else {
+                            swal ( "错误" ,  response.msg ,  "error" )
                         }
                     })
                 }
