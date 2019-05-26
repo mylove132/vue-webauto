@@ -61,14 +61,14 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="margin-left: 10px;margin-top: 15px">
-                                            <div class="control-group http" id="cookieList">
+                                            <div class="control-group http row" id="cookieList" style="height: 200px;width: 550px;overflow-y:auto; overflow-x:auto;">
                                                 <div>
-                                                    <button type="button" class="btn btn-default addBtn" style="border-radius:6px;float: left;margin-bottom: 5px" id="addBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-default addBtn" style="border-radius:6px;margin-left:-450px;margin-bottom: 5px" id="addBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                 </div>
                                             </div>
-                                            <div class="control-group http" id="headerList">
+                                            <div class="control-group http row" id="headerList" style="height: 200px;width: 550px;overflow-y:auto; overflow-x:auto;">
                                                 <div>
-                                                    <button type="button" class="btn btn-default addBtn" style="border-radius:6px;float: left;margin-top: 5px;margin-bottom: 5px" id="addHeaderBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-default addBtn" style="border-radius:6px;margin-left:-450px;margin-bottom: 5px" id="addHeaderBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -179,18 +179,18 @@
             this.module_id = this.$route.query.module_id
             let script = this.$script
             console.log(this.$script)
+            console.log(script.protocol)
             $('.control-group').css('display','none')
-            if (script.pre_type == 1){
+            if (script.protocol == 1){
                 $('.http').css('display','block')
-                $('#interfaceName').val(script.pre_interface_name)
-                $('#response_assert').val(script.response_assert)
+                $('#interfaceName').val(script.name)
+                $('#response_assert').val(script.assert_text)
                 $('#requestUrl').val(script.url)
-                $('#requestType').val(script.pre_interface_request_type)
-                $('#requestType').val(script.pre_interface_request_type)
-                $('#pre_num').val(script.pre_num)
-                $('#timeOut').val(script.pre_interface_timeout_time)
+                $('#requestType').val(script.request_type)
+                $('#pre_num').val(script.pre_number)
+                $('#timeOut').val(script.time_out)
                 $('#pre_time').val(script.pre_time)
-                $('#requestParam').val(script.pre_interface_param_value)
+                $('#requestParam').val(script.params)
                 let $cookieHtml = '<div class="form-group cookieHead" style="clear: both">\n' +
                     '                                <div class="col-sm-2" style="float: left;margin-left: -20px">\n' +
                     '                                    <input class="form-control cookieKey" name="cookieName" placeholder="cookie key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
@@ -204,10 +204,10 @@
                     '                                    </button>\n' +
                     '                                </div>\n' +
                     '                            </div>';
-                console.log(script.cookies)
+                console.log(script.cookie)
                 let _self = this
-                if(script.cookies != null) {
-                    JSON.parse(script.cookies).forEach(function (cookie, index) {
+                if(script.cookie != null) {
+                    JSON.parse(script.cookie).forEach(function (cookie, index) {
                         $('#cookieList').append($cookieHtml)
                         document.getElementsByClassName('cookieKey')[index].value = cookie.cookieKey
                         document.getElementsByClassName('cookieValue')[index].value = cookie.cookieValue
@@ -243,7 +243,7 @@
                     '                                    </button>\n' +
                     '                                </div>\n' +
                     '                            </div>';
-                console.log(script.header)
+
                 if (script.header != null) {
                     JSON.parse(script.header).forEach(function (header, index) {
                         $('#headerList').append($headerHtml)
@@ -269,6 +269,9 @@
                     }
                 }
             }
+            else if (script.protocol == 2){
+                $('.dubbo').css('display','block')
+            }
         },
         methods:{
             editScriptSubmit:function () {
@@ -283,20 +286,20 @@
                 for (let i = 0;i<headerKey.length;i++){
                     this.hStore.push({"headerKey":headerKey[i].value,"headerValue":headerValue[i].value})
                 }
-                this.$post(this.$api.scriptUrl,this.qs.stringify({
-                    id:script.id,
-                    pre_interface_name:$('#interfaceName').val(),
+                this.$put(this.$api.scriptUrl+script.id+"/",this.qs.stringify({
+                    name:$('#interfaceName').val(),
                     url:$('#requestUrl').val(),
-                    pre_type:1,
-                    cookies:JSON.stringify(this.cStore),
+                    protocol:1,
+                    cookie:JSON.stringify(this.cStore),
                     header:JSON.stringify(this.hStore),
-                    response_assert:$('#response_assert').val(),
-                    pre_interface_request_type:$('#requestType').val(),
-                    pre_interface_param_value:$('#requestParam').val(),
-                    pre_interface_timeout_time:$('#timeOut').val(),
+                    assert_text:$('#response_assert').val(),
+                    request_type:$('#requestType').val(),
+                    params:$('#requestParam').val(),
+                    time_out:$('#timeOut').val(),
                     pre_time:$('#pre_time').val(),
-                    pre_num:$('#pre_num').val(),
-                    module_id:this.$route.query.module_id
+                    pre_number:$('#pre_num').val(),
+                    project:this.$route.query.module_id,
+                    user:localStorage.user_id
                 })).then(response => {
                     console.log(response)
                     if(response.code == 0){
@@ -307,6 +310,8 @@
                                 module_id:this.module_id
                             }
                         })
+                    }else {
+                        swal ( "Error" ,  response.msg ,  "error" )
                     }
                 })
             },

@@ -22,7 +22,7 @@
                         <option v-for="user in users" v-bind:value="user.id">{{user.name}}</option>
                     </select>
                     <input type="text" style="width: 160px;height: 40px;margin-left: 100px;border-radius: 3px" id="search" placeholder="模糊匹配项目名" v-on:keyup="search">
-                    <input type="button" value="SEARCH" style="height: 40px;background-color: #f5a623;border-radius: 3px" @click="search">
+                    <input type="button" value="SEARCH" style="height: 40px;background-color: #f5a623;border-radius: 3px;color: white" @click="search">
                 </div>
             </div>
             <div class="row tm-content-row">
@@ -320,7 +320,7 @@
                         this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&user="+userIndex).then(response => {
                             this.moduleList = response.data
                         })
-                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                    }else if(platformIndex == 0 && envIndex == 0 && userIndex == 0){
                         this.$fetch(this.$api.projectUrl).then(response => {
                             this.moduleList = response.data
                         })
@@ -348,7 +348,7 @@
                         this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
                             this.moduleList = response.data
                         })
-                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                    }else if(platformIndex == 0 && envIndex == 0 && userIndex == 0){
                         this.$fetch(this.$api.projectUrl).then(response => {
                             this.moduleList = response.data
                         })
@@ -375,7 +375,7 @@
                         this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
                             this.moduleList = response.data
                         })
-                    }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
+                    }else if(platformIndex == 0 && envIndex == 0 && userIndex == 0){
                         this.$fetch(this.$api.projectUrl).then(response => {
                             this.moduleList = response.data
                         })

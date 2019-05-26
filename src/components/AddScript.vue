@@ -15,6 +15,17 @@
                                         <div class="col-md-4">
                                             <div class="control-group http dubbo socket">
                                                 <!-- Text input-->
+                                                <label class="control-label" for="requestType">项目</label>
+                                                <div class="controls">
+                                                    <select class="input-xlarge" style="width:200px;height: 30px;" id="project">
+                                                        <option value="0">==请选择项目==</option>
+                                                        <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
+                                                    </select>
+                                                </div>
+                                                <p></p>
+                                            </div>
+                                            <div class="control-group http dubbo socket">
+                                                <!-- Text input-->
                                                 <label class="control-label" for="interfaceName">接口名称</label>
                                                 <div class="controls">
                                                     <input type="text" id="interfaceName" style="width:200px" placeholder="请输入接口名称" class="input-xlarge">
@@ -245,8 +256,14 @@
                 isShowHttp:false,
                 isShowDubbo:false,
                 isShowSocket:false,
+                projectList:[],
                 module_id:this.$route.query.module_id
             }
+        },
+        created:function(){
+            this.$fetch(this.$api.projectUrl).then(response => {
+                this.projectList = response.data
+            });
         },
         mounted: function () {
             $('.control-group').css('display','none')
@@ -374,7 +391,7 @@
                         time_out:$('#timeOut').val(),
                         pre_time:$('#pre_time').val(),
                         pre_number:$('#pre_num').val(),
-                        project:this.module_id,
+                        project:$('#project').val(),
                         user:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){

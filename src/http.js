@@ -46,9 +46,14 @@ const errorHandle = (status, other) => {
         // 403 token过期
         // 清除token并跳转登录页
         case 403:
-            store.dispatch('LogOut');
-            store.push({ path: '/login' })
-            break;
+            if (other.detail != '' && other.detail == 'You do not have permission to perform this action.'){
+                swal ( "Error" ,  'not permission' ,  "warning" )
+                break;
+            }else {
+                store.dispatch('LogOut');
+                store.push({path: '/login'})
+                break;
+            }
         // 404请求不存在
         case 404:
             tip('请求的资源不存在');
@@ -86,7 +91,7 @@ instance.interceptors.response.use(
         const { response } = error;
         if (response) {
             // 请求已发出，但是不在2xx的范围
-            errorHandle(response.status, response.data.message);
+            errorHandle(response.status, response.data);
             return Promise.reject(response);
         } else {
             // 处理断网的情况

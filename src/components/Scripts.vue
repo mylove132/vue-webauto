@@ -4,25 +4,21 @@
             <div class="row tm-content-row">
                 <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-12 " style=" vertical-align: middle;height:100px;margin-left: -30px;">
                     <select style="width: 150px;height: 40px;border-radius: 3px" id="select_project" @change="filterProject">
-                        <option value="0">==请选择平台==</option>
-                        <option value="1">教师空间</option>
-                        <option value="2">教师pad</option>
-                        <option value="3">学生pad</option>
-                        <option value="4">商城</option>
+                        <option value="0">==请选择项目==</option>
+                        <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
                     </select>
-                    <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px" id="select_env" @change="filterProtocol">
-                        <option value="0">==请选择环境==</option>
-                        <option value="1">dev</option>
-                        <option value="2">docker-dev</option>
-                        <option value="3">docker-hotfix</option>
-                        <option value="4">stress</option>
+                    <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px" id="select_protocol" @change="filterProtocol">
+                        <option value="0">==请选择协议==</option>
+                        <option value="1">HTTP</option>
+                        <option value="2">DUBBO</option>
+                        <option value="3">SOCKET</option>
                     </select>
                     <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px" id="select_user" @change="filterUser">
                         <option value="0">==请选择用户==</option>
                         <option v-for="user in users" v-bind:value="user.id">{{user.name}}</option>
                     </select>
-                    <input type="text" style="width: 160px;height: 40px;margin-left: 100px;border-radius: 3px" id="search" placeholder="模糊匹配项目名" v-on:keyup="search">
-                    <input type="button" value="SEARCH" style="height: 40px;background-color: #f5a623;border-radius: 3px" @click="search">
+                    <input type="text" style="width: 160px;height: 40px;margin-left: 100px;border-radius: 3px" id="search" placeholder="模糊匹配脚本名" v-on:keyup="search">
+                    <input type="button" value="SEARCH" style="height: 40px;background-color: #f5a623;border-radius: 3px;color: white" @click="search">
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col" style="margin-left: -30px;margin-top: -40px">
                     <div class="tm-bg-primary-dark tm-block tm-block-products">
@@ -111,6 +107,8 @@
                 id:0,
                 headerIndex:0,
                 scriptList:[],
+                projectList:[],
+                users:[],
                 reuqetType:{
                     1:"GET",
                     2:"POST",
@@ -125,9 +123,19 @@
         },
         created:function () {
            this.getScriptsList()
+            this.$fetch(this.$api.projectUrl).then(response => {
+                this.projectList = response.data
+            });
+            this.$fetch(this.$api.userUrl).then(resonse => {
+                console.log(resonse.data)
+                if (resonse.code == 0){
+                    this.users =  resonse.data
+                }else {
+                    return []
+                }
+            })
         },
         mounted:function(){
-
         },
         methods:{
             getScriptsList:function () {
@@ -143,91 +151,129 @@
                     }
                 })
             },
-            filterProjet:function(){
-                const projectIndex = $('#filterProject').val();
-                const envIndex = $('#select_env').val();
+            filterProject:function(){
+                const projectIndex = $('#select_project').val();
+                const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (envIndex != 0 && userIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                if (protocolIndex != 0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&protocol="+protocolIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(envIndex != 0 && userIndex == 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(protocolIndex != 0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&protocol="+protocolIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(envIndex == 0 && userIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(protocolIndex == 0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
-                    this.$fetch(this.$api.projectUrl).then(response => {
-                        this.moduleList = response.data
+                }else if(projectIndex == 0 && protocolIndex == 0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl).then(response => {
+                        this.scriptList = response.data
+                    })
+                }else if(projectIndex == 0 && protocolIndex !=0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?protocol="+protocolIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                } else if(projectIndex == 0 && protocolIndex ==0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?user="+userIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                }else if(projectIndex == 0 && protocolIndex !=0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?user="+userIndex+"&protocol="+protocolIndex).then(response => {
+                        this.scriptList = response.data
                     })
                 }
                 else{
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex).then(response => {
-                        this.moduleList = response.data
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex).then(response => {
+                        this.scriptList = response.data
                     })
                 }
             },
-            filterEnv:function(){
-                const platformIndex = $('#select_platform').val();
-                const envIndex = $('#select_env').val();
+            filterProtocol:function(){
+                const projectIndex = $('#select_project').val();
+                const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (platformIndex != 0 && userIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                if (projectIndex != 0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&protocol="+protocolIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex != 0 && userIndex == 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex).then(response => {
-                        console.log(response)
-                        this.moduleList = response.data
+                }else if(projectIndex != 0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&protocol="+protocolIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex == 0 && userIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(projectIndex == 0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?protocol="+protocolIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
-                    this.$fetch(this.$api.projectUrl).then(response => {
-                        this.moduleList = response.data
+                }else if(projectIndex == 0 && protocolIndex == 0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl).then(response => {
+                        this.scriptList = response.data
                     })
-                }else{
-                    this.$fetch(this.$api.projectUrl+"?env="+envIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(protocolIndex == 0 && projectIndex !=0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                } else if(projectIndex == 0 && protocolIndex ==0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?user="+userIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                }else if(protocolIndex == 0 && projectIndex !=0 && userIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?user="+userIndex+"&project="+projectIndex).then(response => {
+                        this.scriptList = response.data
                     })
                 }
+                else{
+                    this.$fetch(this.$api.scriptUrl+"?protocol="+protocolIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                }
+
             },
             filterUser:function(){
-                const platformIndex = $('#select_platform').val();
-                const envIndex = $('#select_env').val();
+                const projectIndex = $('#select_project').val();
+                const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (platformIndex != 0 && envIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&env="+envIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                if (projectIndex != 0 && protocolIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&protocol="+protocolIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex != 0 && envIndex == 0){
-                    this.$fetch(this.$api.projectUrl+"?type="+platformIndex+"&user="+userIndex).then(response => {
-                        console.log(response)
-                        this.moduleList = response.data
+                }else if(projectIndex != 0 && protocolIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex == 0 && envIndex != 0){
-                    this.$fetch(this.$api.projectUrl+"?env="+envIndex+"&user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(projectIndex == 0 && protocolIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?protocol="+protocolIndex+"&user="+userIndex).then(response => {
+                        this.scriptList = response.data
                     })
-                }else if(platformIndex == 0&envIndex == 0 && userIndex == 0){
-                    this.$fetch(this.$api.projectUrl).then(response => {
-                        this.moduleList = response.data
+                }else if(projectIndex == 0 && protocolIndex == 0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl).then(response => {
+                        this.scriptList = response.data
                     })
-                }else{
-                    this.$fetch(this.$api.projectUrl+"?user="+userIndex).then(response => {
-                        this.moduleList = response.data
+                }else if(protocolIndex == 0 && projectIndex !=0 && userIndex == 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                } else if(userIndex == 0 && protocolIndex ==0 && projectIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                }else if(userIndex == 0 && projectIndex !=0 && protocolIndex != 0){
+                    this.$fetch(this.$api.scriptUrl+"?project="+projectIndex+"&project="+projectIndex).then(response => {
+                        this.scriptList = response.data
                     })
                 }
+                else{
+                    this.$fetch(this.$api.scriptUrl+"?user="+userIndex).then(response => {
+                        this.scriptList = response.data
+                    })
+                }
+
             },
             search:function(){
                 const search_text = $('#search').val()
-                this.$fetch(this.$api.projectUrl+"?search="+search_text).then(response => {
-                    this.moduleList = response.data
+                this.$fetch(this.$api.scriptUrl+"?search="+search_text).then(response => {
+                    this.scriptList = response.data
                 })
             },
             delScript:function (id) {
@@ -243,7 +289,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then(function(isConfirm) {
                     if (isConfirm) {
-                        self.$del(self.$api.scriptUrl+id).then(response => {
+                        self.$del(self.$api.scriptUrl+id+"/").then(response => {
                             if (response.code == 0) {
                                 swal(
                                     'Deleted!',
