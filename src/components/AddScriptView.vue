@@ -1,0 +1,918 @@
+<template>
+    <div class="" id="home">
+        <div class="container mt-5" id="accordion">
+            <div class="row tm-content-row">
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <select class="custom-select" id="project" @change="setEnv">
+                            <option value="0">请选择项目</option>
+                            <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
+                        </select>
+                </div>
+            </div>
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <select class="custom-select" id="protocol">
+                            <option value="0">请选择协议</option>
+                            <option value="1">HTTP</option>
+                            <option value="2">DUBBO</option>
+                            <option value="3">WEBSOCKET</option>
+                        </select>
+                    </div>
+                </div>
+
+            <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
+                            HEADER设置
+                        </a>
+                        <a class="card-link" data-toggle="collapse" href="#collapseTwo" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                            COOKIE设置
+                        </a>
+                        <a class="card-link" data-toggle="collapse" href="#collapseThree" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                            PARAM设置
+                        </a>
+                        <div class="row tm-content-row collapse hide" id="collapseOne" data-parent="#accordion">
+                            <div class="col-12 tm-block-col">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-default addBtn"
+                                                    style="border-radius:6px;width: 140px;"
+                                                    id="addHeaderBtn" @click="addHeaderBtn()"><i
+                                                    class="fa fa-plus" aria-hidden="true"></i></button>
+                                        </div>
+                                        <div class="col-md-10" id="headerList">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row tm-content-row collapse hide" id="collapseTwo" data-parent="#accordion">
+                            <div class="col-12 tm-block-col">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-default addBtn"
+                                                    style="border-radius:6px;width: 140px;" id="addBtn"
+                                                    @click="addCookieBtn()"><i class="fa fa-plus"
+                                                                               aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-default addBtn"
+                                                    style="border-radius:6px;width: 140px;margin-top: 20px;" id="generateLoginToken"
+                                                    @click="addCookieBtn()">登录cookie</button>
+                                        </div>
+                                        <div class="col-md-10" id="cookieList">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row tm-content-row collapse hide" id="collapseThree" data-parent="#accordion">
+                            <div class="col-12 tm-block-col">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                    <div class="row">
+                                        <ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">
+                                            <li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>
+                                            <li id="routeType_1" value="1" @click="checkrouteType(1)" style="color: white;width: 200px">&nbsp;json格式 &nbsp;</li>
+                                        </ul>
+                                    </div>
+                                    <div class="row" id="json_content" style="display: none;margin-top: 20px">
+                                        <textarea style="width: 800px;height: 300px;background-color: #425c6f;border: 2px solid white;border-radius: 5px;" id="requestParam"></textarea>
+                                    </div>
+                                    <div class="row" id="form_content">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-default addBtn"
+                                                    style="border-radius:6px;width: 140px;" id="addParamBtn"
+                                                    @click="addParamsBtn()"><i class="fa fa-plus"
+                                                                               aria-hidden="true"></i></button>
+                                        </div>
+                                        <div class="col-md-10" id="paramsList">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row tm-content-row">
+                <div class="tm-block-col tm-col-account-settings">
+                    <div class="tm-bg-primary-dark tm-block tm-block-settings">
+                        <h2 class="tm-block-title">请求设置</h2>
+                        <form action="" class="tm-signup-form row">
+                            <div class="form-group col-lg-6 http dubbo">
+                                <label for="interfaceName">接口名称</label>
+                                <input
+                                        id="interfaceName"
+                                        name="interfaceName"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6 htttp socket">
+                                <label for="requestUrl">URL</label>
+                                <input
+                                        id="requestUrl"
+                                        name="requestUrl"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="requestType">请求方式</label>
+                                <select class="form-control" style="width:200px;text-align: center" id="requestType">
+                                    <option value="1">GET</option>
+                                    <option value="2">POST</option>
+                                    <option value="3">DELETE</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6 dubbo">
+                                <label for="interface">dubbo接口</label>
+                                <input
+                                        id="interface"
+                                        name="interface"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6 dubbo">
+                                <label for="methodName">方法</label>
+                                <input
+                                        id="methodName"
+                                        name="methodName"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6 dubbo">
+                                <label for="paramType">参数类型</label>
+                                <input
+                                        id="paramType"
+                                        name="paramType"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6 dubbo">
+                                <label for="interfaceVersion">版本号</label>
+                                <input
+                                        id="interfaceVersion"
+                                        name="interfaceVersion"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tm-block-col tm-col-account-settings ">
+                    <div class="tm-bg-primary-dark tm-block tm-block-settings">
+                        <h2 class="tm-block-title">Jmeter Settings</h2>
+                        <form action="" class="tm-signup-form row">
+                            <div class="form-group col-lg-6">
+                                <label for="pre_num">并发数</label>
+                                <input
+                                        id="pre_num"
+                                        name="name"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="pre_time">压测时长</label>
+                                <input
+                                        id="pre_time"
+                                        name="pre_time"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="assert_text">响应断言</label>
+                                <input
+                                        id="assert_text"
+                                        name="assert_text"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="timeOut">接口超时时间</label>
+                                <input
+                                        id="timeOut"
+                                        name="timeOut"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+
+                                <label for="ip">监听服务器IP</label>
+                                <input
+                                        id="ip"
+                                        name="ip"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="port">监听服务器端口</label>
+                                <input
+                                        id="port"
+                                        name="port"
+                                        type="text"
+                                        class="form-control validate"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="testRequest()">测试接口</a>
+            <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="addScript()">添加脚本</a>
+            <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">测试结果</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="writePlace" style="text-align: initial;padding:0px 25px;white-space: pre-line;word-wrap:break-word;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="tm-footer row tm-mt-small">
+            <div class="col-12 font-weight-light">
+                <p class="text-center text-white mb-0 px-4 small">
+                    Copyright &copy; <b>2018</b> All rights reserved.
+
+                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "AddScriptView",
+        data(){
+            return{
+                id: 0,
+                headerIndex: 0,
+                paramsIndex: 0,
+                projectList:[],
+                cStore:[],
+                ccStore:[],
+                hStore:[],
+                hhStore:[],
+                pStore:[],
+                ppStore:[],
+                env:0
+            }
+        },
+        created:function(){
+            this.$fetch(this.$api.projectUrl).then(response => {
+                this.projectList = response.data
+            });
+        },
+        methods:{
+            setEnv:function(){
+                this.$fetch(this.$api.projectUrl+$("#project").val()).then(response => {
+                    this.env = response.data.env
+                })
+
+            },
+            addHeaderBtn: function () {
+                let $cookieHtml = '<div class="form-group headers" style="clear: both">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
+                    '                                    <input class="form-control headerKey" name="headerName" placeholder="header key" style="height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
+                    '                                    <input class="form-control headerValue" name="headerValue" placeholder="header value" style="height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeHeaderButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('#headerList').append($cookieHtml)
+                this.headerIndex++;
+                let self = this
+                let delEle = document.getElementsByClassName('removeHeaderButton')[self.headerIndex - 1]
+                if (delEle != null) {
+                    delEle.onclick = function () {
+                        let head = document.getElementsByClassName('headers')[self.headerIndex - 1];
+                        if (head != null) {
+                            var result = head.parentNode.removeChild(head);
+                            if (result != null) {
+                                self.headerIndex -= 1
+                            }
+                        }
+                    }
+                }
+            },
+            addCookieBtn: function () {
+                let $cookieHtml = '<div class="form-group cookieHead" style="clear: both">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
+                    '                                    <input class="form-control cookieKey" name="cookieName" placeholder="cookie key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
+                    '                                    <input class="form-control cookieValue" name="cookieValue" placeholder="cookie value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('#cookieList').append($cookieHtml)
+                this.id++;
+                console.log("id:" + this.id)
+                let self = this
+                let delEle = document.getElementsByClassName('removeButton')[self.id - 1]
+                if (delEle != null) {
+                    delEle.onclick = function () {
+                        let cookieHead = document.getElementsByClassName('cookieHead')[self.id - 1];
+                        if (cookieHead != null) {
+                            var result = cookieHead.parentNode.removeChild(cookieHead);
+                            if (result != null) {
+                                self.id -= 1
+                            }
+                        }
+                    }
+                }
+            },
+            addParamsBtn: function () {
+                let $paramsHtml = '<div class="form-group paramsHead" style="clear: both">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
+                    '                                    <input class="form-control paramsKey" name="paramsName" placeholder="params key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
+                    '                                    <input class="form-control paramsValue" name="paramsValue" placeholder="params value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeParamsButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('#paramsList').append($paramsHtml)
+                this.paramsIndex++;
+                let self = this
+                let delEle = document.getElementsByClassName('removeParamsButton')[self.paramsIndex - 1]
+                if (delEle != null) {
+                    delEle.onclick = function () {
+                        let head = document.getElementsByClassName('paramsHead')[self.paramsIndex - 1];
+                        if (head != null) {
+                            var result = head.parentNode.removeChild(head);
+                            console.log(result)
+                            if (result != null) {
+                                self.paramsIndex -= 1
+                            }
+                        }
+                    }
+                }
+            },
+            checkrouteType:function (id) {
+                if (id == 0){
+                    $("#routeType_0").css('background-color','#ff6200')
+                    $("#routeType_1").css('background-color','#425c6f')
+                    $('#form_content').css('display','block')
+                    $('#json_content').css('display','none')
+                }else if (id == 1){
+                    $("#routeType_1").css('background-color','#ff6200')
+                    $("#routeType_0").css('background-color','#425c6f')
+                    $('#form_content').css('display','none')
+                    $('#json_content').css('display','block')
+                }
+            },
+            verityHttp:function(){
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
+                    $('#interfaceName').focus()
+                    $("#interfaceName").focus(function(){
+                        $("#interfaceName").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入项目名称' ,  "warning" )
+                    return;
+                }else if ($('#requestUrl').val() == '' || $('#requestUrl').val() == null){
+                    $('#requestUrl').focus()
+                    $("#requestUrl").focus(function(){
+                        $("#requestUrl").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入url' ,  "warning" )
+                    return;
+                }else if ($('#assert_text').val() == '' || $('#assert_text').val() == null){
+                    $('#assert_text').focus()
+                    $("#assert_text").focus(function(){
+                        $("#assert_text").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入断言结果' ,  "warning" )
+                    return;
+                }else if ($('#timeOut').val() == '' || $('#timeOut').val() == null){
+                    $('#timeOut').focus()
+                    $("#timeOut").focus(function(){
+                        $("#timeOut").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入超时时间' ,  "warning" )
+                    $('#timeOut').focus()
+                    return;
+                }else if ($('#pre_time').val() == '' || $('#pre_time').val() == null){
+                    $('#pre_time').focus()
+                    $("#pre_time").focus(function(){
+                        $("#pre_time").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入压测时长' ,  "warning" )
+                    return;
+                }else if ($('#pre_num').val() == '' || $('#pre_num').val() == null){
+                    $('#pre_num').focus()
+                    $("#pre_num").focus(function(){
+                        $("#pre_num").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入压测并发数' ,  "warning" )
+                    return;
+                }
+                return true;
+
+            },
+            verityDubbo:function(){
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
+                    $('#interfaceName').focus()
+                    $("#interfaceName").focus(function(){
+                        $("#interfaceName").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入项目名称' ,  "warning" )
+                    return;
+                }else if ($('#paramType').val() == '' || $('#paramType').val() == null){
+                    $('#paramType').focus()
+                    $("#paramType").focus(function(){
+                        $("#paramType").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入请求参数类型' ,  "warning" )
+                    return;
+                }else if ($('#assert_text').val() == '' || $('#assert_text').val() == null){
+                    $('#assert_text').focus()
+                    $("#assert_text").focus(function(){
+                        $("#assert_text").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入断言结果' ,  "warning" )
+                    return;
+                }else if ($('#interface').val() == '' || $('#interface').val() == null){
+                    $('#interface').focus()
+                    $("#interface").focus(function(){
+                        $("#interface").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入接口' ,  "warning" )
+                    $('#timeOut').focus()
+                    return;
+                }else if ($('#methodName').val() == '' || $('#methodName').val() == null){
+                    $('#methodName').focus()
+                    $("#methodName").focus(function(){
+                        $("#methodName").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入接口方法' ,  "warning" )
+                    return;
+                }else if ($('#interfaceVersion').val() == '' || $('#interfaceVersion').val() == null){
+                    $('#interfaceVersion').focus()
+                    $("#interfaceVersion").focus(function(){
+                        $("#interfaceVersion").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入版本' ,  "warning" )
+                    return;
+                }else if ($('#timeOut').val() == '' || $('#timeOut').val() == null){
+                    $('#timeOut').focus()
+                    $("#timeOut").focus(function(){
+                        $("#timeOut").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入超时时间' ,  "warning" )
+                    return;
+                }else if ($('#requestParam').val() == '' || $('#requestParam').val() == null){
+                    $('#requestParam').focus()
+                    $("#requestParam").focus(function(){
+                        $("#requestParam").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入参数' ,  "warning" )
+                    return;
+                }
+                else if ($('#pre_time').val() == '' || $('#pre_time').val() == null){
+                    $('#pre_time').focus()
+                    $("#pre_time").focus(function(){
+                        $("#pre_time").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入压测时长' ,  "warning" )
+                    return;
+                }else if ($('#pre_num').val() == '' || $('#pre_num').val() == null){
+                    $('#pre_num').focus()
+                    $("#pre_num").focus(function(){
+                        $("#pre_num").css("background-color","black");
+                    });
+                    swal ( "Warning" ,  '请输入压测并发数' ,  "warning" )
+                    return;
+                }
+                return true;
+
+            },
+            addScript:function () {
+
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }
+                if ( $('#protocol').val() == 0){
+                    swal ( "Warning" ,  '请选择协议' ,  "warning" )
+                    return false;
+                }
+                if ($('#protocol').val() == 1){
+                    if(!this.verityHttp()){
+                        return false;
+                    }
+                } else if ($('#protocol').val() == 2){
+                    if(!this.verityDubbo()){
+                        return false;
+                    }
+                }else {
+                    swal ( "Warning" ,  '暂不支持该协议' ,  "warning" )
+                    return false;
+                }
+
+
+                let cookieKey = document.getElementsByClassName('cookieKey')
+                let cookieValue = document.getElementsByClassName('cookieValue')
+                for (let i = 0; i < cookieKey.length; i++) {
+                    this.cStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value})
+                }
+                let headerKey = document.getElementsByClassName('headerKey')
+                let headerValue = document.getElementsByClassName('headerValue')
+                for (let i = 0; i < headerKey.length; i++) {
+                    this.hStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
+                }
+                let paramsKey = document.getElementsByClassName('paramsKey')
+                let paramsValue = document.getElementsByClassName('paramsValue')
+                for (let i = 0; i < paramsKey.length; i++) {
+                    this.pStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
+                }
+                let pm;
+                let paramValue = $("#requestParam").val();
+                if (paramsKey.length != 0 && paramValue == '[]'){
+                    pm = JSON.stringify(this.pStore)
+                } else if (paramsKey.length == 0 && paramValue != '[]'){
+                    pm = paramValue
+                } else {
+                    pm = JSON.stringify(this.pStore)
+                }
+                    this.$post(this.$api.scriptUrl,this.qs.stringify({
+                        name:$('#interfaceName').val(),
+                        url:$('#requestUrl').val(),
+                        protocol:$('#protocol').val(),
+                        ins:$('#interface').val(),
+                        method:$('#methodName').val(),
+                        param_type:$('#paramType').val(),
+                        version:$('#interfaceVersion').val(),
+                        assert_text:$('#assert_text').val(),
+                        cookie:JSON.stringify(this.cStore),
+                        header:JSON.stringify(this.hStore),
+                        request_type:$('#requestType').val(),
+                        params:pm,
+                        time_out:$('#timeOut').val(),
+                        pre_time:$('#pre_time').val(),
+                        pre_number:$('#pre_num').val(),
+                        project:$('#project').val(),
+                        ip:$('#ip').val(),
+                        port:$('#port').val(),
+                        user:localStorage.user_id
+                    })).then(response => {
+                        if(response.code == 0){
+                            this.$router.push({
+                                name:'scripts',
+                                query:{
+                                    module_id:$('#project').val(),
+                                    module_env:this.env
+                                }
+                            })
+                            swal ( "添加成功" ,  $('#interfaceName').val()+"添加成功!" ,  "success" )
+                        }else {
+                            swal ( "错误" ,  response.msg ,  "error" )
+                        }
+                    })
+
+
+            },
+            testRequest: function () {
+
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }
+                if ( $('#protocol').val() == 0){
+                    swal ( "Warning" ,  '请选择协议' ,  "warning" )
+                    return false;
+                }
+
+                let cookieKey = document.getElementsByClassName('cookieKey')
+                let cookieValue = document.getElementsByClassName('cookieValue')
+                for (let i = 0; i < cookieKey.length; i++) {
+                    this.ccStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value})
+                }
+                let headerKey = document.getElementsByClassName('headerKey')
+                let headerValue = document.getElementsByClassName('headerValue')
+                for (let i = 0; i < headerKey.length; i++) {
+                    this.hhStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
+                }
+                let paramsKey = document.getElementsByClassName('paramsKey')
+                let paramsValue = document.getElementsByClassName('paramsValue')
+                for (let i = 0; i < paramsKey.length; i++) {
+                    this.ppStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
+                }
+                let pm;
+                let paramValue = $("#requestParam").val();
+                if (paramsKey.length != 0 && paramValue == '[]'){
+                    pm = JSON.stringify(this.pStore)
+                } else if (paramsKey.length == 0 && paramValue != ''){
+                    pm = paramValue
+                } else {
+                    pm = JSON.stringify(this.ppStore)
+                }
+                this.bus.$emit('loading', true)
+                let self = this
+                if ($('#protocol').val() == 1) {
+                    $.ajax({
+                        url: this.$api.testUrl,
+                        type: 'GET',
+                        data: {
+                            "url": $('#requestUrl').val(),
+                            "protocol": 1,
+                            "cookie": JSON.stringify(self.ccStore),
+                            "header": JSON.stringify(self.hhStore),
+                            "request_type": $('#requestType').val(),
+                            "params": pm
+                        },
+                        success: function (response) {
+                            if (response.code == 0) {
+                                self.bus.$emit('loading', false)
+                                $("#myModal").modal()
+                                let result = new JSONFormat(response.data,4).toString()
+                                document.getElementById("writePlace").innerHTML = result;
+                            }else {
+                                self.bus.$emit('loading', false)
+                                swal("Warning", response.msg, "warning")
+                            }
+                        },
+                        error:function () {
+                            self.bus.$emit('loading', false)
+                        }
+                    })
+                } else if ($('#protocol').val() == 2) {
+                    var jsonParam = {};
+                    var paramArray = new Array();
+                    jsonParam["paramType"] = $('#paramType').val();
+                    jsonParam["paramValue"] = $('#requestParam').val();
+                    paramArray.push(jsonParam);
+
+                    var jsonData = {};
+                    jsonData["protocol"] = "zookeeper";
+                    jsonData["address"] = this.env;
+                    jsonData["interfaceName"] = $('#interface').val();
+                    jsonData["methodName"] = $('#methodName').val();
+                    jsonData["timeOut"] = $('#timeOut').val();
+                    jsonData["requestParamTypeArgs"] = paramArray;
+
+                    self.bus.$emit('loading', true)
+                    $.ajax({
+                        type: "POST",
+                        url: "http://127.0.0.1:8901/dubboTest",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(jsonData),
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response)
+                            if (response.code == 0) {
+                                self.bus.$emit('loading', false)
+                                $("#myModal").modal()
+                                try {
+                                    let result = new JSONFormat(JSON.stringify(response.data), 4).toString()
+                                    document.getElementById("writePlace").innerHTML = result;
+                                }catch (e) {
+                                    console.log(e)
+                                    document.getElementById("writePlace").innerHTML = response.data;
+                                }
+                            }else {
+                                self.bus.$emit('loading', false)
+                                swal("Warning", response.msg, "warning")
+                            }
+                        },
+                        error: function (message) {
+                            self.bus.$emit('loading', false)
+                            $("#myModal").modal()
+                            let result = new JSONFormat(JSON.stringify(message.responseJSON), 4).toString()
+                            document.getElementById("writePlace").innerHTML = result;
+                        }
+                    });
+
+                }
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .which_group {
+        list-style:none;
+        margin:0;
+        padding:0;
+        width:100%;
+        font-size:11px;
+        color:#595959;
+    }
+    .which_group li {
+        float:left;
+        list-style:none;
+        padding:7px;
+        cursor:pointer;
+        box-Shadow:1px 2px 3px #D9D9D9;
+    }
+    .which_group li:first-child {
+        border-top-left-radius:3px;
+        border-bottom-left-radius:3px;
+    }
+    .which_group li:last-child {
+        border-top-right-radius:3px;
+        border-bottom-right-radius:3px;
+    }
+
+    .modal.left .modal-dialog,
+    .modal.right .modal-dialog {
+        position: fixed;
+        margin: auto;
+        width: 650px;
+
+        max-width: 850px;
+        height: 100%;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+    }
+
+    .modal.left .modal-content,
+    .modal.right .modal-content {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+
+    #result {
+        height: 500px;
+    }
+
+    .modal.left .modal-body,
+    .modal.right .modal-body {
+        padding: 15px 15px 80px;
+    }
+
+    /*Left*/
+    .modal.left.fade .modal-dialog {
+        left: -30px;
+        -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+        transition: opacity 0.3s linear, left 0.3s ease-out;
+    }
+
+    .modal.left.fade.in .modal-dialog {
+        left: 0;
+    }
+
+    /*Right*/
+    .modal.right.fade .modal-dialog {
+        right: 0px;
+        -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+        transition: opacity 0.3s linear, right 0.3s ease-out;
+    }
+
+    .modal.right.fade.in .modal-dialog {
+        right: 0;
+    }
+
+    /* ----- MODAL STYLE ----- */
+    .modal-content {
+        border-radius: 0;
+        border: none;
+    }
+
+    .modal-header {
+        color: black;
+        border-bottom-color: black;
+        background-color: white;
+    }
+
+    pre {
+        font-family: 'consolas';
+    }
+
+    .Canvas {
+        font: 14px/18px 'consolas';
+        background-color: #ECECEC;
+        color: #000000;
+        border: solid 1px #CECECE;
+    }
+
+    .ObjectBrace {
+        color: #00AA00;
+        font-weight: bold;
+    }
+
+    .ArrayBrace {
+        color: #0033FF;
+        font-weight: bold;
+    }
+
+    .PropertyName {
+        color: #CC0000;
+        font-weight: bold;
+    }
+
+    .String {
+        color: #007777;
+    }
+
+    .Number {
+        color: #AA00AA;
+    }
+
+    .Boolean {
+        color: #0000FF;
+    }
+
+    .Function {
+        color: #AA6633;
+        text-decoration: italic;
+    }
+
+    .Null {
+        color: #0000FF;
+    }
+
+    .Comma {
+        color: #000000;
+        font-weight: bold;
+    }
+
+    PRE.CodeContainer {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .json_key {
+        color: #92278f;
+        font-weight: bold;
+    }
+
+    .json_null {
+        color: #f1592a;
+        font-weight: bold;
+    }
+
+    .json_string {
+        color: #3ab54a;
+        font-weight: bold;
+    }
+
+    .json_number {
+        color: #25aae2;
+        font-weight: bold;
+    }
+
+    .json_boolean {
+        color: #f98280;
+        font-weight: bold;
+    }
+
+    .json_link {
+        color: #61D2D6;
+        font-weight: bold;
+    }
+
+    .json_array_brackets {
+    }
+</style>

@@ -1,188 +1,39 @@
 <template>
     <div class="" id="home">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="text-white mt-5 mb-5"></p>
-                </div>
-            </div>
-            <!-- row -->
+        <div class="container mt-5">
             <div class="row tm-content-row">
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Latest Hits</h2>
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block">
-                        <h2 class="tm-block-title">Performance</h2>
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller">
-                        <h2 class="tm-block-title">Storage Information</h2>
-                        <div id="pieChartContainer">
-                            <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
-                        <h2 class="tm-block-title">Notification List</h2>
-                    </div>
-                </div>
                 <div class="col-12 tm-block-col">
-                    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                        <h2 class="tm-block-title">Orders List</h2>
-                        <table class="table">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="overflow-y: auto">
+                        <h2 class="tm-block-title">聚合报告</h2>
+                        <table class="table table-hover tm-table-small tm-product-table" style=''>
                             <thead>
                             <tr>
-                                <th scope="col">ORDER NO.</th>
-                                <th scope="col">STATUS</th>
-                                <th scope="col">OPERATORS</th>
-                                <th scope="col">LOCATION</th>
-                                <th scope="col">DISTANCE</th>
-                                <th scope="col">START DATE</th>
-                                <th scope="col">EST DELIVERY DUE</th>
+                                <th nowrap="nowrap" scope="col" v-for="t in thdata">{{t}}</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <th scope="row"><b>#122349</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>Oliver Trag</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>485 km</b></td>
-                                <td>16:00, 12 NOV 2018</td>
-                                <td>08:00, 18 NOV 2018</td>
+                                <td v-for="data1 in tbdata1">{{data1}}</td>
                             </tr>
                             <tr>
-                                <th scope="row"><b>#122348</b></th>
-                                <td>
-                                    <div class="tm-status-circle pending">
-                                    </div>Pending
-                                </td>
-                                <td><b>Jacob Miller</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>360 km</b></td>
-                                <td>11:00, 10 NOV 2018</td>
-                                <td>04:00, 14 NOV 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122347</b></th>
-                                <td>
-                                    <div class="tm-status-circle cancelled">
-                                    </div>Cancelled
-                                </td>
-                                <td><b>George Wilson</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>340 km</b></td>
-                                <td>12:00, 22 NOV 2018</td>
-                                <td>06:00, 28 NOV 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122346</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>William Aung</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>218 km</b></td>
-                                <td>15:00, 10 NOV 2018</td>
-                                <td>09:00, 14 NOV 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122345</b></th>
-                                <td>
-                                    <div class="tm-status-circle pending">
-                                    </div>Pending
-                                </td>
-                                <td><b>Harry Ryan</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>280 km</b></td>
-                                <td>15:00, 11 NOV 2018</td>
-                                <td>09:00, 17 NOV 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122344</b></th>
-                                <td>
-                                    <div class="tm-status-circle pending">
-                                    </div>Pending
-                                </td>
-                                <td><b>Michael Jones</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>218 km</b></td>
-                                <td>18:00, 12 OCT 2018</td>
-                                <td>06:00, 18 OCT 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122343</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>Timmy Davis</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>218 km</b></td>
-                                <td>12:00, 10 OCT 2018</td>
-                                <td>08:00, 18 OCT 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122342</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>Oscar Phyo</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>420 km</b></td>
-                                <td>15:30, 06 OCT 2018</td>
-                                <td>09:30, 16 OCT 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122341</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>Charlie Brown</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>300 km</b></td>
-                                <td>11:00, 10 OCT 2018</td>
-                                <td>03:00, 14 OCT 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122340</b></th>
-                                <td>
-                                    <div class="tm-status-circle cancelled">
-                                    </div>Cancelled
-                                </td>
-                                <td><b>Wilson Cookies</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>218 km</b></td>
-                                <td>17:30, 12 OCT 2018</td>
-                                <td>08:30, 22 OCT 2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><b>#122339</b></th>
-                                <td>
-                                    <div class="tm-status-circle moving">
-                                    </div>Moving
-                                </td>
-                                <td><b>Richard Clamon</b></td>
-                                <td><b>London, UK</b></td>
-                                <td><b>150 km</b></td>
-                                <td>15:00, 12 OCT 2018</td>
-                                <td>09:20, 26 OCT 2018</td>
+                                <td v-for="data2 in tbdata2">{{data2}}</td>
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row tm-content-row">
+                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block">
+                        <h2 class="tm-block-title">Transactions per Second</h2>
+                        <img v-bind:src="tpsUrl" style="width: 500px;height: 350px;margin-left: -15px"/>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block">
+                        <h2 class="tm-block-title">Response Times Over Time</h2>
+                        <img v-bind:src="rtotUrl" style="width: 500px;height: 350px;margin-left: -15px"/>
                     </div>
                 </div>
             </div>
@@ -190,21 +41,75 @@
         <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
                 <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2018</b> Template Mo All rights reserved.
+                    Copyright &copy; <b>2018</b> All rights reserved.
 
-                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="模板之家">OK教育</a>
+                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
                 </p>
             </div>
         </footer>
     </div>
+
 </template>
 
 <script>
+    import VueElementLoading from 'vue-element-loading'
+
     export default {
-        name: "Report"
+        components: {
+            VueElementLoading
+        },
+        name: "Report",
+        data() {
+            return {
+                tpsUrl: '',
+                rtotUrl: '',
+                thdata:[],
+                tbdata1:[],
+                tbdata2:[]
+            }
+        },
+        mounted: function () {
+
+            let history_id = this.$route.query.history_id
+            let script_name = this.$route.query.script_name
+            let md5 = this.$route.query.md5
+            const self = this
+            if(history_id == null || script_name == null || md5 ==null){
+                swal("错误", '请选择历史记录', "error")
+            }
+            self.bus.$emit('loading', true)
+            $.ajax({
+                url: this.$api.reportUrl + "?history_id=" + history_id + "&script_name=" + script_name + "&md5=" + md5,
+                type: 'GET',
+                success: function (response) {
+                    if (response.code == 0) {
+                        self.thdata = []
+                        self.tpsUrl = response.data.urlList.tps;
+                        self.rtotUrl = response.data.urlList.rtot;
+                        let av = response.data.aggregate
+                        console.log(av)
+                        for (let a1 in av[0].split(',')){
+                            self.thdata.push(av[0].split(',')[a1])
+                        }
+                        for (let a2 in av[1].split(',')){
+                            self.tbdata1.push(av[1].split(',')[a2])
+                        }
+                        for (let a3 in av[2].split(',')){
+                            self.tbdata2.push(av[2].split(',')[a3])
+                        }
+                        self.bus.$emit('loading', false)
+                    } else {
+                        swal("错误", response.msg, "error")
+                        self.bus.$emit('loading', false)
+                    }
+                }
+            })
+        }
     }
 </script>
 
 <style scoped>
+
+
 
 </style>

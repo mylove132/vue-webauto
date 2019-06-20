@@ -2,15 +2,18 @@
   <div id="app">
     <Header></Header>
     <router-view></router-view>
+    <Loading></Loading>
   </div>
 </template>
 
 <script>
   import Header from './components/Header'
+  import Loading from './components/Loading'
     export default {
         name: "app",
         components:{
-            Header
+            Header,
+            Loading
         }
         // created:function () {
         //     if (sessionStorage.getItem("store")) {

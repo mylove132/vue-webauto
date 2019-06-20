@@ -8,9 +8,6 @@
 
                             <form class="form-horizontal" style="color: white">
                                 <fieldset>
-                                    <div id="legend" class="">
-                                        <legend class="">添加测试脚本</legend>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="control-group http dubbo socket">
@@ -20,6 +17,19 @@
                                                     <select class="input-xlarge" style="width:200px;height: 30px;" id="project">
                                                         <option value="0">==请选择项目==</option>
                                                         <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
+                                                    </select>
+                                                </div>
+                                                <p></p>
+                                            </div>
+                                            <div class="control-group http dubbo socket">
+                                                <!-- Text input-->
+                                                <label class="control-label" for="requestType">协议</label>
+                                                <div class="controls">
+                                                    <select class="input-xlarge" style="width:200px;height: 30px;" id="protocol" @change="getDubboServer()">
+                                                        <option value="0">==请选择协议==</option>
+                                                        <option value="1">HTTP</option>
+                                                        <option value="2">DUBBO</option>
+                                                        <option value="3">SOCKET</option>
                                                     </select>
                                                 </div>
                                                 <p></p>
@@ -62,7 +72,8 @@
                                                     <p class="help-block"></p>
                                                 </div>
                                             </div>
-                                            <div class="control-group http socket dubbo">
+
+                                            <div class="control-group dubbo">
 
                                                 <!-- Text input-->
                                                 <label class="control-label" for="requestParam">参数</label>
@@ -75,8 +86,19 @@
                                                 <!-- Text input-->
                                                 <label class="control-label" for="requestParam">断言</label>
                                                 <div class="controls">
-                                                    <textarea type="text" id="assert" placeholder="请输入响应断言" class="input-xlarge" style="width: 200px;height: 80px"></textarea>
+                                                    <textarea type="text" id="assert_text" placeholder="请输入响应断言" class="input-xlarge" style="width: 200px;height: 80px"></textarea>
                                                 </div>
+                                            </div>
+                                            <div class="control-group http">
+                                                <label class="control-label"></label>
+                                                <div class="controls">
+                                                    <!-- Multiple Checkboxes -->
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="isParams" value="是否包含参数" @click="addParams()">
+                                                        是否包含参数
+                                                    </label>
+                                                </div>
+
                                             </div>
                                             <div class="control-group http">
                                                 <label class="control-label"></label>
@@ -125,6 +147,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
+
                                             <div class="control-group http socket dubbo">
                                                 <!-- Text input-->
                                                 <label class="control-label" for="timeOut">接口超时时间</label>
@@ -152,6 +175,24 @@
                                                     <p class="help-block"></p>
                                                 </div>
                                             </div>
+                                            <div class="control-group http socket dubbo">
+                                                <!-- Text input-->
+                                                <label class="control-label" for="ip">服务器监听ip</label>
+                                                <div class="controls">
+                                                    <input type="text" placeholder="请输入服务器监听ip" id="ip"
+                                                           class="input-xlarge" style="width:200px">
+                                                    <p class="help-block"></p>
+                                                </div>
+                                            </div>
+                                            <div class="control-group http socket dubbo">
+                                                <!-- Text input-->
+                                                <label class="control-label" for="port">服务器监听端口</label>
+                                                <div class="controls">
+                                                    <input type="text" placeholder="请输入服务器监听端口" id="port"
+                                                           class="input-xlarge" style="width:200px">
+                                                    <p class="help-block"></p>
+                                                </div>
+                                            </div>
                                             <div class="control-group dubbo">
                                                 <!-- Text input-->
                                                 <label class="control-label" for="interfaceVersion">接口版本</label>
@@ -166,8 +207,10 @@
                                                 <label class="control-label" for="interface">接口</label>
                                                 <div class="controls">
                                                     <input type="text" placeholder="请输入接口" id="interface"
-                                                           class="input-xlarge" style="width:200px">
-                                                    <p class="help-block"></p>
+                                                           class="input-xlarge" list="interfaces" style="width:200px">
+                                                    <datalist id="interfaces">
+                                                        <option v-for="service in services" :value="service">{{service}}</option>
+                                                    </datalist>
                                                 </div>
                                             </div>
                                             <div class="control-group dubbo">
@@ -191,6 +234,7 @@
                         <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="addScript()">Add new
                             Script</a>
                         <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="runScripts()">run scripts</a>
+                        <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="testRequest()">Test Interface</a>
                     </div>
                 </div>
             </div>
@@ -229,6 +273,37 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" id="addParamsModal" role="dialog" aria-labelledby="gridSystemModalLabel" >
+                <div class="modal-dialog modal-lg" role="document" style="width: 1200px">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #567086;">
+                            <h4 class="modal-title" id="gridSystemModalLabel13" style="color: white">添加参数</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body params-body" style="background-color: #2c3e50;">
+                            <button type="button" class="btn btn-default addBtn" style="float: left" @click="addParamsBtn()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="modal-footer" style="background-color: #567086;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color:#ffeeba;border-radius: 10px">Close</button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 10px" id="addParamsSubmit">Add Params</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+            <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">测试结果</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="writePlace" style="text-align: initial;padding:0px 25px;white-space: pre-line;word-wrap:break-word;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
@@ -249,6 +324,7 @@
         data() {
             return {
                 id:0,
+                paramsIndex:0,
                 headerIndex:0,
                 bg1: 'rgba(120, 155, 255, 0.1)',
                 bg2: 'rgba(210,105,30, 0.1)',
@@ -257,7 +333,8 @@
                 isShowDubbo:false,
                 isShowSocket:false,
                 projectList:[],
-                module_id:this.$route.query.module_id
+                module_id:this.$route.query.module_id,
+                services:[]
             }
         },
         created:function(){
@@ -273,6 +350,65 @@
 
         },
         methods: {
+            formatJson:function (json, options) {
+                var reg = null,
+                    formatted = '',
+                    pad = 0,
+                    PADDING = '    ';
+                options = options || {};
+                options.newlineAfterColonIfBeforeBraceOrBracket = (options.newlineAfterColonIfBeforeBraceOrBracket === true) ? true : false;
+                options.spaceAfterColon = (options.spaceAfterColon === false) ? false : true;
+                if (typeof json !== 'string') {
+                    json = JSON.stringify(json);
+                } else {
+                    json = JSON.parse(json);
+                    json = JSON.stringify(json);
+                }
+                reg = /([\{\}])/g;
+                json = json.replace(reg, '\r\n$1\r\n');
+                reg = /([\[\]])/g;
+                json = json.replace(reg, '\r\n$1\r\n');
+                reg = /(\,)/g;
+                json = json.replace(reg, '$1\r\n');
+                reg = /(\r\n\r\n)/g;
+                json = json.replace(reg, '\r\n');
+                reg = /\r\n\,/g;
+                json = json.replace(reg, ',');
+                if (!options.newlineAfterColonIfBeforeBraceOrBracket) {
+                    reg = /\:\r\n\{/g;
+                    json = json.replace(reg, ':{');
+                    reg = /\:\r\n\[/g;
+                    json = json.replace(reg, ':[');
+                }
+                if (options.spaceAfterColon) {
+                    reg = /\:/g;
+                    json = json.replace(reg, ':');
+                }
+                (json.split('\r\n')).forEach(function (node, index) {
+                    //console.log(node);
+                    var i = 0,
+                        indent = 0,
+                        padding = '';
+
+                    if (node.match(/\{$/) || node.match(/\[$/)) {
+                        indent = 1;
+                    } else if (node.match(/\}/) || node.match(/\]/)) {
+                        if (pad !== 0) {
+                            pad -= 1;
+                        }
+                    } else {
+                        indent = 0;
+                    }
+
+                    for (i = 0; i < pad; i++) {
+                        padding += PADDING;
+                    }
+
+                    formatted += padding + node + '\r\n';
+                    pad += indent;
+                });
+                return formatted;
+            },
             drawHttp: function () {
                 var c = document.getElementById("myCanvas");
                 var context = c.getContext("2d");
@@ -369,29 +505,169 @@
                     $('.socket').css('display','none')
                 }
             },
+            verityHttp:function(){
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
+                    $('#interfaceName').focus()
+                    $("#interfaceName").focus(function(){
+                        $("#interfaceName").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入项目名称' ,  "warning" )
+                    return;
+                }else if ($('#requestUrl').val() == '' || $('#requestUrl').val() == null){
+                    $('#requestUrl').focus()
+                    $("#requestUrl").focus(function(){
+                        $("#requestUrl").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入url' ,  "warning" )
+                    return;
+                }else if ($('#assert_text').val() == '' || $('#assert_text').val() == null){
+                    $('#assert_text').focus()
+                    $("#assert_text").focus(function(){
+                        $("#assert_text").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入断言结果' ,  "warning" )
+                    return;
+                }else if ($('#timeOut').val() == '' || $('#timeOut').val() == null){
+                    $('#timeOut').focus()
+                    $("#timeOut").focus(function(){
+                        $("#timeOut").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入超时时间' ,  "warning" )
+                    $('#timeOut').focus()
+                    return;
+                }else if ($('#pre_time').val() == '' || $('#pre_time').val() == null){
+                    $('#pre_time').focus()
+                    $("#pre_time").focus(function(){
+                        $("#pre_time").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入压测时长' ,  "warning" )
+                    return;
+                }else if ($('#pre_num').val() == '' || $('#pre_num').val() == null){
+                    $('#pre_num').focus()
+                    $("#pre_num").focus(function(){
+                        $("#pre_num").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入压测并发数' ,  "warning" )
+                    return;
+                }
+                return true;
+
+            },
+            verityDubbo:function(){
+                if ( $('#project').val() == 0){
+                    swal ( "Warning" ,  '请选择项目' ,  "warning" )
+                    return false;
+                }else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
+                    $('#interfaceName').focus()
+                    $("#interfaceName").focus(function(){
+                        $("#interfaceName").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入项目名称' ,  "warning" )
+                    return;
+                }else if ($('#paramType').val() == '' || $('#paramType').val() == null){
+                    $('#paramType').focus()
+                    $("#paramType").focus(function(){
+                        $("#paramType").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入请求参数类型' ,  "warning" )
+                    return;
+                }else if ($('#assert_text').val() == '' || $('#assert_text').val() == null){
+                    $('#assert_text').focus()
+                    $("#assert_text").focus(function(){
+                        $("#assert_text").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入断言结果' ,  "warning" )
+                    return;
+                }else if ($('#interface').val() == '' || $('#interface').val() == null){
+                    $('#interface').focus()
+                    $("#interface").focus(function(){
+                        $("#interface").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入接口' ,  "warning" )
+                    $('#timeOut').focus()
+                    return;
+                }else if ($('#methodName').val() == '' || $('#methodName').val() == null){
+                    $('#methodName').focus()
+                    $("#methodName").focus(function(){
+                        $("#methodName").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入接口方法' ,  "warning" )
+                    return;
+                }else if ($('#interfaceVersion').val() == '' || $('#interfaceVersion').val() == null){
+                    $('#interfaceVersion').focus()
+                    $("#interfaceVersion").focus(function(){
+                        $("#interfaceVersion").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入版本' ,  "warning" )
+                    return;
+                }else if ($('#timeOut').val() == '' || $('#timeOut').val() == null){
+                    $('#timeOut').focus()
+                    $("#timeOut").focus(function(){
+                        $("#timeOut").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入超时时间' ,  "warning" )
+                    return;
+                }else if ($('#requestParam').val() == '' || $('#requestParam').val() == null){
+                    $('#requestParam').focus()
+                    $("#requestParam").focus(function(){
+                        $("#requestParam").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入参数' ,  "warning" )
+                    return;
+                }
+                else if ($('#pre_time').val() == '' || $('#pre_time').val() == null){
+                    $('#pre_time').focus()
+                    $("#pre_time").focus(function(){
+                        $("#pre_time").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入压测时长' ,  "warning" )
+                    return;
+                }else if ($('#pre_num').val() == '' || $('#pre_num').val() == null){
+                    $('#pre_num').focus()
+                    $("#pre_num").focus(function(){
+                        $("#pre_num").css("background-color","#FFFFCC");
+                    });
+                    swal ( "Warning" ,  '请输入压测并发数' ,  "warning" )
+                    return;
+                }
+                return true;
+
+            },
             addScript:function () {
                 if(this.isShowHttp === true){
+                    if(!this.verityHttp()){
+                        return;
+                    }
                     let cookies;
                     let header;
+                    let params;
                     if ($('#isCookie').prop("checked") == true){
                         cookies = localStorage.getItem('cookieStore')
                     }
                     if ($('#isHeader').prop("checked") == true){
                         header = localStorage.getItem('headerStore')
                     }
+                    if ($('#isParams').prop("checked") == true){
+                        params = localStorage.getItem('paramsStore')
+                    }
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
                         name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
                         protocol:1,
-                        assert_text:$('#assert').val(),
+                        assert_text:$('#assert_text').val(),
                         cookie:cookies,
                         header:header,
                         request_type:$('#requestType').val(),
-                        params:$('#requestParam').val(),
+                        params:params,
                         time_out:$('#timeOut').val(),
                         pre_time:$('#pre_time').val(),
                         pre_number:$('#pre_num').val(),
                         project:$('#project').val(),
+                        ip:$('#ip').val(),
+                        port:$('#port').val(),
                         user:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){
@@ -401,11 +677,14 @@
                         }
                     })
                 }else if (this.isShowDubbo === true){
+                    if (!this.verityDubbo()){
+                        return false;
+                    }
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
                         name:$('#interfaceName').val(),
                         param_type:$('#paramType').val(),
                         protocol:2,
-                        assert_text:$('#assert').val(),
+                        assert_text:$('#assert_text').val(),
                         ins:$('#interface').val(),
                         method:$('#methodName').val(),
                         version:$('#interfaceVersion').val(),
@@ -451,14 +730,134 @@
                     }
                 })
             },
+            testRequest:function(){
+                let cookies;
+                let header;
+                let params;
+                if ($('#isCookie').prop("checked") == true){
+                    cookies = localStorage.getItem('cookieStore')
+                }
+                if ($('#isHeader').prop("checked") == true){
+                    header = localStorage.getItem('headerStore')
+                }
+                if ($('#isParams').prop("checked") == true){
+                    params = localStorage.getItem('paramsStore')
+                }
+                const self = this
+                if(this.isShowHttp === true){
+                        if(!this.verityHttp()){
+                            return;
+                        }
+                    self.bus.$emit('loading', true)
+                    $.ajax({
+                        url:this.$api.testUrl,
+                        type:'GET',
+                        data:{
+                            "url":$('#requestUrl').val(),
+                            "protocol":1,
+                             "cookie":cookies,
+                             "header":header,
+                             "request_type":$('#requestType').val(),
+                             "params":params
+                        },
+                        success:function (response) {
+                            if (response.code == 0) {
+                                self.bus.$emit('loading', false)
+                                $("#myModal").modal()
+                                let result = new JSONFormat(response.data,4).toString()
+                                document.getElementById("writePlace").innerHTML = result;
+                            }else {
+                                swal("Warning", response.msg, "warning")
+                            }
+                        }
+                    })
+                }else if (this.isShowDubbo === true){
+                    if(!this.verityDubbo()){
+                        return;
+                    }
+                    self.bus.$emit('loading', true)
+                    $.ajax({
+                        url:this.$api.testUrl,
+                        type:'GET',
+                        data:{
+                            "url": $('#requestUrl').val(),
+                            "protocol": 2,
+                            "param_type": $('#paramType').val(),
+                            "params": $('#requestParam').val(),
+                            "time_out": $('#timeOut').val(),
+                            "pre_time": $('#pre_time').val(),
+                            "pre_number": $('#pre_num').val(),
+                            "version": $('#interfaceVersion').val(),
+                            "ins":$('#interface').val(),
+                            "method":$('#methodName').val(),
+                            "env":this.$route.query.env
+                        },
+                        success:function (response) {
+                            if (response.code == 0) {
+                                self.bus.$emit('loading', false)
+                                $("#myModal").modal()
+                                let result = new JSONFormat(response.data,4).toString()
+                                document.getElementById("writePlace").innerHTML = result;
+                            }else {
+                                swal("Warning", response.msg, "warning")
+                            }
+                        }
+                    })
+                }
+            },
             addCookie:function () {
                 $("#addCookieModal").modal()
             },
             addHeader:function(){
                 $('#addHeaderModal').modal()
             },
+            addParams:function(){
+                $('#addParamsModal').modal()
+            },
+            addParamsBtn:function(){
+                let $paramsHtml = '<div class="form-group paramsHead" style="clear: both;">\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px">\n' +
+                    '                                    <input class="form-control paramsKey" name="paramsName" placeholder="params key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <input class="form-control paramsValue" name="paramsValue" placeholder="params value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-2" style="float: left;margin-top: 15px;margin-left: 70px">\n' +
+                    '                                    <button type="button" class="btn btn-default removeButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>';
+                $('.params-body').append($paramsHtml)
+                this.paramsIndex++;
+                let self = this
+                let delEle = document.getElementsByClassName('removeButton')[self.paramsIndex-1]
+                if (delEle != null){
+                    delEle.onclick = function () {
+                        let paramHead = document.getElementsByClassName('paramsHead')[self.paramsIndex-1];
+                        if (paramHead != null){
+                            var result = paramHead.parentNode.removeChild(paramHead);
+                            if (result != null){
+                                self.paramsIndex -= 1
+                            }
+                        }
+                    }
+                }
+                document.getElementById('addParamsSubmit').onclick = function () {
+                    localStorage.removeItem('paramsStore')
+                    let cookieKey = document.getElementsByClassName('paramsKey')
+                    let cookieValue = document.getElementsByClassName('paramsValue')
+                    let paramsStore = [];
+                    for (let i = 0;i<cookieKey.length;i++){
+                        let k = cookieKey[i].value
+                        let v = cookieValue[i].value
+                        paramsStore.push({"paramskey":k,"paramsvalue":v})
+                    }
+                    localStorage.setItem('paramsStore',JSON.stringify(paramsStore))
+                    $("#addParamsModal").modal('hide')
+                }
+            },
             addCookieBtn:function () {
-                let index = this.id
                 let $cookieHtml = '<div class="form-group cookieHead" style="clear: both;">\n' +
                     '                                <div class="col-sm-2" style="float: left;margin-top: 15px">\n' +
                     '                                    <input class="form-control cookieKey" name="cookieName" placeholder="cookie key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
@@ -473,14 +872,21 @@
                     '                                </div>\n' +
                     '                            </div>';
                 $('.cookieBody').append($cookieHtml)
-                index++;
-                this.id = index;
-                let idNum = this.id
+                this.id++;
                 let self = this
-                document.getElementsByClassName('removeButton')[idNum-1].onclick = function () {
-                    document.getElementsByClassName('cookieHead')[idNum-1].remove();
-                    self.id -= 1
+                let delEle = document.getElementsByClassName('removeButton')[self.id-1]
+                if (delEle != null) {
+                    delEle.onclick = function () {
+                        let cookieHead = document.getElementsByClassName('cookieHead')[self.id - 1];
+                        if (cookieHead != null) {
+                            var result = cookieHead.parentNode.removeChild(cookieHead);
+                            if (result != null) {
+                                self.id -= 1
+                            }
+                        }
+                    }
                 }
+
                 document.getElementById('addCookieSubmit').onclick = function () {
                     localStorage.removeItem('cookieStore')
                     let cookieKey = document.getElementsByClassName('cookieKey')
@@ -494,7 +900,6 @@
                 }
             },
             addHeaderBtn:function () {
-                let index = this.headerIndex
                 let $cookieHtml = '<div class="form-group headers" style="clear: both;">\n' +
                     '                                <div class="col-sm-2" style="float: left;margin-top: 15px">\n' +
                     '                                    <input class="form-control headerKey" name="headerName" placeholder="header key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
@@ -509,13 +914,20 @@
                     '                                </div>\n' +
                     '                            </div>';
                 $('.header-body').append($cookieHtml)
-                index++;
-                this.headerIndex = index;
-                let idNum = this.headerIndex
+                this.headerIndex++;
                 let self = this
-                document.getElementsByClassName('removeHeaderButton')[idNum-1].onclick = function () {
-                    document.getElementsByClassName('headers')[idNum-1].remove();
-                    self.headerIndex -= 1
+                let delEle = document.getElementsByClassName('removeButton')[self.headerIndex-1]
+                if (delEle != null) {
+                    delEle.onclick = function () {
+                        let head = document.getElementsByClassName('headers')[self.headerIndex - 1];
+                        if (head != null) {
+                            var result = head.parentNode.removeChild(head);
+                            console.log(result)
+                            if (result != null) {
+                                self.headerIndex -= 1
+                            }
+                        }
+                    }
                 }
                 document.getElementById('addHeaderSubmit').onclick = function () {
                     localStorage.removeItem('headerStore')
@@ -528,11 +940,179 @@
                     localStorage.setItem('headerStore',JSON.stringify(headerStore))
                     $("#addHeaderModal").modal('hide')
                 }
+            },
+            getDubboServer:function () {
+                if ($('#protocol').val() == 2){
+                    let env = this.$route.query.module_env
+                    let protocol = 2
+                    const self = this
+                    this.$fetch(this.$api.dubboServer+"?env="+env+"&protocol="+protocol).then(response => {
+                        if (response.code == 0){
+                            self.services = response.data[0]
+                        }
+                    })
+                }
             }
         }
     }
 </script>
 
 <style scoped>
+    .modal.left .modal-dialog,
+    .modal.right .modal-dialog {
+        position: fixed;
+        margin: auto;
+        width: 650px;
 
+        max-width: 850px;
+        height: 100%;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+    }
+
+    .modal.left .modal-content,
+    .modal.right .modal-content {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+
+    #result {
+        height: 500px;
+    }
+
+    .modal.left .modal-body,
+    .modal.right .modal-body {
+        padding: 15px 15px 80px;
+    }
+
+    /*Left*/
+    .modal.left.fade .modal-dialog {
+        left: -30px;
+        -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+        transition: opacity 0.3s linear, left 0.3s ease-out;
+    }
+
+    .modal.left.fade.in .modal-dialog {
+        left: 0;
+    }
+
+    /*Right*/
+    .modal.right.fade .modal-dialog {
+        right: 0px;
+        -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+        transition: opacity 0.3s linear, right 0.3s ease-out;
+    }
+
+    .modal.right.fade.in .modal-dialog {
+        right: 0;
+    }
+
+    /* ----- MODAL STYLE ----- */
+    .modal-content {
+        border-radius: 0;
+        border: none;
+    }
+
+    .modal-header {
+        color: black;
+        border-bottom-color: black;
+        background-color: white;
+    }
+
+    pre {
+        font-family: 'consolas';
+    }
+
+    .Canvas {
+        font: 14px/18px 'consolas';
+        background-color: #ECECEC;
+        color: #000000;
+        border: solid 1px #CECECE;
+    }
+
+    .ObjectBrace {
+        color: #00AA00;
+        font-weight: bold;
+    }
+
+    .ArrayBrace {
+        color: #0033FF;
+        font-weight: bold;
+    }
+
+    .PropertyName {
+        color: #CC0000;
+        font-weight: bold;
+    }
+
+    .String {
+        color: #007777;
+    }
+
+    .Number {
+        color: #AA00AA;
+    }
+
+    .Boolean {
+        color: #0000FF;
+    }
+
+    .Function {
+        color: #AA6633;
+        text-decoration: italic;
+    }
+
+    .Null {
+        color: #0000FF;
+    }
+
+    .Comma {
+        color: #000000;
+        font-weight: bold;
+    }
+
+    PRE.CodeContainer {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .json_key {
+        color: #92278f;
+        font-weight: bold;
+    }
+
+    .json_null {
+        color: #f1592a;
+        font-weight: bold;
+    }
+
+    .json_string {
+        color: #3ab54a;
+        font-weight: bold;
+    }
+
+    .json_number {
+        color: #25aae2;
+        font-weight: bold;
+    }
+
+    .json_boolean {
+        color: #f98280;
+        font-weight: bold;
+    }
+
+    .json_link {
+        color: #61D2D6;
+        font-weight: bold;
+    }
+
+    .json_array_brackets {
+    }
 </style>

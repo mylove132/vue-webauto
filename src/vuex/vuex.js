@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         status: '',
         token: localStorage.getItem('token') || '',
         user: localStorage.getItem('user') || '',
+        LOADING: false
     },
     mutations: {
         auth_request(state) {
@@ -30,6 +31,12 @@ const store = new Vuex.Store({
             state.token = ''
             state.user = ''
         },
+        showLoading(state){
+            state.LOADING = true
+        },
+        hideLoading (state) {
+            state.LOADING = false
+        }
     },
     actions: {
         Login({commit}, user) {

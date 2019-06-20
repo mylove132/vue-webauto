@@ -18,6 +18,7 @@ Vue.prototype.$patch=patch;
 Vue.prototype.qs=qs;
 Vue.prototype.$api=api
 Vue.prototype.$db=db
+Vue.prototype.bus = new Vue;
 
 Vue.config.productionTip = false
 
@@ -38,6 +39,8 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
+
+
 new Vue({
     el: "#app",
     router,

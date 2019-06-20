@@ -19,9 +19,9 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link  class="nav-link" to="/report">
+                        <router-link  class="nav-link" to="/project">
                             <i class="far fa-file-alt"></i>
-                            Reports
+                            项目
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -33,11 +33,11 @@
                     <li class="nav-item">
                         <router-link  class="nav-link" to="/account">
                             <i class="far fa-user"></i>
-                            Accounts
+                            用例中心
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/timing">
+                        <router-link class="nav-link" to="/task">
                             <i class="fa fa-bell"></i>
                             定时任务
                         </router-link>
