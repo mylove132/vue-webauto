@@ -2,41 +2,43 @@
     <div class="" id="home">
         <div class="container mt-5" id="accordion">
             <div class="row tm-content-row">
-
                 <div class="col-12 tm-block-col">
+
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                        <select class="custom-select" id="project" @change="setEnv">
-                            <option value="0">请选择项目</option>
-                            <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
-                        </select>
+
+                                <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
+                            <select class="col-md-11 custom-select" id="project" @change="setEnv">
+                                <option value="0">请选择项目</option>
+                                <option v-for="project in projectList" :value="project.id">{{project.projectName}}</option>
+                            </select>
+
+                    </div>
                 </div>
-            </div>
 
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                        <select class="custom-select" id="protocol">
+                        <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
+                        <select class="col-md-11 custom-select" id="protocol" @change="showMust">
                             <option value="0">请选择协议</option>
-                            <option value="1">HTTP</option>
-                            <option value="2">DUBBO</option>
-                            <option value="3">WEBSOCKET</option>
+                            <option v-for="protocol in protocolList" :value="protocol.id">{{protocol.name}}</option>
                         </select>
                     </div>
                 </div>
 
             <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                        <a class="card-link" data-toggle="collapse" href="#collapseOne" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
-                            HEADER设置
+                        <a class="card-link" data-toggle="collapse" href="#collapse1" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
+                            <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> HEADER设置
                         </a>
-                        <a class="card-link" data-toggle="collapse" href="#collapseTwo" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
-                            COOKIE设置
+                        <a class="card-link" data-toggle="collapse" href="#collapse2" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                            <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> COOKIE设置
                         </a>
-                        <a class="card-link" data-toggle="collapse" href="#collapseThree" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
-                            PARAM设置
+                        <a class="card-link" data-toggle="collapse" href="#collapse3" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                            <label class="http dubbo websocket" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> PARAM设置
                         </a>
-                        <div class="row tm-content-row collapse hide" id="collapseOne" data-parent="#accordion">
+                        <div class="row tm-content-row collapse hide" id="collapse1" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <button type="button" class="btn btn-default addBtn"
@@ -51,18 +53,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row tm-content-row collapse hide" id="collapseTwo" data-parent="#accordion">
+                        <div class="row tm-content-row collapse hide" id="collapse2" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;" id="addBtn"
+                                                    style="border-radius:6px;width: 140px;margin-top: 20px" id="addBtn"
                                                     @click="addCookieBtn()"><i class="fa fa-plus"
                                                                                aria-hidden="true"></i></button>
-                                            <button type="button" class="btn btn-default addBtn"
+                                            <!--<button type="button" class="btn btn-default addBtn"
                                                     style="border-radius:6px;width: 140px;margin-top: 20px;" id="generateLoginToken"
                                                     @click="addCookieBtn()">登录cookie</button>
+                                                    -->
                                         </div>
                                         <div class="col-md-10" id="cookieList">
                                         </div>
@@ -71,9 +74,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row tm-content-row collapse hide" id="collapseThree" data-parent="#accordion">
+                        <div class="row tm-content-row collapse hide" id="collapse3" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
                                     <div class="row">
                                         <ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">
                                             <li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>
@@ -81,7 +84,7 @@
                                         </ul>
                                     </div>
                                     <div class="row" id="json_content" style="display: none;margin-top: 20px">
-                                        <textarea style="width: 800px;height: 300px;background-color: #425c6f;border: 2px solid white;border-radius: 5px;" id="requestParam"></textarea>
+                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;" id="requestParam"></textarea>
                                     </div>
                                     <div class="row" id="form_content">
                                         <div class="col-md-2">
@@ -107,8 +110,8 @@
                     <div class="tm-bg-primary-dark tm-block tm-block-settings">
                         <h2 class="tm-block-title">请求设置</h2>
                         <form action="" class="tm-signup-form row">
-                            <div class="form-group col-lg-6 http dubbo">
-                                <label for="interfaceName">接口名称</label>
+                            <div class="form-group col-lg-6">
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="interfaceName">接口名称</label>
                                 <input
                                         id="interfaceName"
                                         name="interfaceName"
@@ -116,8 +119,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 htttp socket">
-                                <label for="requestUrl">URL</label>
+                            <div class="form-group col-lg-6">
+                                <label class="http websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label> <label for="requestUrl">URL</label>
                                 <input
                                         id="requestUrl"
                                         name="requestUrl"
@@ -126,15 +129,13 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="requestType">请求方式</label>
+                                <label class="http websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="requestType">请求方式</label>
                                 <select class="form-control" style="width:200px;text-align: center" id="requestType">
-                                    <option value="1">GET</option>
-                                    <option value="2">POST</option>
-                                    <option value="3">DELETE</option>
+                                    <option v-for="requestType in requestTypeList" :value="requestType.id">{{requestType.name}}</option>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="interface">dubbo接口</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label> <label for="interface">dubbo接口</label>
                                 <input
                                         id="interface"
                                         name="interface"
@@ -142,8 +143,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="methodName">方法</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="methodName">方法</label>
                                 <input
                                         id="methodName"
                                         name="methodName"
@@ -151,8 +152,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="paramType">参数类型</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label> <label for="paramType">参数类型</label>
                                 <input
                                         id="paramType"
                                         name="paramType"
@@ -160,8 +161,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="interfaceVersion">版本号</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="interfaceVersion">版本号</label>
                                 <input
                                         id="interfaceVersion"
                                         name="interfaceVersion"
@@ -177,7 +178,7 @@
                         <h2 class="tm-block-title">Jmeter Settings</h2>
                         <form action="" class="tm-signup-form row">
                             <div class="form-group col-lg-6">
-                                <label for="pre_num">并发数</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="pre_num">并发数</label>
                                 <input
                                         id="pre_num"
                                         name="name"
@@ -186,7 +187,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="pre_time">压测时长</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="pre_time">压测时长</label>
                                 <input
                                         id="pre_time"
                                         name="pre_time"
@@ -195,7 +196,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="assert_text">响应断言</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="assert_text">响应断言</label>
                                 <input
                                         id="assert_text"
                                         name="assert_text"
@@ -204,7 +205,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="timeOut">接口超时时间</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: -20px;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="timeOut">接口超时时间</label>
                                 <input
                                         id="timeOut"
                                         name="timeOut"
@@ -273,7 +274,9 @@
                 id: 0,
                 headerIndex: 0,
                 paramsIndex: 0,
+                protocolList:[],
                 projectList:[],
+                requestTypeList:[],
                 cStore:[],
                 ccStore:[],
                 hStore:[],
@@ -287,13 +290,45 @@
             this.$fetch(this.$api.projectUrl).then(response => {
                 this.projectList = response.data
             });
+            this.$fetch(this.$api.protocolUrl).then(response => {
+                this.protocolList = response.data
+            });
+            this.$fetch(this.$api.requestTypeUrl).then(response => {
+                this.requestTypeList = response.data
+            });
+        },
+        mounted:function(){
+
+            $(".http").css('display','none')
+            $(".dubbo").css('display','none')
+            $(".websocket").css('display','none')
         },
         methods:{
             setEnv:function(){
                 this.$fetch(this.$api.projectUrl+$("#project").val()).then(response => {
                     this.env = response.data.env
-                })
-
+                });
+            },
+            showMust:function(){
+                $(".http").css('display','none');
+                $(".dubbo").css('display','none');
+                $(".websocket").css('display','none');
+                switch ($('#protocol').find("option:selected").text()) {
+                    case "HTTP":
+                        $(".http").css('display','block');
+                        break;
+                    case "DUBBO":
+                        $(".dubbo").css('display','block');
+                        break;
+                    case "WEBSOCKET":
+                        $(".websocket").css('display','block');
+                        break;
+                    default:
+                        $(".http").css('display','none');
+                        $(".dubbo").css('display','none');
+                        $(".websocket").css('display','none');
+                        break;
+                }
             },
             addHeaderBtn: function () {
                 let $cookieHtml = '<div class="form-group headers" style="clear: both">\n' +
@@ -532,28 +567,33 @@
 
             },
             addScript:function () {
-
+                this.cStore = [];
+                this.hStore = [];
+                this.pStore = [];
                 if ( $('#project').val() == 0){
                     swal ( "Warning" ,  '请选择项目' ,  "warning" )
                     return false;
                 }
-                if ( $('#protocol').val() == 0){
+                if ( $('#protocol').find("option:selected").text() == "请选择协议"){
                     swal ( "Warning" ,  '请选择协议' ,  "warning" )
                     return false;
                 }
-                if ($('#protocol').val() == 1){
+                if ( $('#protocol').find("option:selected").text() == "HTTP"){
                     if(!this.verityHttp()){
                         return false;
                     }
-                } else if ($('#protocol').val() == 2){
+                } else if ( $('#protocol').find("option:selected").text() == "DUBBO"){
                     if(!this.verityDubbo()){
                         return false;
                     }
-                }else {
+                }else if ( $('#protocol').find("option:selected").text() == "WEBSOCKET"){
+                    if(!this.verityHttp()){
+                        return false;
+                    }
+                } else {
                     swal ( "Warning" ,  '暂不支持该协议' ,  "warning" )
                     return false;
                 }
-
 
                 let cookieKey = document.getElementsByClassName('cookieKey')
                 let cookieValue = document.getElementsByClassName('cookieValue')
@@ -582,23 +622,23 @@
                     this.$post(this.$api.scriptUrl,this.qs.stringify({
                         name:$('#interfaceName').val(),
                         url:$('#requestUrl').val(),
-                        protocol:$('#protocol').val(),
+                        protocolId:$('#protocol').val(),
                         ins:$('#interface').val(),
                         method:$('#methodName').val(),
-                        param_type:$('#paramType').val(),
+                        paramType:$('#paramType').val(),
                         version:$('#interfaceVersion').val(),
-                        assert_text:$('#assert_text').val(),
+                        assertText:$('#assert_text').val(),
                         cookie:JSON.stringify(this.cStore),
                         header:JSON.stringify(this.hStore),
-                        request_type:$('#requestType').val(),
+                        requestTypeId:$('#requestType').val(),
                         params:pm,
-                        time_out:$('#timeOut').val(),
-                        pre_time:$('#pre_time').val(),
-                        pre_number:$('#pre_num').val(),
-                        project:$('#project').val(),
+                        timeOut:$('#timeOut').val(),
+                        preTime:$('#pre_time').val(),
+                        preNumber:$('#pre_num').val(),
+                        projectId:$('#project').val(),
                         ip:$('#ip').val(),
                         port:$('#port').val(),
-                        user:localStorage.user_id
+                        userId:localStorage.user_id
                     })).then(response => {
                         if(response.code == 0){
                             this.$router.push({
@@ -613,7 +653,6 @@
                             swal ( "错误" ,  response.msg ,  "error" )
                         }
                     })
-
 
             },
             testRequest: function () {

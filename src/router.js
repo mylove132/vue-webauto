@@ -43,12 +43,6 @@ export default new Router({
             path: '/editScript',
             name: 'editScript',
             component: () => import( './components/EditScriptView.vue')
-        },
-        {
-            meta:{requireAuth:true},
-            path: '/editScript1',
-            name: 'editScript1',
-            component: () => import( './components/EditScript.vue')
         }
         ,
         {

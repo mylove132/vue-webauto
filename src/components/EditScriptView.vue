@@ -5,17 +5,17 @@
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <a class="card-link" data-toggle="collapse" href="#collapseOne" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
-                            HEADER设置
+                            <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> HEADER设置
                         </a>
                         <a class="card-link" data-toggle="collapse" href="#collapseTwo" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
-                            COOKIE设置
+                            <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> COOKIE设置
                         </a>
                         <a class="card-link" data-toggle="collapse" href="#collapseThree" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
-                            PARAM设置
+                            <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label>  PARAM设置
                         </a>
                         <div class="row tm-content-row collapse hide" id="collapseOne" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <button type="button" class="btn btn-default addBtn"
@@ -33,16 +33,17 @@
 
                         <div class="row tm-content-row collapse hide" id="collapseTwo" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;" id="addBtn"
+                                                    style="border-radius:6px;width: 140px;margin-top: 20px" id="addBtn"
                                                     @click="addCookieBtn()"><i class="fa fa-plus"
                                                                                aria-hidden="true"></i></button>
-                                            <button type="button" class="btn btn-default addBtn"
+                                            <!--<button type="button" class="btn btn-default addBtn"
                                                     style="border-radius:6px;width: 140px;margin-top: 20px;" id="generateLoginToken"
                                                     @click="addCookieBtn()">登录cookie</button>
+                                                    -->
                                         </div>
                                         <div class="col-md-10" id="cookieList">
                                         </div>
@@ -54,7 +55,7 @@
 
                         <div class="row tm-content-row collapse hide" id="collapseThree" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto http" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
                                     <div class="row">
                                         <ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">
                                             <li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>
@@ -62,7 +63,7 @@
                                         </ul>
                                     </div>
                                     <div class="row" id="json_content" style="display: none;margin-top: 20px">
-                                        <textarea style="width: 800px;height: 300px;background-color: #425c6f;border: 2px solid white;border-radius: 5px;color: cyan" id="requestParam"></textarea>
+                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: cyan" id="requestParam"></textarea>
                                     </div>
                                     <div class="row" id="form_content">
                                         <div class="col-md-2">
@@ -90,7 +91,7 @@
                         <h2 class="tm-block-title">请求设置</h2>
                         <form action="" class="tm-signup-form row">
                             <div class="form-group col-lg-6 http dubbo">
-                                <label for="interfaceName">接口名称</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="interfaceName">接口名称</label>
                                 <input
                                         id="interfaceName"
                                         name="interfaceName"
@@ -99,7 +100,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6 htttp socket">
-                                <label for="requestUrl">URL</label>
+                                <label class="http websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="requestUrl">URL</label>
                                 <input
                                         id="requestUrl"
                                         name="requestUrl"
@@ -108,15 +109,16 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="requestType">请求方式</label>
+                                <label class="http websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="requestType">请求方式</label>
                                 <select class="form-control" style="width:200px;text-align: center" id="requestType">
+                                    <option value="0" selected="selected">请选择请求方式</option>
                                     <option value="1">GET</option>
                                     <option value="2">POST</option>
                                     <option value="3">DELETE</option>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="interface">dubbo接口</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="interface">dubbo接口</label>
                                 <input
                                         id="interface"
                                         name="interface"
@@ -124,8 +126,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="methodName">方法</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="methodName">方法</label>
                                 <input
                                         id="methodName"
                                         name="methodName"
@@ -133,8 +135,8 @@
                                         class="form-control validate"
                                 />
                             </div>
-                            <div class="form-group col-lg-6 dubbo">
-                                <label for="paramType">参数类型</label>
+                            <div class="form-group col-lg-6">
+                                <label class="dubbo" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="paramType">参数类型</label>
                                 <input
                                         id="paramType"
                                         name="paramType"
@@ -143,7 +145,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6 dubbo">
-                                <label for="interfaceVersion">版本号</label>
+                                <label class="dubbo" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="interfaceVersion">版本号</label>
                                 <input
                                         id="interfaceVersion"
                                         name="interfaceVersion"
@@ -159,7 +161,7 @@
                         <h2 class="tm-block-title">Jmeter Settings</h2>
                         <form action="" class="tm-signup-form row">
                             <div class="form-group col-lg-6">
-                                <label for="pre_num">并发数</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="pre_num">并发数</label>
                                 <input
                                         id="pre_num"
                                         name="name"
@@ -168,7 +170,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="pre_time">压测时长</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="pre_time">压测时长</label>
                                 <input
                                         id="pre_time"
                                         name="pre_time"
@@ -177,7 +179,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="assert_text">响应断言</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="assert_text">响应断言</label>
                                 <input
                                         id="assert_text"
                                         name="assert_text"
@@ -186,7 +188,7 @@
                                 />
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="timeOut">接口超时时间</label>
+                                <label class="http dubbo websocket" style="color: red;margin-left: 60px;margin-right: -50px;display: block;float: left">*</label><label for="timeOut">接口超时时间</label>
                                 <input
                                         id="timeOut"
                                         name="timeOut"
@@ -263,26 +265,37 @@
                 pStore: [],
                 ppStore: [],
                 $script: '',
+                requestTypeList:[],
                 script_id: 0
             }
         },
+        created:function () {
+            this.$fetch(this.$api.requestTypeUrl).then(response => {
+                this.requestTypeList = response.data
+            });
+        },
         mounted: function () {
+            $('.http').css('display', 'none')
+            $('.dubbo').css('display', 'none')
+            $('.websocket').css('display', 'none')
             $('.control-group').css('display', 'none')
             const self = this
+            self.bus.$emit('loading', true)
             this.script_id = this.$route.query.script_id
             this.$fetch(this.$api.scriptUrl + this.script_id).then(response => {
                 if (response.code == 0) {
+                    self.bus.$emit('loading', false)
                     self.$script = response.data
                     let script = self.$script
-                    if (script.protocol == 1) {
+                    if (script.protocolId == 1) {
                         $('.http').css('display', 'block')
                         $('#interfaceName').val(script.name)
-                        $('#assert_text').val(script.assert_text)
+                        $('#assert_text').val(script.assertText)
                         $('#requestUrl').val(script.url)
-                        $('#requestType').val(script.request_type)
-                        $('#pre_num').val(script.pre_number)
-                        $('#timeOut').val(script.time_out)
-                        $('#pre_time').val(script.pre_time)
+                        $('#requestType').val(script.requestTypeId)
+                        $('#pre_num').val(script.preNumber)
+                        $('#timeOut').val(script.timeOut)
+                        $('#pre_time').val(script.preTime)
                         $('#requestParam').val(script.params)
                         $('#ip').val(script.ip)
                         $('#port').val(script.port)
@@ -393,22 +406,25 @@
                             }
                         }
                     }
-                    else if (script.protocol == 2) {
+                    else if (script.protocolId == 2) {
                         $('.dubbo').css('display', 'block')
                         $('#interfaceName').val(script.name)
-                        $('#assert_text').val(script.assert_text)
-                        $('#paramType').val(script.param_type)
+                        $('#assert_text').val(script.assertText)
+                        $('#paramType').val(script.paramType)
                         $('#requestParam').val(script.params)
-                        $('#pre_num').val(script.pre_number)
-                        $('#timeOut').val(script.time_out)
-                        $('#pre_time').val(script.pre_time)
-                        $('#requestParam').val(script.params)
+                        $('#pre_num').val(script.preNumber)
+                        $('#timeOut').val(script.timeOut)
+                        $('#pre_time').val(script.preTime)
                         $('#ip').val(script.ip)
                         $('#port').val(script.port)
                         $('#interface').val(script.ins)
                         $('#interfaceVersion').val(script.version)
                         $('#methodName').val(script.method)
                     }
+                }
+                else {
+                    self.bus.$emit('loading', false)
+                    swal("Error", response.message, "error")
                 }
             })
         },
@@ -645,7 +661,10 @@
 
             },
             editScriptSubmit: function () {
-                if (this.$script.protocol == 1) {
+                this.cStore = [];
+                this.hStore = [];
+                this.pStore = [];
+                if (this.$script.protocolId == 1) {
                     if (!this.verityHttp()) {
                         return false;
                     }
@@ -674,26 +693,28 @@
                     } else {
                         pm = JSON.stringify(this.pStore)
                     }
-
-                    this.$put(this.$api.scriptUrl + script.id + "/", this.qs.stringify({
+                    this.bus.$emit('loading', true);
+                    this.$put(this.$api.scriptUrl, this.qs.stringify({
                         name: $('#interfaceName').val(),
+                        id:script.id,
                         url: $('#requestUrl').val(),
-                        protocol: 1,
+                        protocolId: 1,
                         cookie: JSON.stringify(this.cStore),
                         header: JSON.stringify(this.hStore),
                         params: pm,
-                        assert_text: $('#assert_text').val(),
-                        request_type: $('#requestType').val(),
-                        time_out: $('#timeOut').val(),
-                        pre_time: $('#pre_time').val(),
-                        pre_number: $('#pre_num').val(),
+                        assertText: $('#assert_text').val(),
+                        requestTypeId: $('#requestType').val(),
+                        timeOut: $('#timeOut').val(),
+                        preTime: $('#pre_time').val(),
+                        preNumber: $('#pre_num').val(),
                         ip: $('#ip').val(),
                         port: $('#port').val(),
-                        project: this.$script.project,
-                        user: localStorage.user_id
+                        projectId: this.$script.project,
+                        userId: localStorage.user_id
                     })).then(response => {
                         console.log(response)
                         if (response.code == 0) {
+                            this.bus.$emit('loading', false)
                             swal("修改成功", $('#interfaceName').val() + "修改成功!", "success")
                             this.$router.push({
                                 name: 'scripts',
@@ -702,32 +723,35 @@
                                 }
                             })
                         } else {
-                            swal("Error", response.msg, "error")
+                            this.bus.$emit('loading', false)
+                            swal("Error", response.message, "error")
                         }
                     })
-                } else if (this.$script.protocol == 2) {
+                } else if (this.$script.protocolId == 2) {
+                    this.bus.$emit('loading', true)
                     if (!this.verityDubbo()) {
                         return false;
                     }
-                    this.$put(this.$api.scriptUrl + this.$script.id + "/", this.qs.stringify({
+                    this.$put(this.$api.scriptUrl, this.qs.stringify({
                         name: $('#interfaceName').val(),
-                        protocol: 2,
-                        assert_text: $('#assert_text').val(),
-                        param_type: $('#paramType').val(),
+                        protocolId: 2,
+                        id:this.$script.id,
+                        assertText: $('#assert_text').val(),
+                        paramType: $('#paramType').val(),
                         params: $('#requestParam').val(),
-                        time_out: $('#timeOut').val(),
-                        pre_time: $('#pre_time').val(),
-                        pre_number: $('#pre_num').val(),
-                        project: this.$script.project,
+                        timeOut: $('#timeOut').val(),
+                        preTime: $('#pre_time').val(),
+                        preNumber: $('#pre_num').val(),
+                        projectId: this.$script.project,
                         ins: $('#interface').val(),
                         method: $('#methodName').val(),
                         ip: $('#ip').val(),
                         port: $('#port').val(),
                         version: $('#interfaceVersion').val(),
-                        user: localStorage.user_id
+                        userId: localStorage.user_id
                     })).then(response => {
-                        console.log(response)
                         if (response.code == 0) {
+                            this.bus.$emit('loading', false)
                             swal("修改成功", $('#interfaceName').val() + "修改成功!", "success")
                             this.$router.push({
                                 name: 'scripts',
@@ -736,7 +760,8 @@
                                 }
                             })
                         } else {
-                            swal("Error", response.msg, "error")
+                            this.bus.$emit('loading', false)
+                            swal("Error", response.message, "error")
                         }
                     })
                 }
@@ -780,7 +805,7 @@
                             "protocol": 1,
                             "cookie": JSON.stringify(self.ccStore),
                             "header": JSON.stringify(self.hhStore),
-                            "request_type": $('#requestType').val(),
+                            "requestTypeId": $('#requestType').val(),
                             "params": pm
                         },
                         success: function (response) {

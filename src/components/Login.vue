@@ -55,11 +55,11 @@
         },
         methods: {
             login: function () {
-                let params = this.qs.stringify({
+                let user = this.qs.stringify({
                     email: $('#username').val(),
                     password: $("#password").val()
                 });
-                this.$store.dispatch('Login',params).then(response => {
+                this.$store.dispatch('Login',user).then(response => {
                     this.$router.push({ path: '/' })
                 })
             }

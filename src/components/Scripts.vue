@@ -7,14 +7,12 @@
                     <select style="width: 150px;height: 40px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_project"
                             @change="filterProject">
                         <option value="0">请选择项目</option>
-                        <option v-for="project in projectList" :value="project.id">{{project.name}}</option>
+                        <option v-for="project in projectList" :value="project.id">{{project.projectName}}</option>
                     </select>
                     <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_protocol"
                             @change="filterProtocol">
                         <option value="0">请选择协议</option>
-                        <option value="1">HTTP</option>
-                        <option value="2">DUBBO</option>
-                        <option value="3">SOCKET</option>
+                        <option v-for="protocol in protocolList" :value="protocol.id">{{protocol.name}}</option>
                     </select>
                     <select style="width: 150px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_user"
                             @change="filterUser">
@@ -54,19 +52,19 @@
                                 <tbody>
                                 <tr v-for="script in scriptList">
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{script.projectname}}
+                                        {{script.projectName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{script.username}}
+                                        {{script.userName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                                         {{script.name}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{reuqetType[script.request_type]}}
+                                        class="tm-product-name">{{script.requestTypeName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{interfaceType[script.protocol]}}
+                                        class="tm-product-name">{{script.protocolName}}
                                     <!--<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-->
                                         <!--{{script.create_time}}-->
                                     <!--</td>-->
@@ -74,10 +72,10 @@
                                         <!--{{script.update_time}}-->
                                     <!--</td>-->
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{script.pre_time}}
+                                        {{script.preTime}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{script.pre_number}}
+                                        {{script.preNumber}}
                                     </td>
                                     <!--<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.url}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.ins}}</td>
@@ -90,7 +88,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="editScript(script.id,script.project)" class="tm-product-delete-link">
+                                        <a href="#" @click="editScript(script.id,script.envId)" class="tm-product-delete-link">
                                             <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -156,26 +154,15 @@
                 headerIndex: 0,
                 scriptList: [],
                 projectList: [],
-                users: [],
-                reuqetType: {
-                    1: "GET",
-                    2: "POST",
-                    3: "DELETE"
-                },
-                interfaceType: {
-                    1: 'HTTP',
-                    2: 'DUBBO',
-                    3: 'SOCKET'
-                }
+                protocolList:[],
+                users: []
             }
         },
-
-        destroyed() {
-            this.websock.close() //离开路由之后断开websocket连接
-        },
         created: function () {
-            this.initWebSocket()
             this.getScriptsList()
+            this.$fetch(this.$api.protocolUrl).then(response => {
+                this.protocolList = response.data
+            });
             this.$fetch(this.$api.projectUrl).then(response => {
                 this.projectList = response.data
             });
@@ -189,50 +176,12 @@
             })
         },
         mounted: function () {
-
+            console.log(this.projectList)
         },
         methods: {
-            initWebSocket() { //初始化weosocket
-                const wsuri = this.$api.wsUrl;
-                this.websock = new WebSocket(wsuri);
-                this.websock.onmessage = this.websocketonmessage;
-                this.websock.onopen = this.websocketonopen;
-                this.websock.onerror = this.websocketonerror;
-                this.websock.onclose = this.websocketclose;
-            },
-            websocketonopen() { //连接建立之后执行send方法发送数据
-                console.log("建立连接成功")
-            },
-            websocketonerror() {//连接建立失败重连
-                this.initWebSocket();
-            },
-            websocketonmessage(e) { //数据接收
-                const logs = ''
-                const redata = JSON.parse(e.data);
-                console.log(redata)
-                logs = logs + redata.message
-                document.getElementById('log').innerHTML = logs
-                if (redata.code == 0){
-                    this.script_run_status = true
-                } else if (redata.code == 2){
-                    this.script_run_status = false
-                    swal(
-                        'success!',
-                        'this script run success.',
-                        'success'
-                    );
-                }
-                $('#log').text(redata.message)
-            },
-            websocketsend(Data) {//数据发送
-                this.websock.send(Data);
-            },
-            websocketclose(e) {  //关闭
-                console.log('断开连接', e);
-            },
             getScriptsList: function () {
                 if (this.$route.query.module_id != null) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + this.$route.query.module_id).then(response => {
+                    this.$fetch(this.$api.scriptUrl + "orderByProject/" + this.$route.query.module_id).then(response => {
                         this.scriptList = response.data
                     })
                 }else {
@@ -254,124 +203,29 @@
                 const projectIndex = $('#select_project').val();
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (protocolIndex != 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&protocol=" + protocolIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (protocolIndex != 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&protocol=" + protocolIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (protocolIndex == 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex == 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex != 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?protocol=" + protocolIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex == 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex != 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?user=" + userIndex + "&protocol=" + protocolIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
-                else {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
+                this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
+                    this.scriptList = response.data
+                })
             },
             filterProtocol: function () {
                 const projectIndex = $('#select_project').val();
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (projectIndex != 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&protocol=" + protocolIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex != 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&protocol=" + protocolIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?protocol=" + protocolIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex == 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (protocolIndex == 0 && projectIndex != 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex == 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (protocolIndex == 0 && projectIndex != 0 && userIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?user=" + userIndex + "&project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
-                else {
-                    this.$fetch(this.$api.scriptUrl + "?protocol=" + protocolIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
-
+                this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
+                    this.scriptList = response.data
+                })
             },
             filterUser: function () {
                 const projectIndex = $('#select_project').val();
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
-                if (projectIndex != 0 && protocolIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&protocol=" + protocolIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex != 0 && protocolIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?protocol=" + protocolIndex + "&user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (projectIndex == 0 && protocolIndex == 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (protocolIndex == 0 && projectIndex != 0 && userIndex == 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (userIndex == 0 && protocolIndex == 0 && projectIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                } else if (userIndex == 0 && projectIndex != 0 && protocolIndex != 0) {
-                    this.$fetch(this.$api.scriptUrl + "?project=" + projectIndex + "&project=" + projectIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
-                else {
-                    this.$fetch(this.$api.scriptUrl + "?user=" + userIndex).then(response => {
-                        this.scriptList = response.data
-                    })
-                }
-
+                this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
+                    this.scriptList = response.data
+                })
             },
             search: function () {
                 const search_text = $('#search').val()
-                this.$fetch(this.$api.scriptUrl + "?search=" + search_text).then(response => {
+                this.$fetch(this.$api.scriptUrl + "search?keyword=" + search_text).then(response => {
                     this.scriptList = response.data
                 })
             },
@@ -388,7 +242,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then(function (isConfirm) {
                     if (isConfirm) {
-                        self.$del(self.$api.scriptUrl + id + "/").then(response => {
+                        self.$del(self.$api.scriptUrl + id).then(response => {
                             if (response.code == 0) {
                                 swal(
                                     'Deleted!',
@@ -401,25 +255,14 @@
                     }
                 })
             },
-            editScript: function (script_id,env) {
-                 this.$fetch(this.$api.projectUrl+env).then(response => {
-                    if (response.code == 0){
+            editScript: function (script_id,envId) {
                         this.$router.push({
                             path: 'editScript',
                             query: {
                                 script_id: script_id,
-                                env:response.data.env
+                                env:envId
                             }
                         })
-                    }else {
-                        swal(
-                            'warning!',
-                            response.msg,
-                            'warning'
-                        );
-                    }
-                })
-
             },
             seeLog:function(){
                 $('#logModal').modal()

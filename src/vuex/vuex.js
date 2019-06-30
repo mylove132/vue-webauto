@@ -46,7 +46,7 @@ const store = new Vuex.Store({
                     .then(resp => {
                         const token = resp.data.data.token
                         const user = resp.data.data.name
-                        const id = resp.data.data.id
+                        const id = resp.data.data.user_id
                         localStorage.setItem('token', token)
                         localStorage.setItem('user', user)
                         localStorage.setItem('user_id', id)

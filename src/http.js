@@ -46,18 +46,7 @@ const errorHandle = (status, other) => {
         // 403 token过期
         // 清除token并跳转登录页
         case 403:
-            if (other.detail != '' && other.detail == 'You do not have permission to perform this action.'){
-                swal ( "Warning" ,  'not permission' ,  "warning" )
-                break;
-            }else if (other.detail != '' && other.detail == '请传入token值'){
-                swal ( "Warning" ,  '请先登录' ,  "warning" )
-                break;
-            }
-            else {
-                store.dispatch('LogOut');
-                store.push({path: '/login'})
-                break;
-            }
+            swal ( "Warning" ,  other.message ,  "warning" )
         // 404请求不存在
         case 404:
             tip('请求的资源不存在');
