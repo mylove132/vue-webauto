@@ -46,7 +46,9 @@ const errorHandle = (status, other) => {
         // 403 token过期
         // 清除token并跳转登录页
         case 403:
-            swal ( "Warning" ,  other.message ,  "warning" )
+            swal ( "Warning" ,  other.message ,  "warning" );
+            window.location.href = "/login";
+            break;
         // 404请求不存在
         case 404:
             tip('请求的资源不存在');

@@ -712,7 +712,6 @@
                         projectId: this.$script.project,
                         userId: localStorage.user_id
                     })).then(response => {
-                        console.log(response)
                         if (response.code == 0) {
                             this.bus.$emit('loading', false)
                             swal("修改成功", $('#interfaceName').val() + "修改成功!", "success")
@@ -819,7 +818,7 @@
                                     document.getElementById("writePlace").innerHTML = response.data
                                 }
 
-                            }else {
+                            }else{
                                 self.bus.$emit('loading', false)
                                 swal("Warning", response.msg, "warning")
                             }
