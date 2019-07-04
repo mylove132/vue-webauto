@@ -70,22 +70,22 @@
         },
         mounted: function () {
 
-            let history_id = this.$route.query.history_id
+            let id = this.$route.query.history_id
             let script_name = this.$route.query.script_name
             let md5 = this.$route.query.md5
             const self = this
-            if(history_id == null || script_name == null || md5 ==null){
+            if(id == null || md5 ==null){
                 swal("错误", '请选择历史记录', "error")
             }
             self.bus.$emit('loading', true)
             $.ajax({
-                url: this.$api.reportUrl + "?history_id=" + history_id + "&script_name=" + script_name + "&md5=" + md5,
+                url: this.$api.generateReportUrl + "?id=" + id + "&md5=" + md5,
                 type: 'GET',
                 success: function (response) {
                     if (response.code == 0) {
                         self.thdata = []
-                        self.tpsUrl = response.data.urlList.tps;
-                        self.rtotUrl = response.data.urlList.rtot;
+                        self.tpsUrl = response.data.tps;
+                        self.rtotUrl = response.data.rtot;
                         let av = response.data.aggregate
                         console.log(av)
                         for (let a1 in av[0].split(',')){
@@ -99,7 +99,7 @@
                         }
                         self.bus.$emit('loading', false)
                     } else {
-                        swal("错误", response.msg, "error")
+                        swal("错误", response.message, "error")
                         self.bus.$emit('loading', false)
                     }
                 }

@@ -7,11 +7,10 @@
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
 
                                 <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
-                            <select class="col-md-11 custom-select" id="project" @change="setEnv">
+                            <select class="col-md-11 custom-select" id="project">
                                 <option value="0">请选择项目</option>
                                 <option v-for="project in projectList" :value="project.id">{{project.projectName}}</option>
                             </select>
-
                     </div>
                 </div>
 
@@ -21,6 +20,17 @@
                         <select class="col-md-11 custom-select" id="protocol" @change="showMust">
                             <option value="0">请选择协议</option>
                             <option v-for="protocol in protocolList" :value="protocol.id">{{protocol.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
+                        <select class="col-md-11 custom-select" id="env">
+                            <option value="0">请选择测试环境</option>
+                            <option v-for="envs in envList" :value="envs.id">{{envs.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -84,7 +94,7 @@
                                         </ul>
                                     </div>
                                     <div class="row" id="json_content" style="display: none;margin-top: 20px">
-                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;" id="requestParam"></textarea>
+                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460" id="requestParam"></textarea>
                                     </div>
                                     <div class="row" id="form_content">
                                         <div class="col-md-2">
@@ -277,13 +287,13 @@
                 protocolList:[],
                 projectList:[],
                 requestTypeList:[],
+                envList:[],
                 cStore:[],
                 ccStore:[],
                 hStore:[],
                 hhStore:[],
                 pStore:[],
                 ppStore:[],
-                env:0
             }
         },
         created:function(){
@@ -296,6 +306,9 @@
             this.$fetch(this.$api.requestTypeUrl).then(response => {
                 this.requestTypeList = response.data
             });
+            this.$fetch(this.$api.envUrl).then(response => {
+                this.envList = response.data
+            });
         },
         mounted:function(){
 
@@ -304,11 +317,6 @@
             $(".websocket").css('display','none')
         },
         methods:{
-            setEnv:function(){
-                this.$fetch(this.$api.projectUrl+$("#project").val()).then(response => {
-                    this.env = response.data.env
-                });
-            },
             showMust:function(){
                 $(".http").css('display','none');
                 $(".dubbo").css('display','none');
@@ -439,7 +447,13 @@
                 if ( $('#project').val() == 0){
                     swal ( "Warning" ,  '请选择项目' ,  "warning" )
                     return false;
-                }else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
+                }else if ( $('#env').val() == 0){
+                    swal ( "Warning" ,  '请选择环境' ,  "warning" )
+                    return false;
+                }else if ( $('#protocol').val() == 0){
+                    swal ( "Warning" ,  '请选择协议' ,  "warning" )
+                    return false;
+                } else if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null){
                     $('#interfaceName').focus()
                     $("#interfaceName").focus(function(){
                         $("#interfaceName").css("background-color","black");
@@ -645,7 +659,7 @@
                                 name:'scripts',
                                 query:{
                                     module_id:$('#project').val(),
-                                    module_env:this.env
+                                    module_env:$('#env').val()
                                 }
                             })
                             swal ( "添加成功" ,  $('#interfaceName').val()+"添加成功!" ,  "success" )
@@ -698,10 +712,10 @@
                         type: 'GET',
                         data: {
                             "url": $('#requestUrl').val(),
-                            "protocol": 1,
+                            "protocolId": 1,
                             "cookie": JSON.stringify(self.ccStore),
                             "header": JSON.stringify(self.hhStore),
-                            "request_type": $('#requestType').val(),
+                            "requestType": $('#requestType').val(),
                             "params": pm
                         },
                         success: function (response) {
@@ -720,6 +734,9 @@
                         }
                     })
                 } else if ($('#protocol').val() == 2) {
+                    if(this.verityDubbo()){
+                        return false;
+                    }
                     var jsonParam = {};
                     var paramArray = new Array();
                     jsonParam["paramType"] = $('#paramType').val();
@@ -727,17 +744,17 @@
                     paramArray.push(jsonParam);
 
                     var jsonData = {};
-                    jsonData["protocol"] = "zookeeper";
-                    jsonData["address"] = this.env;
+                    jsonData["address"] = $("#env").val();
                     jsonData["interfaceName"] = $('#interface').val();
                     jsonData["methodName"] = $('#methodName').val();
                     jsonData["timeOut"] = $('#timeOut').val();
+                    jsonData["version"] = $('#interfaceVersion').val();
                     jsonData["requestParamTypeArgs"] = paramArray;
-
                     self.bus.$emit('loading', true)
+
                     $.ajax({
                         type: "POST",
-                        url: "http://127.0.0.1:8901/dubboTest",
+                        url: "http://127.0.0.1:8901/api/dubboTest",
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(jsonData),
                         dataType: "json",

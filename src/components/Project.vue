@@ -48,12 +48,12 @@
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.envName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.desc}}</td>
                                     <td>
-                                        <a href="#" class="tm-product-delete-link" @click="delModule(module.id)">
+                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="delModule(module.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="editModal(module)" class="tm-product-delete-link" >
+                                        <a href="javascript:void(0);" @click="editModal(module)" class="tm-product-delete-link" >
                                             <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -97,7 +97,7 @@
                                         </div><!-- /.modal-dialog -->
                                     </div>
                                     <td>
-                                        <a href="#" @click="runProject(module.id,module.env)" class="tm-product-delete-link">
+                                        <a href="javascript:void(0);" @click="runProject(module.id,module.env)" class="tm-product-delete-link">
                                             <i class="fa fa-th-list tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -289,7 +289,7 @@
                         $('#addModal').modal('hide')
                         this.getProject()
                     }else {
-                        swal ( "Error" ,  response.msg ,  "error" )
+                        swal ( "Error" ,  response.message ,  "error" )
                     }
                 }).catch( error => {
                     swal ( "Error" ,  error ,  "error" )

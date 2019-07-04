@@ -104,19 +104,75 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                                 aria-hidden="true">&times;</span></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <select style="width: 150px;height: 40px;border-radius: 3px" id="select_task_platform" @change="selectPlatform">
-                                            <option value="0">==请选择平台==</option>
-                                            <option v-for="project in modulType" v-bind:value="project.value">{{project.name}}</option>
-                                        </select>
-                                        <select style="width: 150px;height: 40px;border-radius: 3px" id="select_task_project" @change="selectProject">
-                                            <option value="0">==请选择项目==</option>
-                                            <option v-for="project in typeList" v-bind:value="project.id">{{project.name}}</option>
-                                        </select>
-                                        <select style="width: 150px;height: 40px;border-radius: 3px" id="select_task_script" @change="selectScript">
-                                            <option value="0">==请选择脚本==</option>
-                                            <option v-for="script in scriptList" v-bind:value="script.id">{{script.name}}</option>
-                                        </select>
+                                    <div class="modal-body" style="background-color: #4d6579">
+                                        <div class="" id="h1">
+                                            <div class="container mt-5">
+                                                <div class="row tm-content-row">
+                                                    <div class="col-12 tm-block-col">
+                                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                                                            <select class="custom-select" id="select_task_platform" @change="selectPlatform">
+                                                                <option value="0">请选择平台</option>
+                                                                <option v-for="projectType in projectTypeList" v-bind:value="projectType.id">{{projectType.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row tm-content-row">
+                                                    <div class="col-12 tm-block-col">
+                                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                                                            <select class="custom-select" id="select_task_project" @change="selectProject">
+                                                                <option value="0">请选择项目</option>
+                                                                <option v-for="project in projectList" v-bind:value="project.id">{{project.projectName}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row tm-content-row">
+                                                    <div class="col-12 tm-block-col">
+                                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                                                            <select class="custom-select" id="select_task_script" @change="selectScript">
+                                                                <option value="0">请选择脚本</option>
+                                                                <option v-for="script in scriptList" v-bind:value="script.id">{{script.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row tm-content-row" id="crontab" style="display: none;">
+                                                    <div class="col-12 tm-block-col">
+                                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                                                            <div class="form-group col-lg-12">
+                                                                <input
+                                                                        id="cronId"
+                                                                        type="text"
+                                                                        class="form-control validate"
+                                                                        placeholder="请输入cron表达式"
+                                                                        style="color: white;margin-left: 0px;width: 300px;float: left;height: 50px;margin-top: -20px"
+                                                                />
+                                                                <button class="form-group" @click="checkCron()" style="margin-left: 30px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
+                                                            </div>
+                                                            </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row tm-content-row" id="addBtn" style="display: none">
+                                                    <div class="col-12 tm-block-col">
+                                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                                                            <div class="form-group col-lg-12">
+                                                                <button class="form-group" @click="addTask()" style="margin-left: 180px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">添加定时任务</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                        </div>
+                                        <div>
+                                            <div class="col-md-12">
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -141,50 +197,31 @@
 </template>
 
 <script>
-    const moduleType={
-            1:'教师空间',
-            2:'教师pad',
-            3:'学生pad',
-            4:'商城'
-        };
     export default {
         name: "Task",
         data(){
             return{
+                taskList:[],
+                projectTypeList:[],
                 projectList:[],
-                typeList:[],
                 scriptList:[]
             }
         },
-        mounted:function(){
-            const self = this
-            this.$fetch(this.$api.projectUrl).then(response => {
-                for(let a of response.data){
-                    console.log(a);
-                }
-                self.projectList = response.data
+        created:function(){
+            this.$fetch(this.$api.taskUrl+"/list").then(response => {
+               if (response.code == 0){
+                   this.taskList = response.data
+               }else {
+                   swal("错误", response.message, "error")
+               }
             })
-        },
-        computed:{
-            modulType(){
-                let _list = {}, list = [];
-
-                this.projectList.forEach(v=>{
-                    if(!_list[v['type']]) {
-                        _list[v['type']] = true;
-                        list.push({
-                            value: v.type,
-                            name: ({
-                                1: '教师空间',
-                                2: '教师pad',
-                                3: '学生pad',
-                                4: '商城'
-                            })[v.type]
-                        });
-                     }
-                });
-                return list;
-            }
+            this.$fetch(this.$api.typeUrl).then(response => {
+                if (response.code == 0){
+                    this.projectTypeList = response.data
+                }else {
+                    swal("错误", response.message, "error")
+                }
+            })
         },
         methods:{
             addTimeTask:function () {
@@ -195,29 +232,50 @@
                 const self = this
                 if($('#select_task_platform').val() == 0){
                     return;
+                }else {
+                    this.$fetch(this.$api.projectUrl+"?typeId="+$('#select_task_platform').val()).then(response => {
+                        self.projectList = response.data
+                    })
                 }
-                this.$fetch(this.$api.projectUrl+"?type="+$('#select_task_platform').val()).then(response => {
-                    if (response.code == 0){
-                        self.typeList = response.data
-                    }
-                })
             },
             selectProject:function(){
                 const self = this
                 if($('#select_task_project').val() == 0){
                     return;
-                };
-                self.scriptList = []
+                }
                 this.$fetch(this.$api.scriptUrl+"?project="+$('#select_task_project').val()).then(response => {
                     if (response.code == 0){
                         self.scriptList = response.data
                     }
                 })
             },
-            selectScript:function () {
+            selectScript:function(){
+                let script = $("#select_task_script").val();
+                if (script != 0){
+                    $("#crontab").css('display','block')
+                    $("#addBtn").css('display','block')
+                }else{
+                    $("#crontab").css('display','none')
+                    $("#addBtn").css('display','none')
+                }
+            },
+            checkCron:function () {
+                let cron = $("#cronId").val()
+                this.$fetch(this.$api.checkCronUrl+"?cron="+cron).then(response => {
+                    if (response.code == 0){
+                        let result = response.data
+                        if (result == true){
+                            swal("表达式正确", "", "success")
+                        }else {
+                            swal("错误", response.message, "error")
+                        }
+                    }
+                })
+            },
+            addTask:function () {
 
             }
-            
+
         }
     }
 </script>

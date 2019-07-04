@@ -2,6 +2,16 @@
     <div class="" id="home">
         <div class="container mt-5" id="accordion">
             <div class="row tm-content-row">
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
+                        <select class="col-md-11 custom-select" id="env">
+                            <option value="0">请选择测试环境</option>
+                            <option v-for="envs in envList" :value="envs.id">{{envs.name}}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <a class="card-link" data-toggle="collapse" href="#collapseOne" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
@@ -63,7 +73,7 @@
                                         </ul>
                                     </div>
                                     <div class="row" id="json_content" style="display: none;margin-top: 20px">
-                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: cyan" id="requestParam"></textarea>
+                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460" id="requestParam"></textarea>
                                     </div>
                                     <div class="row" id="form_content">
                                         <div class="col-md-2">
@@ -219,8 +229,8 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="testRequest()">测试接口</a>
-            <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="editScriptSubmit()">保存编辑</a>
+            <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="testRequest()">测试接口</a>
+            <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="editScriptSubmit()">保存编辑</a>
             <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
@@ -266,12 +276,16 @@
                 ppStore: [],
                 $script: '',
                 requestTypeList:[],
+                envList:[],
                 script_id: 0
             }
         },
         created:function () {
             this.$fetch(this.$api.requestTypeUrl).then(response => {
                 this.requestTypeList = response.data
+            });
+            this.$fetch(this.$api.envUrl).then(response => {
+                this.envList = response.data
             });
         },
         mounted: function () {
@@ -591,7 +605,10 @@
                     });
                     swal("Warning", '请输入项目名称', "warning")
                     return;
-                } else if ($('#paramType').val() == '' || $('#paramType').val() == null) {
+                }else if ($('#env').val() == 0){
+                    swal ( "Warning" ,  '请选择环境' ,  "warning" )
+                    return;
+                }else if ($('#paramType').val() == '' || $('#paramType').val() == null) {
                     $('#paramType').focus()
                     $("#paramType").focus(function () {
                         $("#paramType").css("background-color", "#FFFFCC");
@@ -727,10 +744,10 @@
                         }
                     })
                 } else if (this.$script.protocolId == 2) {
-                    this.bus.$emit('loading', true)
                     if (!this.verityDubbo()) {
                         return false;
                     }
+                    this.bus.$emit('loading', true)
                     this.$put(this.$api.scriptUrl, this.qs.stringify({
                         name: $('#interfaceName').val(),
                         protocolId: 2,
@@ -786,7 +803,7 @@
                 }
                 let pm;
                 let paramValue = $("#requestParam").val();
-                if (paramsKey.length != 0 && paramValue == '[]'){
+                if (paramsKey.length != 0 && paramValue == ''){
                     pm = JSON.stringify(this.ppStore)
                 } else if (paramsKey.length == 0 && paramValue != ''){
                     pm = paramValue
@@ -795,16 +812,20 @@
                 }
                 this.bus.$emit('loading', true)
                 let self = this
-                if (this.$script.protocol == 1) {
+                if (this.$script.protocolId == 1) {
+                    if (!this.verityHttp()) {
+                        return false;
+                    }
                     $.ajax({
                         url: this.$api.testUrl,
                         type: 'GET',
                         data: {
                             "url": $('#requestUrl').val(),
-                            "protocol": 1,
+                            "protocolId": 1,
                             "cookie": JSON.stringify(self.ccStore),
                             "header": JSON.stringify(self.hhStore),
                             "requestTypeId": $('#requestType').val(),
+                            "timeOut":$('#timeOut').val(),
                             "params": pm
                         },
                         success: function (response) {
@@ -827,7 +848,10 @@
                             self.bus.$emit('loading', false)
                         }
                     })
-                } else if (this.$script.protocol == 2) {
+                } else if (this.$script.protocolId == 2) {
+                    if (!this.verityDubbo()) {
+                        return;
+                    }
                     var jsonParam = {};
                     var paramArray = new Array();
                     jsonParam["paramType"] = $('#paramType').val();
@@ -835,17 +859,17 @@
                     paramArray.push(jsonParam);
 
                     var jsonData = {};
-                    jsonData["protocol"] = "zookeeper";
-                    jsonData["address"] = this.$route.query.env;
+                    jsonData["address"] = $("#env").val();
                     jsonData["interfaceName"] = $('#interface').val();
                     jsonData["methodName"] = $('#methodName').val();
                     jsonData["timeOut"] = $('#timeOut').val();
+                    jsonData["version"] = $('#interfaceVersion').val();
                     jsonData["requestParamTypeArgs"] = paramArray;
 
                     self.bus.$emit('loading', true)
                     $.ajax({
                         type: "POST",
-                        url: "http://127.0.0.1:8901/dubboTest",
+                        url: "http://127.0.0.1:8901"+self.$api.dubboTest,
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(jsonData),
                         dataType: "json",
@@ -863,7 +887,7 @@
                                 }
                             }else {
                                 self.bus.$emit('loading', false)
-                                swal("Warning", response.msg, "warning")
+                                swal("Warning", response.message, "warning")
                             }
                         },
                         error: function (message) {

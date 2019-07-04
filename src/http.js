@@ -47,6 +47,7 @@ const errorHandle = (status, other) => {
         // 清除token并跳转登录页
         case 403:
             swal ( "Warning" ,  other.message ,  "warning" );
+            store.dispatch('LogOut')
             window.location.href = "/login";
             break;
         // 404请求不存在

@@ -6,15 +6,12 @@
                      style=" vertical-align: middle;height:100px;margin-left: -30px;">
                     <select style="width: 180px;height: 40px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_cp" @change="selectCP">
                         <option value="0">请选择测试产品</option>
-                        <option value="1">教师空间</option>
-                        <option value="2">教师pad</option>
-                        <option value="3">学生pad</option>
-                        <option value="4">商城</option>
+                        <option v-for="projectType in projectTypeList" v-bind:value="projectType.id">{{projectType.name}}</option>
                     </select>
                     <select style="width: 180px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_project"
                             @change="selectProject">
                         <option value="0">请选择测试项目</option>
-                        <option v-for="project in projectList" v-bind:value="project.id">{{project.name}}</option>
+                        <option v-for="project in projectList" v-bind:value="project.id">{{project.projectName}}</option>
                     </select>
                     <select style="width: 180px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_script"
                             @change="selectScript">
@@ -47,19 +44,19 @@
                                 <tbody>
                                 <tr v-for="history in historyList">
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{history.project_name}}
+                                        {{history.projectName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{history.script_name}}
+                                        {{history.scriptName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{history.username}}
+                                        {{history.userName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
                                         class="tm-product-name">{{history.status}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{history.create_time}}
+                                        class="tm-product-name">{{history.createTime}}
                                     <td>
                                         <a href="#" class="tm-product-delete-link" @click="watchLog(history)">
                                             <i class="fa fa-print  tm-product-delete-icon"></i>
@@ -117,11 +114,17 @@
         data(){
             return {
                 historyList:[],
+                projectTypeList:[],
                 projectList:[],
                 ScriptSelectList:[]
             }
         },
         created:function () {
+            this.$fetch(this.$api.typeUrl).then(response => {
+                if (response.code == 0){
+                    this.projectTypeList = response.data
+                }
+            })
             this.$fetch(this.$api.historyUrl).then(response => {
                 if (response.code == 0){
                     this.historyList = response.data
@@ -136,17 +139,15 @@
                 if (projectValue == 0){
                     return;
                 }else {
-                    this.$fetch(this.$api.projectUrl+"?type="+projectValue).then(response => {
+                    this.$fetch(this.$api.projectUrl+"?typeId="+projectValue).then(response => {
                         self.projectList = response.data
                     })
                 }
             },
             selectProject:function(){
                 this.ScriptSelectList = []
-                this.historyList = []
                 let cpValue =  $('#select_cp').val()
                 let projectValue =  $('#select_project').val()
-                const self = this;
                 if (cpValue == 0){
                     swal("warning", "请选择产品", "warning")
                     return;
@@ -154,23 +155,8 @@
                     if (projectValue == 0){
                         return;
                     }
-                    this.$fetch(this.$api.scriptUrl+"?project="+projectValue).then(response => {
-                        if (response.code == 0){
-                            self.ScriptSelectList = response.data
-                            self.ScriptSelectList.forEach(function (script,index) {
-                                self.$fetch(self.$api.historyUrl+"?script="+script.id).then(response => {
-                                    if (response.code == 0){
-                                        if (response.data.length != 0){
-                                            for (let tem in response.data){
-                                                console.log(response.data[tem])
-                                                self.historyList.push(response.data[tem])
-                                            }
-                                        }
-
-                                    }
-                                })
-                            })
-                        }
+                    this.$fetch(this.$api.scriptUrl+"orderByProject/"+projectValue).then(response => {
+                        this.ScriptSelectList = response.data
                         
                     })
                 }
@@ -183,29 +169,25 @@
                 let scriptId = $("#select_script").val();
                 let self = this
                 this.historyList = []
-                    self.$fetch(self.$api.historyUrl+"?script="+scriptId).then(response => {
+                    self.$fetch(self.$api.historyUrl+"orderByScriptId/"+scriptId).then(response => {
                         if (response.code == 0){
                             self.historyList = response.data
                         }
                     })
             },
             search:function () {
-                
+                const search_text = $('#search').val()
+                this.$fetch(this.$api.historyUrl + "search?keyword=" + search_text).then(response => {
+                    this.historyList = response.data
+                })
             },
             downloadReport:function(history){
                 var url = this.$api.reportDownload;
 
-                url = url + '?history_id='+history.id+'&script_name='+history.script_name+'&md5='+history.md5;
+                url = url + "?md5="+history.md5+"&id="+history.id;
                 this.$fetch(url).then(response => {
-                    if (response.code == 6001){
-                        swal("warning", response.msg, "warning")
-                        return;
-                    }else if (response.code == 6002){
-                        swal("warning", response.msg, "warning")
-                        return;
-                    }else if (response.code == 6003){
-                        swal("warning", response.msg, "warning")
-                        return;
+                    if (response == "下载文件不存在" || response == "下载失败"){
+                        swal("错误", response, "error")
                     }
                     else {
                         window.open(url, '_blank');
@@ -216,12 +198,10 @@
 
             },
             watchReport: function (history) {
-                const self = this
                 this.$router.push({
                     name:'report',
                     query:{
                         history_id:history.id,
-                        script_name:history.script_name,
                         md5:history.md5
                     }
                 })
@@ -229,14 +209,14 @@
             watchLog: function (history) {
                 const self = this
                 $.ajax({
-                    url: this.$api.logUrl + "?history_id=" + history.id + "&script_name=" + history.script_name + "&md5=" + history.md5,
+                    url: this.$api.logUrl + "?id="+history.id+"&md5="+history.md5,
                     type: 'GET',
                     success: function (response) {
                         if (response.code == 0) {
                             $('#myModal').modal()
                             document.getElementById('log').innerHTML = response.data.log
                         } else {
-                            swal("错误", response.msg, "error")
+                            swal("错误", response.message, "error")
                         }
                     }
                 })

@@ -77,27 +77,22 @@
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                                         {{script.preNumber}}
                                     </td>
-                                    <!--<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.url}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.ins}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.method}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.params}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{script.param_type}}</td>-->
                                     <td>
-                                        <a href="#" class="tm-product-delete-link" @click="delScript(script.id)">
+                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="delScript(script.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="editScript(script.id,script.envId)" class="tm-product-delete-link">
+                                        <a href="javascript:void(0);" @click="editScript(script.id,script.envId)" class="tm-product-delete-link">
                                             <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="seeLog()" class="tm-product-delete-link"
+                                        <a href="javascript:void(0);" @click="seeLog()" class="tm-product-delete-link"
                                            v-if="script_run_status">
                                             <i class="fa fa-spinner tm-product-delete-icon" title="Align Left"></i>
                                         </a>
-                                        <a href="#" @click="runScript(script.id)" class="tm-product-delete-link"
+                                        <a href="javascript:void(0);" @click="runScript(script.id)" class="tm-product-delete-link"
                                            v-else="script_run_status">
                                             <i class="fa fa-play-circle tm-product-delete-icon" title="Align Left"></i>
                                         </a>
@@ -108,7 +103,7 @@
                             </table>
                         </div>
                         <!-- table container -->
-                        <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="addScripts()">Add new
+                        <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="addScripts()">Add new
                             Scripts</a>
                     </div>
                 </div>
@@ -194,8 +189,6 @@
                 this.$router.push({
                     name: 'addScripts',
                     query: {
-                        module_id: this.$route.query.module_id,
-                        module_env: this.$route.query.module_env
                     }
                 })
             },

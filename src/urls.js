@@ -9,11 +9,15 @@ const base = {
     testUrl: '/api/common/testRequest',
     scriptUrl:'/api/script/',
     dubboServer:'/api/dubbo/service',
+    dubboTest:'/api/dubboTest',
     historyUrl:'/api/history/',
     reportUrl:'/api/report/',
-    logUrl:'/api/logreport/',
-    execScriptUrl:'/api/exec/script/',
-    reportDownload:'/api/download',
+    generateReportUrl:"/api/common/generateReport",
+    logUrl:'/api/common/watchLog',
+    execScriptUrl:'/api/common/execScript/',
+    reportDownload:'/api/common/download',
+    taskUrl:"/api/scheduleJob",
+    checkCronUrl:"/api/common/checkCron",
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 
