@@ -33,7 +33,7 @@
                     <li class="nav-item">
                         <router-link  class="nav-link" to="/account">
                             <i class="far fa-user"></i>
-                            用例中心
+                            用户中心
                         </router-link>
                     </li>
                     <li class="nav-item">

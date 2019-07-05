@@ -14,7 +14,7 @@ const base = {
     reportUrl:'/api/report/',
     generateReportUrl:"/api/common/generateReport",
     logUrl:'/api/common/watchLog',
-    execScriptUrl:'/api/common/execScript/',
+    execScriptUrl:'/api/common/execScript',
     reportDownload:'/api/common/download',
     taskUrl:"/api/scheduleJob",
     checkCronUrl:"/api/common/checkCron",

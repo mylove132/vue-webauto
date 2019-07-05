@@ -704,9 +704,13 @@
                 } else {
                     pm = JSON.stringify(this.ppStore)
                 }
-                this.bus.$emit('loading', true)
+
                 let self = this
                 if ($('#protocol').val() == 1) {
+                    if (!this.verityHttp()){
+                        return
+                    }
+                    this.bus.$emit('loading', true)
                     $.ajax({
                         url: this.$api.testUrl,
                         type: 'GET',
@@ -734,9 +738,10 @@
                         }
                     })
                 } else if ($('#protocol').val() == 2) {
-                    if(this.verityDubbo()){
+                    if(!this.verityDubbo()){
                         return false;
                     }
+                    self.bus.$emit('loading', true)
                     var jsonParam = {};
                     var paramArray = new Array();
                     jsonParam["paramType"] = $('#paramType').val();

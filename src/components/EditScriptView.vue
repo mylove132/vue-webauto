@@ -810,12 +810,12 @@
                 } else {
                     pm = JSON.stringify(this.ppStore)
                 }
-                this.bus.$emit('loading', true)
                 let self = this
                 if (this.$script.protocolId == 1) {
                     if (!this.verityHttp()) {
                         return false;
                     }
+                    this.bus.$emit('loading', true)
                     $.ajax({
                         url: this.$api.testUrl,
                         type: 'GET',
@@ -869,7 +869,7 @@
                     self.bus.$emit('loading', true)
                     $.ajax({
                         type: "POST",
-                        url: "http://127.0.0.1:8901"+self.$api.dubboTest,
+                        url: self.$api.dubboTest,
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(jsonData),
                         dataType: "json",

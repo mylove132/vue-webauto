@@ -88,12 +88,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0);" @click="seeLog()" class="tm-product-delete-link"
-                                           v-if="script_run_status">
-                                            <i class="fa fa-spinner tm-product-delete-icon" title="Align Left"></i>
-                                        </a>
-                                        <a href="javascript:void(0);" @click="runScript(script.id)" class="tm-product-delete-link"
-                                           v-else="script_run_status">
+                                        <a href="javascript:void(0);" @click="runScript(script.id)" class="tm-product-delete-link">
                                             <i class="fa fa-play-circle tm-product-delete-icon" title="Align Left"></i>
                                         </a>
 
@@ -261,22 +256,11 @@
                 $('#logModal').modal()
             },
             runScript: function (id) {
-                this.$post(this.$api.execScriptUrl,this.qs.stringify({
-                    user:localStorage.user_id,
-                    id:id
-                })).then(response => {
-                    if(response.code == 5001){
-                        swal(
-                            '!',
-                            response.msg,
-                            'warning'
-                        );
-                    }else if(response.code == 5002){
-                        swal(
-                            '!',
-                            response.msg,
-                            'warning'
-                        );
+                this.$fetch(this.$api.execScriptUrl+"?scriptId="+id+"&userId="+localStorage.user_id).then(response => {
+                    if (response.code == 0){
+                        swal("脚本开始执行","","success")
+                    }else {
+                        swal("",response.message,"warning")
                     }
                 })
             }

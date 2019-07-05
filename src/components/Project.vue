@@ -326,7 +326,7 @@
                 })
             },
             runProject:function (id,env) {
-                this.$fetch(this.$api.scriptUrl+"?projectId="+id).then(response => {
+                this.$fetch(this.$api.scriptUrl+"orderByProject/"+id).then(response => {
                     console.log(response)
                     if (response.code == 0 && (response.data).length == 0){
                         let self = this
