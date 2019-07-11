@@ -15,9 +15,9 @@
                                     <th scope="col">创建时间</th>
 
                                     <th scope="col">定时任务说明</th>
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">删除</th>
+                                    <th scope="col">编辑</th>
+                                    <th scope="col">状态</th>
                                     <th scope="col">&nbsp;</th>
                                 </tr>
                                 </thead>
@@ -586,6 +586,8 @@
                             })
                             swal("修改成功", response.message, "success")
                             $('#editTaskModal').modal('hide');
+                        }else {
+                            swal("error",response.message,"error")
                         }
                     }
 

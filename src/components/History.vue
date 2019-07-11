@@ -63,7 +63,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="watchReport(history)" class="tm-product-delete-link">
+                                        <a href="#" @click="watchReport(history.id)" class="tm-product-delete-link">
                                             <i class="fa fa-binoculars tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -197,14 +197,16 @@
 
 
             },
-            watchReport: function (history) {
-                this.$router.push({
-                    name:'report',
-                    query:{
-                        history_id:history.id,
-                        md5:history.md5
+            watchReport: function (id) {
+                this.$fetch(this.$api.watchReport+"?id="+id).then(
+                    response => {
+                        if (response.code == 0){
+                            window.open(this.$api.staticUrl+response.data.md5+"/index.html","_blank")
+                        }else {
+                            swal("报告不存在",response.message,"error")
+                        }
                     }
-                })
+                )
             },
             watchLog: function (history) {
                 const self = this

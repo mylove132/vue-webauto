@@ -44,9 +44,10 @@
                                     <th nowrap="nowrap" scope="col">接口方法</th>
                                     <th nowrap="nowrap" scope="col">参数类型</th>
                                     <th nowrap="nowrap" scope="col">参数值</th>-->
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">删除</th>
+                                    <th scope="col">编辑</th>
+                                    <th scope="col">运行</th>
+                                    <th scope="col">服务器</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -91,7 +92,12 @@
                                         <a href="javascript:void(0);" @click="runScript(script.id)" class="tm-product-delete-link">
                                             <i class="fa fa-play-circle tm-product-delete-icon" title="Align Left"></i>
                                         </a>
-
+                                        <button @click="seeLog" style="display: none">查看日志</button>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" @click="watchServer(script.ip)" class="tm-product-delete-link" v-show="script.ip != null && script.ip != '' && script.ip != 'localhost'">
+                                            <i class="fa fa-server tm-product-delete-icon" title="Align Left"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -145,7 +151,8 @@
                 scriptList: [],
                 projectList: [],
                 protocolList:[],
-                users: []
+                users: [],
+                runStatus:true
             }
         },
         created: function () {
@@ -255,10 +262,14 @@
             seeLog:function(){
                 $('#logModal').modal()
             },
+            watchServer:function(ip){
+                window.open("http://"+ip+":19999","_blank")
+            },
             runScript: function (id) {
                 this.$fetch(this.$api.execScriptUrl+"?scriptId="+id+"&userId="+localStorage.user_id).then(response => {
                     if (response.code == 0){
                         swal("脚本开始执行","","success")
+                        obj.css('display','none')
                     }else {
                         swal("",response.message,"warning")
                     }
@@ -314,5 +325,35 @@
 
         }
 
+    }
+
+    button {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    button:before {
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.5em;
+        color: red;
+        border: 1px solid red;
+        border-radius: 50%;
+        vertical-align: -10%;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 30%, 0% 30%);
+        animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotatez(0deg);
+        }
+
+        to {
+            transform: rotatez(360deg);
+        }
     }
 </style>

@@ -14,10 +14,12 @@ const base = {
     reportUrl:'/api/report/',
     generateReportUrl:"/api/common/generateReport",
     logUrl:'/api/common/watchLog',
+    watchReport:"/api/common/watchReport",
     execScriptUrl:'/api/common/execScript',
     reportDownload:'/api/common/download',
     taskUrl:"/api/scheduleJob",
     checkCronUrl:"/api/common/checkCron",
+    staticUrl:"http://127.0.0.1:7001/",
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 
