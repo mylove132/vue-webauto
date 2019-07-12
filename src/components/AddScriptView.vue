@@ -759,7 +759,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "http://127.0.0.1:8901/api/dubboTest",
+                        url: self.$api.dubboTest,
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify(jsonData),
                         dataType: "json",

@@ -201,7 +201,7 @@
                 this.$fetch(this.$api.watchReport+"?id="+id).then(
                     response => {
                         if (response.code == 0){
-                            window.open(this.$api.staticUrl+response.data.md5+"/index.html","_blank")
+                            window.open(response.data.staticUrl+response.data.md5+"/index.html","_blank")
                         }else {
                             swal("报告不存在",response.message,"error")
                         }

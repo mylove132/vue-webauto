@@ -19,7 +19,6 @@ const base = {
     reportDownload:'/api/common/download',
     taskUrl:"/api/scheduleJob",
     checkCronUrl:"/api/common/checkCron",
-    staticUrl:"http://127.0.0.1:7001/",
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 
