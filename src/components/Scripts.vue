@@ -278,7 +278,6 @@
                 this.$fetch(this.$api.execScriptUrl+"?scriptId="+id+"&userId="+localStorage.user_id).then(response => {
                     if (response.code == 0){
                         swal("脚本开始执行","","success")
-                        obj.css('display','none')
                     }else {
                         swal("",response.message,"warning")
                     }
@@ -286,27 +285,12 @@
             },
             goto(value){
                 let next = this.params.currentPage + parseInt(value);
-                if (next == 0){
-                    $("#beforeBtn").attr('disabled','false');
-                }else{
-                    $("#beforeBtn").removeAttr("disabled");
-                }
                 this.$fetch(this.$api.scriptUrl + "orderByProject/" + this.$route.query.module_id, {
                     currentPage: next,
                     pageSize:10
                 }).then(response => {
                     if (response.code == 0){
                         this.scriptList = response.data.list
-                        if (response.data.isFirstPage == true){
-                            $("#beforeBtn").attr('disabled','false');
-                        }else {
-                            $("#beforeBtn").removeAttr("disabled");
-                        }
-                        if (response.data.isLastPage == true){
-                            $("#netBtn").attr('disabled','false');
-                        }else {
-                            $("#netBtn").removeAttr("disabled");
-                        }
                     }
                 })
                 this.params.currentPage = next > 0 ? next : 1;

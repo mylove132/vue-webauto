@@ -56,19 +56,19 @@
                                         class="tm-product-name">{{history.status}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{dateFormat(history.createTime)}}
+                                        class="tm-product-name">{{history.createTime}}
                                     <td>
-                                        <a href="#" class="tm-product-delete-link" @click="watchLog(history)">
+                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="watchLog(history)">
                                             <i class="fa fa-print  tm-product-delete-icon"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="watchReport(history.id)" class="tm-product-delete-link">
+                                        <a href="javascript:void(0);" @click="watchReport(history.id)" class="tm-product-delete-link">
                                             <i class="fa fa-binoculars tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="#" @click="downloadReport(history)" class="tm-product-delete-link">
+                                        <a href="javascript:void(0);" @click="downloadReport(history)" class="tm-product-delete-link">
                                             <i class="fa fa-download tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -211,7 +211,7 @@
                 this.$fetch(this.$api.watchReport+"?id="+id).then(
                     response => {
                         if (response.code == 0){
-                            window.open(response.data.staticUrl+response.data.md5+"/index.html","_blank")
+                            window.open(response.data.staticUrl+"/"+response.data.md5+"/index.html","_blank")
                         }else {
                             swal("报告不存在",response.message,"error")
                         }
@@ -233,35 +233,14 @@
                     }
                 })
             },
-            dateFormat:function(value){
-                var _date = value.replace("T"," ");
-                var _index = _date.lastIndexOf('.');
-                _date = _date.substring(0, _index);
-                return _date;
-            },
             goto(value){
                 let next = this.params.currentPage + parseInt(value);
-                if (next == 0){
-                    $("#beforeBtn").attr('disabled','false');
-                }else{
-                    $("#beforeBtn").removeAttr("disabled");
-                }
                 this.$fetch(this.$api.historyUrl, {
                     currentPage: next,
                     pageSize:10
                 }).then(response => {
                     if (response.code == 0){
                         this.historyList = response.data.list
-                        if (response.data.isFirstPage == true){
-                            $("#beforeBtn").attr('disabled','false');
-                        }else {
-                            $("#beforeBtn").removeAttr("disabled");
-                        }
-                        if (response.data.isLastPage == true){
-                            $("#netBtn").attr('disabled','false');
-                        }else {
-                            $("#netBtn").removeAttr("disabled");
-                        }
                     }
                 })
                 this.params.currentPage = next > 0 ? next : 1;

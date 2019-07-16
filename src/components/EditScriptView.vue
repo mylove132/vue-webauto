@@ -773,7 +773,7 @@
                             this.$router.push({
                                 name: 'scripts',
                                 query: {
-                                    module_id: this.module_id
+                                    module_id: this.$script.projectId
                                 }
                             })
                         } else {

@@ -43,8 +43,8 @@
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.typeName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{module.projectName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.userName}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{dateFormat(module.ctime)}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{dateFormat(module.update_time)}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.createTime}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.updateTime}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.envName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.descption}}</td>
                                     <td>
@@ -217,12 +217,6 @@
                     this.moduleList = response.data.list
                 })
             },
-        dateFormat:function(value){
-            var _date = value.replace("T"," ");
-            var _index = _date.lastIndexOf('.');
-            _date = _date.substring(0, _index);
-            return _date;
-        },
             delModule: function (id) {
                 let self = this
                 swal({
@@ -382,27 +376,12 @@
             },
             goto(value){
                 let next = this.params.currentPage + parseInt(value);
-                if (next == 0){
-                    $("#beforeBtn").attr('disabled','false');
-                }else{
-                    $("#beforeBtn").removeAttr("disabled");
-                }
                 this.$fetch(this.$api.projectUrl, {
                     currentPage: next,
                     pageSize:10
                 }).then(response => {
                     if (response.code == 0){
-                        this.historyList = response.data.list
-                        if (response.data.isFirstPage == true){
-                            $("#beforeBtn").attr('disabled','false');
-                        }else {
-                            $("#beforeBtn").removeAttr("disabled");
-                        }
-                        if (response.data.isLastPage == true){
-                            $("#netBtn").attr('disabled','false');
-                        }else {
-                            $("#netBtn").removeAttr("disabled");
-                        }
+                        this.moduleList = response.data.list
                     }
                 })
                 this.params.currentPage = next > 0 ? next : 1;
