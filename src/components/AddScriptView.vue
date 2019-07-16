@@ -298,7 +298,7 @@
         },
         created:function(){
             this.$fetch(this.$api.projectUrl).then(response => {
-                this.projectList = response.data
+                this.projectList = response.data.list
             });
             this.$fetch(this.$api.protocolUrl).then(response => {
                 this.protocolList = response.data

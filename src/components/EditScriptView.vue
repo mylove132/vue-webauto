@@ -274,7 +274,7 @@
                 hhStore: [],
                 pStore: [],
                 ppStore: [],
-                $script: '',
+                $script: [],
                 requestTypeList:[],
                 envList:[],
                 script_id: 0
@@ -300,6 +300,7 @@
                 if (response.code == 0) {
                     self.bus.$emit('loading', false)
                     self.$script = response.data
+                    console.log(self.$script)
                     let script = self.$script
                     if (script.protocolId == 1) {
                         $('.http').css('display', 'block')
@@ -726,7 +727,7 @@
                         preNumber: $('#pre_num').val(),
                         ip: $('#ip').val(),
                         port: $('#port').val(),
-                        projectId: this.$script.project,
+                        projectId: this.$script.projectId,
                         userId: localStorage.user_id
                     })).then(response => {
                         if (response.code == 0) {
@@ -735,7 +736,7 @@
                             this.$router.push({
                                 name: 'scripts',
                                 query: {
-                                    module_id: this.module_id
+                                    module_id:this.$script.projectId
                                 }
                             })
                         } else {

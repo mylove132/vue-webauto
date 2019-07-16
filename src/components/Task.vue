@@ -27,7 +27,7 @@
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{task.scriptName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{task.userName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{task.cron}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{task.createTime}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{dateFormat(task.crt_time)}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{task.description}}</td>
                                     <td>
                                         <a href="javascript:void(0);" class="tm-product-delete-link" @click="delTask(task.id)">
@@ -52,6 +52,7 @@
                                 </tr>
                                 </tbody>
                             </table>
+
                         </div>
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" id="mainModal" role="dialog" aria-labelledby="gridSystemModalLabel" >
                             <div class="modal-dialog modal-lg" role="document" style="width: 1200px">
@@ -333,7 +334,7 @@
         created:function(){
             this.$fetch(this.$api.taskUrl+"/list").then(response => {
                if (response.code == 0){
-                   this.taskList = response.data
+                   this.taskList = response.data.list
                }else {
                    swal("错误", response.message, "error")
                }
@@ -351,6 +352,12 @@
                 $('#taskModal').modal();
                 console.log(this.projectList)
             },
+        dateFormat:function(value){
+            var _date = value.replace("T"," ");
+            var _index = _date.lastIndexOf('.');
+            _date = _date.substring(0, _index);
+            return _date;
+        },
             selectPlatform:function () {
                 const self = this
                 this.projectList = []
@@ -593,6 +600,8 @@
 
                 })
             }
+
+
 
         }
     }

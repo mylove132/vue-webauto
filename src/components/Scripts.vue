@@ -59,7 +59,7 @@
                                         {{script.userName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{script.name}}
+                                        {{script.scriptName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
                                         class="tm-product-name">{{script.requestTypeName}}
@@ -102,6 +102,11 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="page-box" style="margin-left: 780px">
+                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
+                            <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
+                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
                         </div>
                         <!-- table container -->
                         <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="addScripts()">Add new
@@ -152,7 +157,11 @@
                 projectList: [],
                 protocolList:[],
                 users: [],
-                runStatus:true
+                runStatus:true,
+                params:{
+                    pageSize: 10,
+                    currentPage: 1
+                }
             }
         },
         created: function () {
@@ -161,12 +170,12 @@
                 this.protocolList = response.data
             });
             this.$fetch(this.$api.projectUrl).then(response => {
-                this.projectList = response.data
+                this.projectList = response.data.list
             });
             this.$fetch(this.$api.userUrl).then(resonse => {
                 console.log(resonse.data)
                 if (resonse.code == 0) {
-                    this.users = resonse.data
+                    this.users = resonse.data.list
                 } else {
                     return []
                 }
@@ -179,7 +188,7 @@
             getScriptsList: function () {
                 if (this.$route.query.module_id != null) {
                     this.$fetch(this.$api.scriptUrl + "orderByProject/" + this.$route.query.module_id).then(response => {
-                        this.scriptList = response.data
+                        this.scriptList = response.data.list
                     })
                 }else {
                     this.$fetch(this.$api.scriptUrl).then(response => {
@@ -199,7 +208,7 @@
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
                 this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
-                    this.scriptList = response.data
+                    this.scriptList = response.data.list
                 })
             },
             filterProtocol: function () {
@@ -207,7 +216,7 @@
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
                 this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
-                    this.scriptList = response.data
+                    this.scriptList = response.data.list
                 })
             },
             filterUser: function () {
@@ -215,13 +224,13 @@
                 const protocolIndex = $('#select_protocol').val();
                 const userIndex = $('#select_user').val();
                 this.$fetch(this.$api.scriptUrl + "filter?projectId=" + projectIndex + "&protocolId=" + protocolIndex + "&userId=" + userIndex).then(response => {
-                    this.scriptList = response.data
+                    this.scriptList = response.data.list
                 })
             },
             search: function () {
                 const search_text = $('#search').val()
                 this.$fetch(this.$api.scriptUrl + "search?keyword=" + search_text).then(response => {
-                    this.scriptList = response.data
+                    this.scriptList = response.data.list
                 })
             },
             delScript: function (id) {
@@ -274,6 +283,34 @@
                         swal("",response.message,"warning")
                     }
                 })
+            },
+            goto(value){
+                let next = this.params.currentPage + parseInt(value);
+                if (next == 0){
+                    $("#beforeBtn").attr('disabled','false');
+                }else{
+                    $("#beforeBtn").removeAttr("disabled");
+                }
+                this.$fetch(this.$api.scriptUrl + "orderByProject/" + this.$route.query.module_id, {
+                    currentPage: next,
+                    pageSize:10
+                }).then(response => {
+                    if (response.code == 0){
+                        this.scriptList = response.data.list
+                        if (response.data.isFirstPage == true){
+                            $("#beforeBtn").attr('disabled','false');
+                        }else {
+                            $("#beforeBtn").removeAttr("disabled");
+                        }
+                        if (response.data.isLastPage == true){
+                            $("#netBtn").attr('disabled','false');
+                        }else {
+                            $("#netBtn").removeAttr("disabled");
+                        }
+                    }
+                })
+                this.params.currentPage = next > 0 ? next : 1;
+
             }
         }
 
@@ -327,33 +364,6 @@
 
     }
 
-    button {
-        opacity: 0.5;
-        cursor: default;
-        pointer-events: none;
-    }
 
-    button:before {
-        content: '';
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        margin-right: 0.5em;
-        color: red;
-        border: 1px solid red;
-        border-radius: 50%;
-        vertical-align: -10%;
-        clip-path: polygon(0% 0%, 100% 0%, 100% 30%, 0% 30%);
-        animation: rotate 1s linear infinite;
-    }
 
-    @keyframes rotate {
-        from {
-            transform: rotatez(0deg);
-        }
-
-        to {
-            transform: rotatez(360deg);
-        }
-    }
 </style>

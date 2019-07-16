@@ -42,11 +42,11 @@
                                 <tr v-for="module in moduleList">
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.typeName}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" class="tm-product-name">{{module.projectName}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.username}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.creteTime}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.updateTime}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.userName}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{dateFormat(module.ctime)}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{dateFormat(module.update_time)}}</td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.envName}}</td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.desc}}</td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{module.descption}}</td>
                                     <td>
                                         <a href="javascript:void(0);" class="tm-product-delete-link" @click="delModule(module.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
@@ -104,6 +104,11 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="page-box" style="margin-left: 780px">
+                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
+                            <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
+                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
                         </div>
                         <!-- table container -->
                         <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="addModule()">Add new product</a>
@@ -179,7 +184,11 @@
                 typeList:[],
                 envList:[],
                 moduleList: [],
-                users:[]
+                users:[],
+                params:{
+                    pageSize: 10,
+                    currentPage: 1
+                }
             }
         },
         created: function () {
@@ -205,9 +214,15 @@
         methods: {
             getProject: function () {
                 this.$fetch(this.$api.projectUrl).then(response => {
-                    this.moduleList = response.data
+                    this.moduleList = response.data.list
                 })
             },
+        dateFormat:function(value){
+            var _date = value.replace("T"," ");
+            var _index = _date.lastIndexOf('.');
+            _date = _date.substring(0, _index);
+            return _date;
+        },
             delModule: function (id) {
                 let self = this
                 swal({
@@ -364,6 +379,34 @@
                         swal ( "未知错误" ,  response.msg ,  "error" )
                     }
                 })
+            },
+            goto(value){
+                let next = this.params.currentPage + parseInt(value);
+                if (next == 0){
+                    $("#beforeBtn").attr('disabled','false');
+                }else{
+                    $("#beforeBtn").removeAttr("disabled");
+                }
+                this.$fetch(this.$api.projectUrl, {
+                    currentPage: next,
+                    pageSize:10
+                }).then(response => {
+                    if (response.code == 0){
+                        this.historyList = response.data.list
+                        if (response.data.isFirstPage == true){
+                            $("#beforeBtn").attr('disabled','false');
+                        }else {
+                            $("#beforeBtn").removeAttr("disabled");
+                        }
+                        if (response.data.isLastPage == true){
+                            $("#netBtn").attr('disabled','false');
+                        }else {
+                            $("#netBtn").removeAttr("disabled");
+                        }
+                    }
+                })
+                this.params.currentPage = next > 0 ? next : 1;
+
             }
         }
     }

@@ -16,7 +16,7 @@
                     <select style="width: 180px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_script"
                             @change="selectScript">
                         <option value="0">请选择测试脚本</option>
-                        <option v-for="script in ScriptSelectList" v-bind:value="script.id">{{script.name}}</option>
+                        <option v-for="script in ScriptSelectList" v-bind:value="script.id">{{script.scriptName}}</option>
                     </select>
                     <input type="text" style="width: 160px;height: 40px;margin-left: 100px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9"
                            id="search" placeholder="模糊匹配脚本名" v-on:keyup="search">
@@ -56,7 +56,7 @@
                                         class="tm-product-name">{{history.status}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{history.createTime}}
+                                        class="tm-product-name">{{dateFormat(history.createTime)}}
                                     <td>
                                         <a href="#" class="tm-product-delete-link" @click="watchLog(history)">
                                             <i class="fa fa-print  tm-product-delete-icon"></i>
@@ -75,6 +75,11 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="page-box" style="margin-left: 780px">
+                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
+                            <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
+                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
                         </div>
                     </div>
 
@@ -116,7 +121,12 @@
                 historyList:[],
                 projectTypeList:[],
                 projectList:[],
-                ScriptSelectList:[]
+                ScriptSelectList:[],
+                params:{
+                    pageSize: 10,
+                    currentPage: 1
+
+                }
             }
         },
         created:function () {
@@ -125,9 +135,9 @@
                     this.projectTypeList = response.data
                 }
             })
-            this.$fetch(this.$api.historyUrl).then(response => {
+            this.$fetch(this.$api.historyUrl, this.params).then(response => {
                 if (response.code == 0){
-                    this.historyList = response.data
+                    this.historyList = response.data.list
                 }
             })
         },
@@ -140,7 +150,7 @@
                     return;
                 }else {
                     this.$fetch(this.$api.projectUrl+"?typeId="+projectValue).then(response => {
-                        self.projectList = response.data
+                        self.projectList = response.data.list
                     })
                 }
             },
@@ -156,7 +166,7 @@
                         return;
                     }
                     this.$fetch(this.$api.scriptUrl+"orderByProject/"+projectValue).then(response => {
-                        this.ScriptSelectList = response.data
+                        this.ScriptSelectList = response.data.list
                         
                     })
                 }
@@ -169,16 +179,16 @@
                 let scriptId = $("#select_script").val();
                 let self = this
                 this.historyList = []
-                    self.$fetch(self.$api.historyUrl+"orderByScriptId/"+scriptId).then(response => {
+                    self.$fetch(self.$api.historyUrl+"orderByScriptId?scriptId="+scriptId).then(response => {
                         if (response.code == 0){
-                            self.historyList = response.data
+                            self.historyList = response.data.list
                         }
                     })
             },
             search:function () {
                 const search_text = $('#search').val()
                 this.$fetch(this.$api.historyUrl + "search?keyword=" + search_text).then(response => {
-                    this.historyList = response.data
+                    this.historyList = response.data.list
                 })
             },
             downloadReport:function(history){
@@ -222,6 +232,40 @@
                         }
                     }
                 })
+            },
+            dateFormat:function(value){
+                var _date = value.replace("T"," ");
+                var _index = _date.lastIndexOf('.');
+                _date = _date.substring(0, _index);
+                return _date;
+            },
+            goto(value){
+                let next = this.params.currentPage + parseInt(value);
+                if (next == 0){
+                    $("#beforeBtn").attr('disabled','false');
+                }else{
+                    $("#beforeBtn").removeAttr("disabled");
+                }
+                this.$fetch(this.$api.historyUrl, {
+                    currentPage: next,
+                    pageSize:10
+                }).then(response => {
+                    if (response.code == 0){
+                        this.historyList = response.data.list
+                        if (response.data.isFirstPage == true){
+                            $("#beforeBtn").attr('disabled','false');
+                        }else {
+                            $("#beforeBtn").removeAttr("disabled");
+                        }
+                        if (response.data.isLastPage == true){
+                            $("#netBtn").attr('disabled','false');
+                        }else {
+                            $("#netBtn").removeAttr("disabled");
+                        }
+                    }
+                })
+                this.params.currentPage = next > 0 ? next : 1;
+
             }
         }
     }
