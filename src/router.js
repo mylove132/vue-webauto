@@ -68,6 +68,21 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: () => import( './components/Login.vue')
+        },
+        {
+            path:'/addjmeterArticle',
+            name:'addjmeterArticle',
+            component: () => import( './components/AddJmeterArticle.vue')
+        },
+        {
+            path:'/articleList',
+            name:'articleList',
+            component: () => import( './components/ArticleList.vue')
+        },
+        {
+            path:'/articleDetail',
+            name:'articleDetail',
+            component: () => import( './components/ArticleDetail.vue')
         }
     ]
 })

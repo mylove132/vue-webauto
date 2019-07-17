@@ -7,6 +7,8 @@ import qs from 'qs'
 import api from './urls'
 import vuei18n from 'vue-i18n'
 import db from './util'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 
 //定义全局变量
@@ -46,5 +48,6 @@ new Vue({
     router,
     vuei18n,
     store,
+    mavonEditor,
     render: h => h(App)
 })

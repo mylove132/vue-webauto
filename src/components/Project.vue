@@ -247,7 +247,7 @@
             editModal:function(module){
                 $('#mainModal').modal()
                 $('#moduleName').val(module.projectName)
-                $('#moduleDesc').val(module.desc)
+                $('#moduleDesc').val(module.descption)
                 $('#moduleType').val(module.typeId)
                 $('#moduleEnv').val(module.envId)
             },

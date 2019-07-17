@@ -55,9 +55,9 @@
                     <div id="item-jxwz" class="panel-collapse collapse">
                         <div class="item-body" style="background-color:#567085;">
                             <ul class="list-unstyled">
-                                <li class="item-second"><a href="#">添加jmeter文章</a></li>
-                                <li class="item-second"><a href="#">修改jmeter文章</a></li>
-                                <li class="item-second"><a href="#">文章列表</a></li>
+                                <li class="item-second"><a href="javascript:void(0);" @click="addJmeterArticle()">添加jmeter文章</a></li>
+                                <li class="item-second"><a href="javascript:void(0);">修改jmeter文章</a></li>
+                                <li class="item-second"><a href="javascript:void(0);" @click="articleList()">文章列表</a></li>
                             </ul>
                         </div>
                     </div>
@@ -71,22 +71,42 @@
 
             </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10" id="showIndex" style="display: block">
             <h1>welcome to okay jmeter web platform !!!</h1>
+
         </div>
     </div>
 
 </template>
 
 <script>
+    import { mavonEditor } from 'mavon-editor'
     export default {
         name: "Home",
         data(){
-            return{}
+            return{
+            }
+        },
+        components:{
+            mavonEditor
         },
         methods:{
             showJmeterUse:function () {
                 
+            },
+            addJmeterArticle:function () {
+                this.$router.push({
+                    name: 'addjmeterArticle',
+                    query: {
+                    }
+                })
+            },
+            articleList:function () {
+                this.$router.push({
+                    name: 'articleList',
+                    query: {
+                    }
+                })
             }
         }
     }

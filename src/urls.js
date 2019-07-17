@@ -18,7 +18,11 @@ const base = {
     execScriptUrl:'/api/common/execScript',
     reportDownload:'/api/common/download',
     taskUrl:"/api/scheduleJob",
+    articleUrl:"/api/article",
     checkCronUrl:"/api/common/checkCron",
+    imgUrl:"/api/common/upload",
+    categoryurl:"/api/category",
+
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 
