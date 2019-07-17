@@ -22,72 +22,17 @@
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-5 col-xl-12 tm-block-col"
                      style="margin-left: -30px;margin-top: -40px">
-                    <div class="tm-bg-primary-dark tm-block tm-block-products">
-                        <div class="tm-product-table-container">
-                            <table class="table table-hover tm-table-small tm-product-table" style=''>
-                                <thead>
-                                <tr>
-                                    <th nowrap="nowrap" scope="col">标题</th>
-                                    <th nowrap="nowrap" scope="col">分类</th>
-                                    <th nowrap="nowrap" scope="col">创建人</th>
-                                    <th nowrap="nowrap" scope="col">创建时间</th>
-                                    <th nowrap="nowrap" scope="col">更新时间</th>
-                                    <th scope="col">删除</th>
-                                    <th scope="col">编辑</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="article in articleList" @click="seeArticleDetail(article)">
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{article.title}}
-                                    </td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{article.categoryName}}
-                                    </td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{article.userName}}
-                                    </td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{article.createTime}}
-                                    </td>
-                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
-                                        class="tm-product-name">{{article.updateTime}}
-                                    <td>
-                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="delArticle(article.id)">
-                                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0);" @click="editArticle(article)" class="tm-product-delete-link">
-                                            <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="page-box" style="margin-left: 780px">
-                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
-                            <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
-                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
-                        </div>
-                        <!-- table container -->
-                        <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="addArticle()">Add new
-                            Scripts</a>
+                    <div v-for="article in articleList">
+                        <p style="color: white;text-align: left">>>{{article.categoryName}}</p>
+                        <ul>
+                            <li @click="seeArticleDetail(article)">{{article.title}}<span>
+                                <i class="fa fa-user" aria-hidden="true"></i> {{article.userName}}
+                            </span><span>{{article.updateTime}}</span></li>
+                        </ul>
                     </div>
-                </div>
             </div>
         </div>
-        <footer class="tm-footer row tm-mt-small">
-            <div class="col-12 font-weight-light">
-                <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2018</b> All rights reserved.
-
-                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="OK教育">OK教育</a> - Collect
-                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
-                </p>
-            </div>
-        </footer>
+    </div>
     </div>
 </template>
 
@@ -192,5 +137,25 @@
 </script>
 
 <style scoped>
+    ul{
 
+        list-style-type:none;
+        font-size:0.8em;
+
+    }
+    li{
+        padding:0.7em;
+        padding-left:1.75em;
+        border-bottom:1px dashed black;
+        background-color: #394f62;
+        background-size:2em 2em;
+        background-position:0 0.1em;
+        color: white;
+        text-align: left;
+    }
+    li>span{
+        diaplay:inlie-block;
+        float:right;
+        width:12em;
+    }
 </style>
