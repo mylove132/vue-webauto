@@ -205,7 +205,7 @@
             }),
             this.$fetch(this.$api.userUrl).then(resonse => {
                     if (resonse.code == 0){
-                        this.users =  resonse.data
+                        this.users =  resonse.data.list
                     }else {
                         return []
                     }
@@ -309,7 +309,7 @@
                 const envIndex = $('#select_env').val();
                 const userIndex = $('#select_user').val();
                 this.$fetch(this.$api.projectUrl+"filter?typeId="+platformIndex+"&envId="+envIndex+"&userId="+userIndex).then(response => {
-                            this.moduleList = response.data
+                            this.moduleList = response.data.list
                         })
             },
             filterEnv:function(){
@@ -317,7 +317,7 @@
                 const envIndex = $('#select_env').val();
                 const userIndex = $('#select_user').val();
                  this.$fetch(this.$api.projectUrl+"filter?typeId="+platformIndex+"&envId="+envIndex+"&userId="+userIndex).then(response => {
-                            this.moduleList = response.data
+                            this.moduleList = response.data.list
                         })
             },
             filterUser:function(){
@@ -325,13 +325,13 @@
                 const envIndex = $('#select_env').val();
                 const userIndex = $('#select_user').val();
                  this.$fetch(this.$api.projectUrl+"filter?typeId="+platformIndex+"&envId="+envIndex+"&userId="+userIndex).then(response => {
-                            this.moduleList = response.data
+                            this.moduleList = response.data.list
                         })
             },
             search:function(){
                 const search_text = $('#search').val()
                 this.$fetch(this.$api.projectUrl+"search?keyword="+search_text).then(response => {
-                    this.moduleList = response.data
+                    this.moduleList = response.data.list
                 })
             },
             runProject:function (id,env) {

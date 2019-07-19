@@ -128,7 +128,7 @@
                                                         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                                                             <select class="custom-select" id="select_task_project" @change="selectProject">
                                                                 <option value="0">请选择项目</option>
-                                                                <option v-for="project in projectList" v-bind:value="project.id">{{project.name}}</option>
+                                                                <option v-for="project in projectList" v-bind:value="project.id">{{project.projectName}}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -138,7 +138,7 @@
                                                         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                                                             <select class="custom-select" id="select_task_script" @change="selectScript">
                                                                 <option value="0">请选择脚本</option>
-                                                                <option v-for="script in scriptList" v-bind:value="script.id">{{script.name}}</option>
+                                                                <option v-for="script in scriptList" v-bind:value="script.id">{{script.scriptName}}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -172,7 +172,7 @@
                                                                 />
                                                                 <button class="form-group" @click="checkCron()" style="margin-left: 30px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
                                                             </div>
-                                                            </div>
+                                                        </div>
 
                                                     </div>
                                                 </div>
@@ -227,7 +227,7 @@
                                                         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                                                             <select class="custom-select" id="select_edit_task_project" @change="selectEditProject">
                                                                 <option value="0">请选择项目</option>
-                                                                <option v-for="project in projectSelectList" v-bind:value="project.id">{{project.name}}</option>
+                                                                <option v-for="project in projectSelectList" v-bind:value="project.id">{{project.projectName}}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -237,7 +237,7 @@
                                                         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                                                             <select class="custom-select" id="select_edit_task_script">
                                                                 <option value="0">请选择脚本</option>
-                                                                <option v-for="script in scriptList" v-bind:value="script.id">{{script.name}}</option>
+                                                                <option v-for="script in scriptList" v-bind:value="script.id">{{script.scriptName}}</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -326,6 +326,7 @@
                 projectTypeList:[],
                 projectList:[],
                 scriptList:[],
+                scriptEditList:[],
                 projectSelectList:[],
                 taskId:0,
                 status:0
@@ -333,11 +334,11 @@
         },
         created:function(){
             this.$fetch(this.$api.taskUrl+"/list").then(response => {
-               if (response.code == 0){
-                   this.taskList = response.data.list
-               }else {
-                   swal("错误", response.message, "error")
-               }
+                if (response.code == 0){
+                    this.taskList = response.data.list
+                }else {
+                    swal("错误", response.message, "error")
+                }
             });
             this.$fetch(this.$api.typeUrl).then(response => {
                 if (response.code == 0){
@@ -350,7 +351,6 @@
         methods:{
             addTimeTask:function () {
                 $('#taskModal').modal();
-                console.log(this.projectList)
             },
             selectPlatform:function () {
                 const self = this
@@ -359,7 +359,7 @@
                     return;
                 }else {
                     this.$fetch(this.$api.projectUrl+"typeId/"+$('#select_task_platform').val()).then(response => {
-                        self.projectList = response.data
+                        self.projectList = response.data.list
                     })
                 }
             },
@@ -382,7 +382,7 @@
                 }
                 this.$fetch(this.$api.scriptUrl+"orderByProject/"+$('#select_task_project').val()).then(response => {
                     if (response.code == 0){
-                        self.scriptList = response.data
+                        self.scriptList = response.data.list
                     }
                 })
             },
@@ -393,7 +393,7 @@
                     return;
                 }this.$fetch(this.$api.scriptUrl+"orderByProject/"+$('#select_edit_task_project').val()).then(response => {
                     if (response.code == 0){
-                        self.scriptList = response.data
+                        self.scriptList = response.data.list
                     }
                 })
             },
@@ -454,7 +454,7 @@
                         if (response.code == 0){
                             self.$fetch(self.$api.taskUrl+"/list").then(response => {
                                 if (response.code == 0){
-                                    self.taskList = response.data
+                                    self.taskList = response.data.list
                                 }else {
                                     swal("错误", response.message, "error")
                                 }
@@ -463,7 +463,6 @@
                             $('#taskModal').modal('hide');
                         }
                     }
-
                 })
             },
             delTask:function (taskId) {
@@ -483,7 +482,7 @@
                             if (response.code == 0){
                                 self.$fetch(self.$api.taskUrl+"/list").then(response => {
                                     if (response.code == 0){
-                                        self.taskList = response.data
+                                        self.taskList = response.data.list
                                     }else {
                                         swal("错误", response.message, "error")
                                     }
@@ -494,7 +493,6 @@
                         })
                     }
                 })
-
             },
             editTask:function (task) {
                 console.log(task)
@@ -504,23 +502,22 @@
                 $("#editTaskModal").modal()
                 $("#description_edit").val(task.description);
                 $("#cronIdEdit").val(task.cron)
-                $("#select_edit_task_platform").val(task.projectTypeId)
+                $("#select_edit_task_platform").val(task.typeId)
                 this.projectSelectList = []
                 if($('#select_edit_task_platform').val() == 0){
                     return;
                 }else {
                     this.$fetch(this.$api.projectUrl+"typeId/"+$('#select_edit_task_platform').val()).then(response => {
-                        this.projectSelectList = response.data
+                        this.projectSelectList = response.data.list
                     })
                 };
                 if($('#select_edit_task_project').val() == 0){
                     return;
                 }this.$fetch(this.$api.scriptUrl+"orderByProject/"+$('#select_edit_task_project').val()).then(response => {
                     if (response.code == 0){
-                        self.scriptList = response.data
+                        self.scriptList = response.data.list
                     }
                 });
-
             },
             pauseTask:function (taskId) {
                 this.$fetch(this.$api.taskUrl+"/pause/"+taskId).then(response => {
@@ -528,7 +525,7 @@
                         this.$fetch(this.$api.taskUrl+"/list").then(response => {
                             if (response.code == 0){
                                 swal("定时任务已暂停","","success")
-                                this.taskList = response.data
+                                this.taskList = response.data.list
                             }else {
                                 swal("错误", response.message, "error")
                             }
@@ -542,7 +539,7 @@
                         this.$fetch(this.$api.taskUrl+"/list").then(response => {
                             if (response.code == 0){
                                 swal("定时任务已重新启动","","success")
-                                this.taskList = response.data
+                                this.taskList = response.data.list
                             }else {
                                 swal("错误", response.message, "error")
                             }
@@ -580,7 +577,7 @@
                         if (response.code == 0){
                             self.$fetch(self.$api.taskUrl+"/list").then(response => {
                                 if (response.code == 0){
-                                    self.taskList = response.data
+                                    self.taskList = response.data.list
                                 }else {
                                     swal("错误", response.message, "error")
                                 }
@@ -591,12 +588,8 @@
                             swal("error",response.message,"error")
                         }
                     }
-
                 })
             }
-
-
-
         }
     }
 </script>
@@ -607,7 +600,6 @@
         position: fixed;
         margin: auto;
         width: 650px;
-
         max-width: 850px;
         height: 100%;
         -webkit-transform: translate3d(0%, 0, 0);
@@ -615,23 +607,19 @@
         -o-transform: translate3d(0%, 0, 0);
         transform: translate3d(0%, 0, 0);
     }
-
     .modal.left .modal-content,
     .modal.right .modal-content {
         height: 100%;
         overflow-y: auto;
         overflow-x: auto;
     }
-
     #result {
         height: 500px;
     }
-
     .modal.left .modal-body,
     .modal.right .modal-body {
         padding: 15px 15px 80px;
     }
-
     /*Left*/
     .modal.left.fade .modal-dialog {
         left: -30px;
@@ -640,11 +628,9 @@
         -o-transition: opacity 0.3s linear, left 0.3s ease-out;
         transition: opacity 0.3s linear, left 0.3s ease-out;
     }
-
     .modal.left.fade.in .modal-dialog {
         left: 0;
     }
-
     /*Right*/
     .modal.right.fade .modal-dialog {
         right: 0px;
@@ -653,17 +639,14 @@
         -o-transition: opacity 0.3s linear, right 0.3s ease-out;
         transition: opacity 0.3s linear, right 0.3s ease-out;
     }
-
     .modal.right.fade.in .modal-dialog {
         right: 0;
     }
-
     /* ----- MODAL STYLE ----- */
     .modal-content {
         border-radius: 0;
         border: none;
     }
-
     .modal-header {
         color: black;
         border-bottom-color: black;
