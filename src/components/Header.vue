@@ -57,11 +57,6 @@
                             登录
                         </router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link d-block" to="/register">
-                            注册
-                        </router-link>
-                    </li>
                 </ul>
                 <ul class="navbar-nav" v-else="isLogin">
                     <li class="nav-item">
