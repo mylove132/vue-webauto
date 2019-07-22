@@ -16,6 +16,12 @@ export default new Router({
         },
         {
             //meta:{requireAuth:true},
+            path: '/register',
+            name: 'register',
+            component: () => import( './components/Regist.vue')
+        },
+        {
+            //meta:{requireAuth:true},
             path: '/project',
             name: 'project',
             component: () => import( './components/Project.vue')
