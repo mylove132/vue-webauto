@@ -220,14 +220,17 @@
             },
             watchLog: function (history) {
                 const self = this
+                this.bus.$emit('loading', true)
                 $.ajax({
                     url: this.$api.logUrl + "?id="+history.id+"&md5="+history.md5,
                     type: 'GET',
                     success: function (response) {
                         if (response.code == 0) {
+                            this.bus.$emit('loading', false)
                             $('#myModal').modal()
                             document.getElementById('log').innerHTML = response.data.log
                         } else {
+                            this.bus.$emit('loading', false)
                             swal("错误", response.message, "error")
                         }
                     }
