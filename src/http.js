@@ -46,10 +46,30 @@ const errorHandle = (status, other) => {
         // 403 token过期
         // 清除token并跳转登录页
         case 403:
-            swal ( "Warning" ,  other.message ,  "warning" );
-            store.dispatch('LogOut')
-            window.location.href = "/login";
-            break;
+            if (other.message == "token不存在") {
+                swal("Warning", other.message, "warning");
+                store.dispatch('LogOut')
+                window.location.href = "/login";
+                break;
+            }else if (other.message == "token失效"){
+                swal("Warning", other.message, "warning");
+                store.dispatch('LogOut')
+                window.location.href = "/login";
+                break;
+            }else if (other.message == "token用户不存在"){
+                swal("Warning", other.message, "warning");
+                store.dispatch('LogOut')
+                window.location.href = "/login";
+                break;
+            }else if (other.message == "用户角色不存在"){
+                swal("Warning", other.message, "warning");
+                store.dispatch('LogOut')
+                window.location.href = "/login";
+                break;
+            }else if (other.message == "用户角色无权限"){
+                swal("Warning", other.message, "warning");
+                break;
+            }
         // 404请求不存在
         case 404:
             tip('请求的资源不存在');
