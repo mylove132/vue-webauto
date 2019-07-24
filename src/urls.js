@@ -12,6 +12,8 @@ const base = {
     dubboTest:'/api/dubboTest',
     historyUrl:'/api/history/',
     reportUrl:'/api/report/',
+    roleUrl:"/api/common/roles",
+    listRoleUrl:"/api/common/roleList",
     generateReportUrl:"/api/common/generateReport",
     logUrl:'/api/common/watchLog',
     watchReport:"/api/common/watchReport",

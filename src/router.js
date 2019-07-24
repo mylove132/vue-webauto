@@ -89,6 +89,11 @@ export default new Router({
             path:'/articleDetail',
             name:'articleDetail',
             component: () => import( './components/ArticleDetail.vue')
+        },
+        {
+            path:'/settings',
+            name:'settings',
+            component: () => import( './components/Settings.vue')
         }
     ]
 })
