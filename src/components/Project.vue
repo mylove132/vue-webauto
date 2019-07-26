@@ -106,9 +106,9 @@
                             </table>
                         </div>
                         <div class="page-box" style="margin-left: 780px">
-                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
+                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: white;border-radius: 5px"> 上一页</button>
                             <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
-                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
+                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: white;border-radius: 5px"> 下一页</button>
                         </div>
                         <!-- table container -->
                         <a href="#" class="btn btn-primary btn-block text-uppercase mb-3" @click="addModule()">Add new product</a>
@@ -125,10 +125,7 @@
                                                 <nobr>
                                                     <strong style="color: white">平台:&nbsp;&nbsp;  </strong>
                                                     <select style="width: 130px" id="addModuleType">
-                                                        <option value="1">教师空间</option>
-                                                        <option value="2">教师pad</option>
-                                                        <option value="3">学生pad</option>
-                                                        <option value="4">商城</option>
+                                                        <option v-for="type in typeList" v-bind:value="type.id">{{type.name}}</option>
                                                     </select>
                                                     <strong style="color: white;padding-left: 5px">项目名称:&nbsp;&nbsp;  </strong>
                                                     <input type="text" placeholder="项目名称" style="border-radius: 5px" id="addModuleName" />
@@ -139,10 +136,7 @@
                                             <nobr>
                                                 <strong style="color: white">环境:&nbsp;&nbsp;  </strong>
                                                 <select style="width: 130px" id="addModuleEnv">
-                                                    <option value="1">dev</option>
-                                                    <option value="2">docker-dev</option>
-                                                    <option value="3">docker-hotfix</option>
-                                                    <option value="4">stress</option>
+                                                    <option v-for="env in envList" v-bind:value="env.id">{{env.name}}</option>
                                                 </select>
                                                 <strong style="color: white;padding-left: 5px">项目描述:&nbsp;&nbsp;  </strong>
                                                 <input type="text" placeholder="项目描述" style="border-radius: 5px" id="addModuleDesc" />

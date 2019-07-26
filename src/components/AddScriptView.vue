@@ -5,7 +5,6 @@
                 <div class="col-12 tm-block-col">
 
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-
                                 <label style="color: red;margin-left: -20px;margin-right: 40px">*</label>
                             <select class="col-md-11 custom-select" id="project">
                                 <option value="0">请选择项目</option>
@@ -37,73 +36,81 @@
 
             <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                        <a class="card-link" data-toggle="collapse" href="#collapse1" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px #c807a3;">
+                        <a class="card-link" data-toggle="collapse" href="#collapse1" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px rgb(12,232,100);">
                             <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> HEADER设置
                         </a>
-                        <a class="card-link" data-toggle="collapse" href="#collapse2" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                        <a class="card-link" data-toggle="collapse" href="#collapse2" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px rgb(12,232,100);">
                             <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> COOKIE设置
                         </a>
-                        <a class="card-link" data-toggle="collapse" href="#collapse3" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px #c807a3;">
+                        <a class="card-link" data-toggle="collapse" href="#collapse3" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px rgb(12,232,100);">
                             <label class="http dubbo websocket" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> PARAM设置
                         </a>
                         <div class="row tm-content-row collapse hide" id="collapse1" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;"
-                                                    id="addHeaderBtn" @click="addHeaderBtn()"><i
-                                                    class="fa fa-plus" aria-hidden="true"></i></button>
-                                        </div>
-                                        <div class="col-md-10" id="headerList">
-                                        </div>
-                                    </div>
-
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
+                                    <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                        <thead>
+                                        <tr>
+                                            <th nowrap="nowrap" scope="col">header名称</th>
+                                            <th nowrap="nowrap" scope="col">header值</th>
+                                            <th scope="col">删除</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="headerBody">
+                                        </tbody>
+                                    </table>
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addHeaderRow()">添加header</a>
                                 </div>
                             </div>
                         </div>
                         <div class="row tm-content-row collapse hide" id="collapse2" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;margin-top: 20px" id="addBtn"
-                                                    @click="addCookieBtn()"><i class="fa fa-plus"
-                                                                               aria-hidden="true"></i></button>
-                                            <!--<button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;margin-top: 20px;" id="generateLoginToken"
-                                                    @click="addCookieBtn()">登录cookie</button>
-                                                    -->
-                                        </div>
-                                        <div class="col-md-10" id="cookieList">
-                                        </div>
-                                    </div>
-
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
+                                    <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                        <thead>
+                                        <tr>
+                                            <th nowrap="nowrap" scope="col">cookie名称</th>
+                                            <th nowrap="nowrap" scope="col">cookie值</th>
+                                            <th nowrap="nowrap" scope="col">域名</th>
+                                            <th nowrap="nowrap" scope="col">路径</th>
+                                            <th scope="col">删除</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="cookieBody">
+                                        </tbody>
+                                    </table>
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addCookieRow()">添加cookie</a>
                                 </div>
                             </div>
                         </div>
                         <div class="row tm-content-row collapse hide" id="collapse3" data-parent="#accordion">
                             <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
+                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
                                     <div class="row">
                                         <ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">
                                             <li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>
                                             <li id="routeType_1" value="1" @click="checkrouteType(1)" style="color: white;width: 200px">&nbsp;json格式 &nbsp;</li>
                                         </ul>
                                     </div>
-                                    <div class="row" id="json_content" style="display: none;margin-top: 20px">
-                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460" id="requestParam"></textarea>
+                                    <div class="row" id="json_content" style="display: none;margin-top: 100px">
+                                        <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460;margin-top: -80px" id="requestParam"></textarea>
                                     </div>
                                     <div class="row" id="form_content">
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;" id="addParamBtn"
-                                                    @click="addParamsBtn()"><i class="fa fa-plus"
-                                                                               aria-hidden="true"></i></button>
-                                        </div>
-                                        <div class="col-md-10" id="paramsList">
+                                        <div class="col-12 tm-block-col" style="margin-left: 20px">
+                                            <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:0px;">
+                                                <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                                    <thead>
+                                                    <tr>
+                                                        <th nowrap="nowrap" scope="col">param名称</th>
+                                                        <th nowrap="nowrap" scope="col">param值</th>
+                                                        <th scope="col">删除</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="paramBody">
+                                                    </tbody>
+                                                </table>
+                                                <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addparamRow()">添加param</a>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -113,8 +120,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="row tm-content-row">
                 <div class="tm-block-col tm-col-account-settings">
                     <div class="tm-bg-primary-dark tm-block tm-block-settings">
@@ -277,11 +282,100 @@
 </template>
 
 <script>
+    var i=0;
+    var j=0;
+    var z=0;
+    window.addCookieRow=function(){
+        var mytable = document.getElementById("cookieBody");
+        var mytr = mytable.insertRow();
+        mytr.setAttribute("id","tr"+i);
+        var mytd_1=mytr.insertCell();
+        var mytd_2=mytr.insertCell();
+        var mytd_3=mytr.insertCell();
+        var mytd_4=mytr.insertCell();
+        var mytd_5=mytr.insertCell();
+        mytd_1.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"cookieName\"/>\n" +
+            "                                            </td>";
+        mytd_2.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"cookieValue\"/>\n" +
+            "                                            </td>";
+        mytd_3.innerHTML=" <td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"cookieDomain\"/>\n" +
+            "                                            </td>";
+        mytd_4.innerHTML=" <td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"cookiePath\"/>\n" +
+            "                                            </td>";
+        mytd_5.innerHTML="<td>\n" +
+            "                                                <a href=\"javascript:void(0);\" class=\"tm-product-delete-link\" onclick=\"delCookieTr("+i+")\">\n" +
+            "                                                    <i class=\"far fa-trash-alt tm-product-delete-icon\"></i>\n" +
+            "                                                </a>\n" +
+            "                                            </td>";
+        i++;
+    };
+    window.addHeaderRow=function(){
+        var mytable = document.getElementById("headerBody");
+        var mytr = mytable.insertRow();
+        mytr.setAttribute("id","tr"+j);
+        var mytd_1=mytr.insertCell();
+        var mytd_2=mytr.insertCell();
+        var mytd_3=mytr.insertCell();
+        mytd_1.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"headerName\"/>\n" +
+            "                                            </td>";
+        mytd_2.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"headerValue\"/>\n" +
+            "                                            </td>";
+        mytd_3.innerHTML="<td>\n" +
+            "                                                <a href=\"javascript:void(0);\" class=\"tm-product-delete-link\" onclick=\"delHeaderTr("+j+")\">\n" +
+            "                                                    <i class=\"far fa-trash-alt tm-product-delete-icon\"></i>\n" +
+            "                                                </a>\n" +
+            "                                            </td>";
+        j++;
+    };
+    window.addparamRow=function(){
+        var mytable = document.getElementById("paramBody");
+        var mytr = mytable.insertRow();
+        mytr.setAttribute("id","tr"+z);
+        var mytd_1=mytr.insertCell();
+        var mytd_2=mytr.insertCell();
+        var mytd_3=mytr.insertCell();
+        mytd_1.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"paramName\"/>\n" +
+            "                                            </td>";
+        mytd_2.innerHTML="<td style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\">\n" +
+            "                                                <input type=\"text\" class=\"paramValue\"/>\n" +
+            "                                            </td>";
+        mytd_3.innerHTML="<td>\n" +
+            "                                                <a href=\"javascript:void(0);\" class=\"tm-product-delete-link\" onclick=\"delParamTr("+z+")\">\n" +
+            "                                                    <i class=\"far fa-trash-alt tm-product-delete-icon\"></i>\n" +
+            "                                                </a>\n" +
+            "                                            </td>";
+        z++;
+    };
+
+    window.delCookieTr=function(i){
+        var mytable = document.getElementById("cookieBody");
+        var myrow = document.getElementById("tr"+i);
+        mytable.deleteRow(myrow.rowIndex-1);
+    };
+    window.delHeaderTr=function(i){
+        var mytable = document.getElementById("headerBody");
+        var myrow = document.getElementById("tr"+i);
+        mytable.deleteRow(myrow.rowIndex-1);
+    };
+    window.delParamTr=function(i){
+        var mytable = document.getElementById("paramBody");
+        var myrow = document.getElementById("tr"+i);
+        mytable.deleteRow(myrow.rowIndex-1);
+    };
+
     export default {
         name: "AddScriptView",
         data(){
             return{
                 id: 0,
+                i:0,
                 headerIndex: 0,
                 paramsIndex: 0,
                 protocolList:[],
@@ -294,6 +388,7 @@
                 hhStore:[],
                 pStore:[],
                 ppStore:[],
+                cookieList:[]
             }
         },
         created:function(){
@@ -317,6 +412,7 @@
             $(".websocket").css('display','none')
         },
         methods:{
+
             showMust:function(){
                 $(".http").css('display','none');
                 $(".dubbo").css('display','none');
@@ -336,98 +432,6 @@
                         $(".dubbo").css('display','none');
                         $(".websocket").css('display','none');
                         break;
-                }
-            },
-            addHeaderBtn: function () {
-                let $cookieHtml = '<div class="form-group headers" style="clear: both">\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
-                    '                                    <input class="form-control headerKey" name="headerName" placeholder="header key" style="height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '\n' +
-                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
-                    '                                    <input class="form-control headerValue" name="headerValue" placeholder="header value" style="height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
-                    '                                    <button type="button" class="btn btn-default removeHeaderButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
-                    '                                    </button>\n' +
-                    '                                </div>\n' +
-                    '                            </div>';
-                $('#headerList').append($cookieHtml)
-                this.headerIndex++;
-                let self = this
-                let delEle = document.getElementsByClassName('removeHeaderButton')[self.headerIndex - 1]
-                if (delEle != null) {
-                    delEle.onclick = function () {
-                        let head = document.getElementsByClassName('headers')[self.headerIndex - 1];
-                        if (head != null) {
-                            var result = head.parentNode.removeChild(head);
-                            if (result != null) {
-                                self.headerIndex -= 1
-                            }
-                        }
-                    }
-                }
-            },
-            addCookieBtn: function () {
-                let $cookieHtml = '<div class="form-group cookieHead" style="clear: both">\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
-                    '                                    <input class="form-control cookieKey" name="cookieName" placeholder="cookie key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '\n' +
-                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
-                    '                                    <input class="form-control cookieValue" name="cookieValue" placeholder="cookie value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
-                    '                                    <button type="button" class="btn btn-default removeButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
-                    '                                    </button>\n' +
-                    '                                </div>\n' +
-                    '                            </div>';
-                $('#cookieList').append($cookieHtml)
-                this.id++;
-                console.log("id:" + this.id)
-                let self = this
-                let delEle = document.getElementsByClassName('removeButton')[self.id - 1]
-                if (delEle != null) {
-                    delEle.onclick = function () {
-                        let cookieHead = document.getElementsByClassName('cookieHead')[self.id - 1];
-                        if (cookieHead != null) {
-                            var result = cookieHead.parentNode.removeChild(cookieHead);
-                            if (result != null) {
-                                self.id -= 1
-                            }
-                        }
-                    }
-                }
-            },
-            addParamsBtn: function () {
-                let $paramsHtml = '<div class="form-group paramsHead" style="clear: both">\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 150px;margin-top: 3px;">\n' +
-                    '                                    <input class="form-control paramsKey" name="paramsName" placeholder="params key" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '\n' +
-                    '                                <div class="col-sm-2" style="float: left; margin-left: 80px">\n' +
-                    '                                    <input class="form-control paramsValue" name="paramsValue" placeholder="params value" style="border-radius: 5px;height: 45px;width:180px;background-color: white;color: black"/>\n' +
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-2" style="float: left;margin-left: 80px">\n' +
-                    '                                    <button type="button" class="btn btn-default removeParamsButton" style="border-radius: 5px;height: 45px"><i class="fa fa-minus"></i>\n' +
-                    '                                    </button>\n' +
-                    '                                </div>\n' +
-                    '                            </div>';
-                $('#paramsList').append($paramsHtml)
-                this.paramsIndex++;
-                let self = this
-                let delEle = document.getElementsByClassName('removeParamsButton')[self.paramsIndex - 1]
-                if (delEle != null) {
-                    delEle.onclick = function () {
-                        let head = document.getElementsByClassName('paramsHead')[self.paramsIndex - 1];
-                        if (head != null) {
-                            var result = head.parentNode.removeChild(head);
-                            console.log(result)
-                            if (result != null) {
-                                self.paramsIndex -= 1
-                            }
-                        }
-                    }
                 }
             },
             checkrouteType:function (id) {
@@ -609,18 +613,20 @@
                     return false;
                 }
 
-                let cookieKey = document.getElementsByClassName('cookieKey')
+                let cookieKey = document.getElementsByClassName('cookieName')
                 let cookieValue = document.getElementsByClassName('cookieValue')
+                let cookieDomain = document.getElementsByClassName('cookieDomain')
+                let cookiePath = document.getElementsByClassName('cookiePath')
                 for (let i = 0; i < cookieKey.length; i++) {
-                    this.cStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value})
+                    this.cStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value,"domain":cookieDomain[i].value,"path":cookiePath[i].value})
                 }
-                let headerKey = document.getElementsByClassName('headerKey')
+                let headerKey = document.getElementsByClassName('headerName')
                 let headerValue = document.getElementsByClassName('headerValue')
                 for (let i = 0; i < headerKey.length; i++) {
                     this.hStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
                 }
-                let paramsKey = document.getElementsByClassName('paramsKey')
-                let paramsValue = document.getElementsByClassName('paramsValue')
+                let paramsKey = document.getElementsByClassName('paramName')
+                let paramsValue = document.getElementsByClassName('paramValue')
                 for (let i = 0; i < paramsKey.length; i++) {
                     this.pStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
                 }
@@ -680,18 +686,23 @@
                     return false;
                 }
 
-                let cookieKey = document.getElementsByClassName('cookieKey')
+
+                let cookieKey = document.getElementsByClassName('cookieName')
                 let cookieValue = document.getElementsByClassName('cookieValue')
+                let cookieDomain = document.getElementsByClassName('cookieDomain')
+                let cookiePath = document.getElementsByClassName('cookiePath')
                 for (let i = 0; i < cookieKey.length; i++) {
-                    this.ccStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value})
+                    this.ccStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value,"domain":cookieDomain[i].value,"path":cookiePath[i].value})
                 }
-                let headerKey = document.getElementsByClassName('headerKey')
+
+                let headerKey = document.getElementsByClassName('headerName')
                 let headerValue = document.getElementsByClassName('headerValue')
                 for (let i = 0; i < headerKey.length; i++) {
                     this.hhStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
                 }
-                let paramsKey = document.getElementsByClassName('paramsKey')
-                let paramsValue = document.getElementsByClassName('paramsValue')
+
+                let paramsKey = document.getElementsByClassName('paramName')
+                let paramsValue = document.getElementsByClassName('paramValue')
                 for (let i = 0; i < paramsKey.length; i++) {
                     this.ppStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
                 }
@@ -705,6 +716,8 @@
                     pm = JSON.stringify(this.ppStore)
                 }
 
+                alert(this.hhStore)
+
                 let self = this
                 if ($('#protocol').val() == 1) {
                     if (!this.verityHttp()){
@@ -713,7 +726,7 @@
                     this.bus.$emit('loading', true)
                     $.ajax({
                         url: this.$api.testUrl,
-                        type: 'GET',
+                        type: 'POST',
                         data: {
                             "url": $('#requestUrl').val(),
                             "protocolId": 1,

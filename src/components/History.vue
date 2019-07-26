@@ -77,9 +77,9 @@
                             </table>
                         </div>
                         <div class="page-box" style="margin-left: 780px">
-                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: yellow;border-radius: 5px"> 上一页</button>
+                            <button @click="goto(-1)" id="beforeBtn" style="color: black;background-color: white;border-radius: 5px"> 上一页</button>
                             <label style="color: white;margin-left: 20px;margin-right: 20px">当前页: {{params.currentPage}}</label>
-                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: yellow;border-radius: 5px"> 下一页</button>
+                            <button @click="goto(+1)" id="netBtn" style="color: black;background-color: white;border-radius: 5px"> 下一页</button>
                         </div>
                     </div>
 

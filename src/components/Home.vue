@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-2 side-nav" style="margin-left: 20px;margin-top: 50px">
-            <div class="panel-group" id="accordion" style="color: yellow">
+            <div class="panel-group" id="accordion" style="color: white">
                 <div class="panel-heading panel yx">
-                    <a href="#" class="side-nav-item item-title" style="background-color:#567085;color: yellow" @click="showJmeterUse()">
+                    <a href="#" class="side-nav-item item-title" style="background-color:#567085;color: white" @click="showJmeterUse()">
                         jmeter使用说明
                     </a>
                     <div class="item-body collapse" id='index'>
@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="panel-heading panel yx" style="margin-top: 30px">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#item-xn" id="item-xns" class="side-nav-item item-title" style="background-color:#567085;color: yellow">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-xn" id="item-xns" class="side-nav-item item-title" style="background-color:#567085;color: white">
                         jmeter性能报告说明
                     </a>
                     <div id="item-xn" class="panel-collapse collapse">
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="panel-heading panel yx" style="margin-top: 30px">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#item-cangku" id="headcangku" class="side-nav-item item-title" style="background-color:#567085;color: yellow">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-cangku" id="headcangku" class="side-nav-item item-title" style="background-color:#567085;color: white">
                         接口类型说明
                     </a>
                     <div id="item-cangku" class="panel-collapse collapse"  style="background-color:#567085;">
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="panel-heading panel yx" style="margin-top: 30px">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#item-jxwz" id="jxwz" class="side-nav-item item-title" style="background-color:#567085;color: yellow">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-jxwz" id="jxwz" class="side-nav-item item-title" style="background-color:#567085;color: white">
                         jmeter精选文章
                     </a>
                     <div id="item-jxwz" class="panel-collapse collapse">
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="panel-heading panel yx" style="margin-top: 30px">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#item-caiwu" id="headcaiwu" class="side-nav-item item-title collapsed" style="background-color:#567085;color: yellow">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-caiwu" id="headcaiwu" class="side-nav-item item-title collapsed" style="background-color:#567085;color: white">
                         定时任务
                     </a>
                 </div>

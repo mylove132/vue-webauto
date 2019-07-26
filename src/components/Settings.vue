@@ -67,6 +67,7 @@
                             <tr>
                                 <th nowrap="nowrap" scope="col">id</th>
                                 <th nowrap="nowrap" scope="col">系统</th>
+                                <th nowrap="nowrap" scope="col">url</th>
                                 <th scope="col">删除</th>
                                 <th scope="col">编辑</th>
                             </tr>
@@ -81,6 +82,12 @@
                                 </td>
                                 <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!type.status">
                                     <input type="text" id="typeId" v-bind:value="type.name"/>
+                                </td>
+                                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!type.status">
+                                    {{type.url}}
+                                </td>
+                                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!type.status">
+                                    <input type="text" id="urlId" v-bind:value="type.url"/>
                                 </td>
                                 <td>
                                     <a href="javascript:void(0);" class="tm-product-delete-link" @click="delType(type.id)">
@@ -488,9 +495,15 @@
                     swal("warning","系统名称不能为空","warning");
                     return;
                 }
+                if ($("#urlId").val() == "" || $("#urlId").val() == null){
+                    $("#urlId").focus();
+                    swal("warning","系统url不能为空","warning");
+                    return;
+                }
                 this.$put(this.$api.typeUrl,this.qs.stringify({
                     id:id,
-                    name:$("#typeId").val()
+                    name:$("#typeId").val(),
+                    url:$("#urlId").val()
                 })).then(response => {
                     if (response.code == 0){
                         swal("success","修改完成","success");
@@ -521,7 +534,8 @@
                     return;
                 }
                 this.$post(this.$api.typeUrl,this.qs.stringify({
-                    name:$("#addTypeName").val()
+                    name:$("#addTypeName").val(),
+                    url:$("#urlId").val()
                 })).then(response => {
                     if (response.code == 0){
                         $("#addTypeModal").modal('hide')
