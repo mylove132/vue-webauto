@@ -3,8 +3,8 @@
         <div class="col-md-2 side-nav" style="margin-left: 20px;margin-top: 50px">
             <div class="panel-group" id="accordion" style="color: white">
                 <div class="panel-heading panel yx">
-                    <a href="#" class="side-nav-item item-title" style="background-color:#567085;color: white" @click="showJmeterUse()">
-                        jmeter使用说明
+                    <a data-toggle="collapse" href="#jmeterPlatform" class="side-nav-item item-title" style="background-color:#567085;color: white" @click="showJmeterUse()">
+                        jmeter平台使用说明
                     </a>
                     <div class="item-body collapse" id='index'>
                     </div>
@@ -71,8 +71,92 @@
 
             </div>
         </div>
-        <div class="col-md-10" id="showIndex" style="display: block">
-            <h1>welcome to okay jmeter web platform !!!</h1>
+        <div class="col-md-10" id="accordion1">
+            <div class="row tm-content-row collapse hide" id="jmeterPlatform" data-parent="#accordion1" style="margin-left: 400px;margin-top: -360px">
+                <div class="col-12">
+                    <a class="card-link" data-toggle="collapse" href="#collapse1" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px rgb(12,232,100);">
+                         HEADER设置
+                    </a>
+                    <a class="card-link" data-toggle="collapse" href="#collapse2" style="margin-left:100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px rgb(12,232,100);">
+                         COOKIE设置
+                    </a>
+                    <a class="card-link" data-toggle="collapse" href="#collapse3" style="margin-left: 100px;color: white;font-size: 20px;display: block;float: left;text-shadow:5px 2px 6px rgb(12,232,100);">
+                         PARAM设置
+                    </a>
+                    <div class="row tm-content-row collapse hide" id="collapse1" data-parent="#accordion">
+                        <div class="col-12 tm-block-col">
+                            <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
+                                <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                    <thead>
+                                    <tr>
+                                        <th nowrap="nowrap" scope="col">header名称</th>
+                                        <th nowrap="nowrap" scope="col">header值</th>
+                                        <th scope="col">删除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="headerBody">
+                                    </tbody>
+                                </table>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addHeaderRow()">添加header</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row tm-content-row collapse hide" id="collapse2" data-parent="#accordion">
+                        <div class="col-12 tm-block-col">
+                            <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
+                                <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                    <thead>
+                                    <tr>
+                                        <th nowrap="nowrap" scope="col">cookie名称</th>
+                                        <th nowrap="nowrap" scope="col">cookie值</th>
+                                        <th nowrap="nowrap" scope="col">域名</th>
+                                        <th nowrap="nowrap" scope="col">路径</th>
+                                        <th scope="col">删除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="cookieBody">
+                                    </tbody>
+                                </table>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addCookieRow()">添加cookie</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row tm-content-row collapse hide" id="collapse3" data-parent="#accordion">
+                        <div class="col-12 tm-block-col">
+                            <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;margin-top: 80px">
+                                <div class="row">
+                                    <ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">
+                                        <li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>
+                                        <li id="routeType_1" value="1" @click="checkrouteType(1)" style="color: white;width: 200px">&nbsp;json格式 &nbsp;</li>
+                                    </ul>
+                                </div>
+                                <div class="row" id="json_content" style="display: none;margin-top: 100px">
+                                    <textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460;margin-top: -80px" id="requestParam"></textarea>
+                                </div>
+                                <div class="row" id="form_content">
+                                    <div class="col-12 tm-block-col" style="margin-left: 20px">
+                                        <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:0px;">
+                                            <table class="table table-hover tm-table-small tm-product-table" style=''>
+                                                <thead>
+                                                <tr>
+                                                    <th nowrap="nowrap" scope="col">param名称</th>
+                                                    <th nowrap="nowrap" scope="col">param值</th>
+                                                    <th scope="col">删除</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="paramBody">
+                                                </tbody>
+                                            </table>
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" onclick="addparamRow()">添加param</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

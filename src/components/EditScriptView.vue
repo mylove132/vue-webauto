@@ -14,6 +14,23 @@
                 </div>
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                    <div style="float: left;margin-left: 350px;color: white;margin-top: -10px">单点登录</div>
+                    <div class="testswitch" style="margin-left: 40px;margin-top: -15px">
+                        <input class="testswitch-checkbox" id="onoffswitch" type="checkbox" @click="isCasLogin">
+                        <label class="testswitch-label" for="onoffswitch">
+                            <span class="testswitch-inner" data-on="ON" data-off="OFF"></span>
+                            <span class="testswitch-switch"></span>
+                        </label>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-12 tm-block-col" style="display: none" id="user">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="color: white">
+                        用户名：<input type="text" id="username"/><label style="margin-left: 20px">密码：</label><input type="text" id="password"/>
+                    </div>
+                </div>
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <a class="card-link" data-toggle="collapse" href="#collapse1" style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px rgb(12,232,100);">
                             <label class="http" style="color: red;margin-left: -20px;margin-right: 20px;display: block;float: left">*</label> HEADER设置
                         </a>
@@ -96,114 +113,6 @@
                             </div>
                         </div>
 
-
-                        <div class="row tm-content-row collapse hide" id="collapseOne" data-parent="#accordion">
-                            <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="margin-left:-800px;height: 270px;border:2px solid #2e6e9e;overflow-y:auto;margin-top: 80px">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-default addBtn"
-                                                    style="border-radius:6px;width: 140px;"
-                                                    id="addHeaderBtn" @click="addHeaderBtn()"><i
-                                                    class="fa fa-plus" aria-hidden="true"></i></button>
-                                        </div>
-                                        <div class="col-md-10" id="headerList">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row tm-content-row collapse hide" id="collapseTwo" data-parent="#accordion">
-                            <div class="col-12 tm-block-col">
-                                <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">
-
-                                    <table class="table table-hover tm-table-small tm-product-table" style=''>
-                                        <thead>
-                                        <tr>
-                                            <th nowrap="nowrap" scope="col">cookie名称</th>
-                                            <th nowrap="nowrap" scope="col">cookie值</th>
-                                            <th nowrap="nowrap" scope="col">域名</th>
-                                            <th nowrap="nowrap" scope="col">路径</th>
-                                            <th scope="col">删除</th>
-                                            <th scope="col">编辑</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="(cookie,index) in cookieList">
-                                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                                {{cookie.name}}
-                                            </td>
-                                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!requestType.status">
-                                                {{cookie.value}}
-                                            </td>
-                                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!requestType.status">
-                                                <input type="text" id="requestTypeId" v-bind:value="requestType.name"/>
-                                            </td>
-                                            <td>
-                                                <a href="javascript:void(0);" class="tm-product-delete-link" @click="delRequestType(requestType.id)">
-                                                    <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a href="javascript:void(0);" @click="editRequestType(requestType,index)" class="tm-product-delete-link">
-                                                    <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
-                                                </a>
-                                            </td>
-                                            <td v-show="requestType.status">
-                                                <a href="javascript:void(0);" @click="cancelEditRequestType()" class="tm-product-delete-link">
-                                                    <i class="fa fa-thumbs-down tm-product-delete-icon" title="Align Left"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <!--<div class="row">-->
-                                        <!--<div class="col-md-2">-->
-                                            <!--<button type="button" class="btn btn-default addBtn"-->
-                                                    <!--style="border-radius:6px;width: 140px;margin-top: 20px" id="addBtn"-->
-                                                    <!--@click="addCookieBtn()"><i class="fa fa-plus"-->
-                                                                               <!--aria-hidden="true"></i></button>-->
-                                            <!--&lt;!&ndash;<button type="button" class="btn btn-default addBtn"-->
-                                                    <!--style="border-radius:6px;width: 140px;margin-top: 20px;" id="generateLoginToken"-->
-                                                    <!--@click="addCookieBtn()">登录cookie</button>-->
-                                                    <!--&ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--<div class="col-md-10" id="cookieList">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--<div class="row tm-content-row collapse hide" id="collapseThree" data-parent="#accordion">-->
-                            <!--<div class="col-12 tm-block-col">-->
-                                <!--<div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="height: 270px;overflow-y:auto;margin-left:-800px;border:2px solid #2e6e9e;margin-top: 80px">-->
-                                    <!--<div class="row">-->
-                                        <!--<ul class="which_group" id="routeType" style="width: 99%;margin-left: 300px;margin-top: -20px">-->
-                                            <!--<li id="routeType_0" value="0" @click="checkrouteType(0)" style="color: white;width: 200px">&nbsp;form表单格式 &nbsp;</li>-->
-                                            <!--<li id="routeType_1" value="1" @click="checkrouteType(1)" style="color: white;width: 200px">&nbsp;json格式 &nbsp;</li>-->
-                                        <!--</ul>-->
-                                    <!--</div>-->
-                                    <!--<div class="row" id="json_content" style="display: none;margin-top: 20px">-->
-                                        <!--<textarea style="width: 800px;height: 300px;background-color: #EEEEEE;border: 2px solid white;border-radius: 5px;color: #0c5460" id="requestParam"></textarea>-->
-                                    <!--</div>-->
-                                    <!--<div class="row" id="form_content">-->
-                                        <!--<div class="col-md-2">-->
-                                            <!--<button type="button" class="btn btn-default addBtn"-->
-                                                    <!--style="border-radius:6px;width: 140px;" id="addParamBtn"-->
-                                                    <!--@click="addParamsBtn()"><i class="fa fa-plus"-->
-                                                                               <!--aria-hidden="true"></i></button>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-md-10" id="paramsList">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
 
                     </div>
                 </div>
@@ -581,6 +490,16 @@
             })
         },
         methods:{
+
+            isCasLogin:function(){
+                if ($("#onoffswitch").is(':checked')) {
+                    $("#user").css('display','block');
+                } else {
+                    $("#user").css('display','none');
+                }
+
+            },
+
             checkrouteType:function (id) {
                 if (id == 0){
                     $("#routeType_0").css('background-color','#ff6200')
@@ -641,6 +560,24 @@
                 }
                 return true;
 
+            },
+            verityUserPassword:function(){
+                if ($('#username').val() == '' || $('#username').val() == null) {
+                    $('#username').focus()
+                    $("#username").focus(function () {
+                        $("#username").css("background-color", "#FFFFCC");
+                    });
+                    swal("Warning", '请输入登录的用户名', "warning")
+                    return;
+                }
+                if ($('#password').val() == '' || $('#password').val() == null) {
+                    $('#password').focus()
+                    $("#password").focus(function () {
+                        $("#password").css("background-color", "#FFFFCC");
+                    });
+                    swal("Warning", '请输入登录的密码', "warning")
+                    return;
+                }
             },
             verityDubbo: function () {
                 if ($('#interfaceName').val() == '' || $('#interfaceName').val() == null) {
@@ -860,6 +797,51 @@
                     pm = JSON.stringify(this.ppStore)
                 }
                 let self = this
+
+                if ($("#onoffswitch").is(':checked')) {
+                    if (!this.verityHttp()) {
+                        return false;
+                    }
+                    // if (!this.verityUserPassword()) {
+                    //     return false;
+                    // }
+                    this.bus.$emit('loading', true);
+                    $.ajax({
+                        url: this.$api.testUrl,
+                        type: 'POST',
+                        data: {
+                            "url": $('#requestUrl').val(),
+                            "protocolId": 1,
+                            "isCas": true,
+                            "cookie": JSON.stringify(self.ccStore),
+                            "header": JSON.stringify(self.hhStore),
+                            "requestTypeId": $('#requestType').val(),
+                            "timeOut":$('#timeOut').val(),
+                            "params": pm,
+                            "username":$("#username").val(),
+                            "password":$("#password").val()
+                        },
+                        success: function (response) {
+                            if (response.code == 0) {
+                                self.bus.$emit('loading', false)
+                                $("#myModal").modal()
+                                try {
+                                    let result = new JSONFormat(response.data,4).toString()
+                                    document.getElementById("writePlace").innerHTML = result;
+                                }catch (e) {
+                                    document.getElementById("writePlace").innerHTML = response.data
+                                }
+
+                            }else{
+                                self.bus.$emit('loading', false)
+                                swal("Warning", response.msg, "warning")
+                            }
+                        },
+                        error:function () {
+                            self.bus.$emit('loading', false)
+                        }
+                    })
+                }else {
                 if (this.$script.protocolId == 1) {
                     if (!this.verityHttp()) {
                         return false;
@@ -947,6 +929,7 @@
                         }
                     });
 
+                }
                 }
             }
         }
@@ -1136,4 +1119,87 @@
 
     .json_array_brackets {
     }
+
+    .testswitch {
+        position: relative;
+        float: left;
+        width: 90px;
+        margin: 0;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select: none;
+    }
+
+    .testswitch-checkbox {
+        display: none;
+    }
+
+    .testswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #999999;
+        border-radius: 20px;
+    }
+
+    .testswitch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+
+    .testswitch-inner::before, .testswitch-inner::after {
+        display: block;
+        float: right;
+        width: 50%;
+        height: 30px;
+        padding: 0;
+        line-height: 30px;
+        font-size: 14px;
+        color: white;
+        font-family:
+                Trebuchet, Arial, sans-serif;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .testswitch-inner::after {
+        content: attr(data-on);
+        padding-left: 10px;
+        background-color: #00e500;
+        color: #FFFFFF;
+    }
+
+    .testswitch-inner::before {
+        content: attr(data-off);
+        padding-right: 10px;
+        background-color: #EEEEEE;
+        color: #999999;
+        text-align: right;
+    }
+
+    .testswitch-switch {
+        position: absolute;
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin: 4px;
+        background: #FFFFFF;
+        top: 0;
+        bottom: 0;
+        right: 56px;
+        border: 2px solid #999999;
+        border-radius: 20px;
+        transition: all 0.3s ease-in 0s;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-inner {
+        margin-left: 0;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-switch {
+        right: 0px;
+    }
+
 </style>
