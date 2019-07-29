@@ -67,7 +67,6 @@
                             <tr>
                                 <th nowrap="nowrap" scope="col">id</th>
                                 <th nowrap="nowrap" scope="col">系统</th>
-                                <th nowrap="nowrap" scope="col">url</th>
                                 <th scope="col">删除</th>
                                 <th scope="col">编辑</th>
                             </tr>
@@ -83,12 +82,12 @@
                                 <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!type.status">
                                     <input type="text" id="typeId" v-bind:value="type.name"/>
                                 </td>
-                                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!type.status">
-                                    {{type.url}}
-                                </td>
-                                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!type.status">
-                                    <input type="text" id="urlId" v-bind:value="type.url"/>
-                                </td>
+                                <!--<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!type.status">-->
+                                    <!--{{type.url}}-->
+                                <!--</td>-->
+                                <!--<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!type.status">-->
+                                    <!--<input type="text" id="urlId" v-bind:value="type.url"/>-->
+                                <!--</td>-->
                                 <td>
                                     <a href="javascript:void(0);" class="tm-product-delete-link" @click="delType(type.id)">
                                         <i class="far fa-trash-alt tm-product-delete-icon"></i>

@@ -676,7 +676,9 @@
 
             },
             testRequest: function () {
-
+                this.hhStore = []
+                this.ccStore = []
+                this.ppStore = []
                 if ( $('#project').val() == 0){
                     swal ( "Warning" ,  '请选择项目' ,  "warning" )
                     return false;
@@ -716,8 +718,6 @@
                     pm = JSON.stringify(this.ppStore)
                 }
 
-                alert(this.hhStore)
-
                 let self = this
                 if ($('#protocol').val() == 1) {
                     if (!this.verityHttp()){
@@ -732,7 +732,7 @@
                             "protocolId": 1,
                             "cookie": JSON.stringify(self.ccStore),
                             "header": JSON.stringify(self.hhStore),
-                            "requestType": $('#requestType').val(),
+                            "requestTypeId": $('#requestType').val(),
                             "params": pm
                         },
                         success: function (response) {

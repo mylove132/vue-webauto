@@ -33,7 +33,7 @@
                                 <tr>
                                     <th nowrap="nowrap" scope="col">项目</th>
                                     <th nowrap="nowrap" scope="col">脚本名称</th>
-                                    <th nowrap="nowrap" scope="col">执行人</th>
+                                    <th nowrap="nowrap" scope="col">执行策略</th>
                                     <th nowrap="nowrap" scope="col">压测状态</th>
                                     <th nowrap="nowrap" scope="col">压测时间</th>
                                     <th nowrap="nowrap" scope="col">日志</th>
@@ -50,7 +50,7 @@
                                         {{history.scriptName}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                        {{history.userName}}
+                                        {{history.strategy == 0?"人工":"定时任务"}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
                                         class="tm-product-name">{{history.status}}

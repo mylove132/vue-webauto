@@ -33,9 +33,9 @@
                                     <th scope="col">更新时间</th>
                                     <th scope="col">项目环境</th>
                                     <th scope="col">项目描述</th>
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
-                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">删除</th>
+                                    <th scope="col">编辑</th>
+                                    <th scope="col">脚本列表</th>
                                 </tr>
                                 </thead>
                                 <tbody>
