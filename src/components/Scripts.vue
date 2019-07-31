@@ -84,7 +84,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0);" @click="editScript(script.id,script.envId)" class="tm-product-delete-link">
+                                        <a href="javascript:void(0);" @click="editScript(script.id)" class="tm-product-delete-link">
                                             <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -259,12 +259,11 @@
                     }
                 })
             },
-            editScript: function (script_id,envId) {
+            editScript: function (script_id) {
                         this.$router.push({
                             path: 'editScript',
                             query: {
-                                script_id: script_id,
-                                env:envId
+                                script_id: script_id
                             }
                         })
             },

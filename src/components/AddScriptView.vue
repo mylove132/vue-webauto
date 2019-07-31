@@ -36,6 +36,22 @@
 
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <div style="float: left;margin-left: 50px;color: white;margin-top: -10px">单点登录</div>
+                        <div class="testswitch" style="margin-left: 40px;margin-top: -15px">
+                            <input class="testswitch-checkbox" id="onoffswitch" type="checkbox" @click="isCasLogin">
+                            <label class="testswitch-label" for="onoffswitch">
+                                <span class="testswitch-inner" data-on="ON" data-off="OFF"></span>
+                                <span class="testswitch-switch"></span>
+                            </label>
+                        </div>
+                        <div style="display: none;color: white" id="user">
+                            用户名：<input type="text" id="username" style="border-radius: 5px" /><p></p><label style="margin-left: 260px">密码：</label><input type="text" id="password" style="border-radius: 5px"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <a class="card-link" data-toggle="collapse" href="#collapse1"
                            style="color: white;font-size: 20px;display: block;float: left;margin-left: 200px;text-shadow:5px 2px 6px rgb(12,232,100);">
                             <label class="http"
@@ -144,6 +160,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
             <div class="row tm-content-row">
                 <div class="tm-block-col tm-col-account-settings">
@@ -463,7 +481,14 @@
             $(".websocket").css('display', 'none')
         },
         methods: {
+            isCasLogin:function(){
+                if ($("#onoffswitch").is(':checked')) {
+                    $("#user").css('display','block');
+                } else {
+                    $("#user").css('display','none');
+                }
 
+            },
             showMust: function () {
                 $(".http").css('display', 'none');
                 $(".dubbo").css('display', 'none');
@@ -714,7 +739,9 @@
                     projectId: $('#project').val(),
                     ip: $('#ip').val(),
                     port: $('#port').val(),
-                    userId: localStorage.user_id
+                    userId: localStorage.user_id,
+                    username:$("#username").val(),
+                    password:$("#password").val()
                 })).then(response => {
                     if (response.code == 0) {
                         this.$router.push({
@@ -731,39 +758,161 @@
                 })
 
             },
+            // testRequest: function () {
+            //     this.hhStore = []
+            //     this.ccStore = []
+            //     this.ppStore = []
+            //     if ($('#project').val() == 0) {
+            //         swal("Warning", '请选择项目', "warning")
+            //         return false;
+            //     }
+            //     if ($('#protocol').val() == 0) {
+            //         swal("Warning", '请选择协议', "warning")
+            //         return false;
+            //     }
+            //
+            //
+            //     let cookieKey = document.getElementsByClassName('cookieName')
+            //     let cookieValue = document.getElementsByClassName('cookieValue')
+            //     let cookieDomain = document.getElementsByClassName('cookieDomain')
+            //     let cookiePath = document.getElementsByClassName('cookiePath')
+            //     for (let i = 0; i < cookieKey.length; i++) {
+            //         this.ccStore.push({
+            //             "cookieKey": cookieKey[i].value,
+            //             "cookieValue": cookieValue[i].value,
+            //             "domain": cookieDomain[i].value,
+            //             "path": cookiePath[i].value
+            //         })
+            //     }
+            //
+            //     let headerKey = document.getElementsByClassName('headerName')
+            //     let headerValue = document.getElementsByClassName('headerValue')
+            //     for (let i = 0; i < headerKey.length; i++) {
+            //         this.hhStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
+            //     }
+            //
+            //     let paramsKey = document.getElementsByClassName('paramName')
+            //     let paramsValue = document.getElementsByClassName('paramValue')
+            //     for (let i = 0; i < paramsKey.length; i++) {
+            //         this.ppStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
+            //     }
+            //     let pm;
+            //     let paramValue = $("#requestParam").val();
+            //     if (paramsKey.length != 0 && paramValue == '[]') {
+            //         pm = JSON.stringify(this.pStore)
+            //     } else if (paramsKey.length == 0 && paramValue != '') {
+            //         pm = paramValue
+            //     } else {
+            //         pm = JSON.stringify(this.ppStore)
+            //     }
+            //
+            //     let self = this
+            //     if ($('#protocol').val() == 1) {
+            //         if (!this.verityHttp()) {
+            //             return
+            //         }
+            //         this.bus.$emit('loading', true)
+            //         $.ajax({
+            //             url: this.$api.testUrl,
+            //             type: 'POST',
+            //             data: {
+            //                 "url": $('#requestUrl').val(),
+            //                 "protocolId": 1,
+            //                 "cookie": JSON.stringify(self.ccStore),
+            //                 "header": JSON.stringify(self.hhStore),
+            //                 "requestTypeId": $('#requestType').val(),
+            //                 "params": pm
+            //             },
+            //             success: function (response) {
+            //                 if (response.code == 0) {
+            //                     self.bus.$emit('loading', false)
+            //                     $("#myModal").modal()
+            //                     try {
+            //                         let result = new JSONFormat(response.data, 4).toString()
+            //                         document.getElementById("writePlace").innerHTML = result;
+            //                     }
+            //                     catch (e) {
+            //                         document.getElementById("writePlace").innerHTML = response.data
+            //                     }
+            //
+            //                 } else {
+            //                     self.bus.$emit('loading', false)
+            //                     swal("Warning", response.msg, "warning")
+            //                 }
+            //             },
+            //             error: function () {
+            //                 self.bus.$emit('loading', false)
+            //             }
+            //         })
+            //     } else if ($('#protocol').val() == 2) {
+            //         if (!this.verityDubbo()) {
+            //             return false;
+            //         }
+            //         self.bus.$emit('loading', true)
+            //         var jsonParam = {};
+            //         var paramArray = new Array();
+            //         jsonParam["paramType"] = $('#paramType').val();
+            //         jsonParam["paramValue"] = $('#requestParam').val();
+            //         paramArray.push(jsonParam);
+            //
+            //         var jsonData = {};
+            //         jsonData["address"] = $("#env").val();
+            //         jsonData["interfaceName"] = $('#interface').val();
+            //         jsonData["methodName"] = $('#methodName').val();
+            //         jsonData["timeOut"] = $('#timeOut').val();
+            //         jsonData["version"] = $('#interfaceVersion').val();
+            //         jsonData["requestParamTypeArgs"] = paramArray;
+            //         self.bus.$emit('loading', true)
+            //
+            //         $.ajax({
+            //             type: "POST",
+            //             url: self.$api.dubboTest,
+            //             contentType: "application/json; charset=utf-8",
+            //             data: JSON.stringify(jsonData),
+            //             dataType: "json",
+            //             success: function (response) {
+            //                 console.log(response)
+            //                 if (response.code == 0) {
+            //                     self.bus.$emit('loading', false)
+            //                     $("#myModal").modal()
+            //                     try {
+            //                         let result = new JSONFormat(JSON.stringify(response.data), 4).toString()
+            //                         document.getElementById("writePlace").innerHTML = result;
+            //                     } catch (e) {
+            //                         console.log(e)
+            //                         document.getElementById("writePlace").innerHTML = response.data;
+            //                     }
+            //                 } else {
+            //                     self.bus.$emit('loading', false)
+            //                     swal("Warning", response.msg, "warning")
+            //                 }
+            //             },
+            //             error: function (message) {
+            //                 self.bus.$emit('loading', false)
+            //                 $("#myModal").modal()
+            //                 let result = new JSONFormat(JSON.stringify(message.responseJSON), 4).toString()
+            //                 document.getElementById("writePlace").innerHTML = result;
+            //             }
+            //         });
+            //
+            //     }
+            // }
             testRequest: function () {
-                this.hhStore = []
                 this.ccStore = []
+                this.hhStore = []
                 this.ppStore = []
-                if ($('#project').val() == 0) {
-                    swal("Warning", '请选择项目', "warning")
-                    return false;
-                }
-                if ($('#protocol').val() == 0) {
-                    swal("Warning", '请选择协议', "warning")
-                    return false;
-                }
-
-
-                let cookieKey = document.getElementsByClassName('cookieName')
+                let cookieKey = document.getElementsByClassName('cookieKey')
                 let cookieValue = document.getElementsByClassName('cookieValue')
                 let cookieDomain = document.getElementsByClassName('cookieDomain')
                 let cookiePath = document.getElementsByClassName('cookiePath')
                 for (let i = 0; i < cookieKey.length; i++) {
-                    this.ccStore.push({
-                        "cookieKey": cookieKey[i].value,
-                        "cookieValue": cookieValue[i].value,
-                        "domain": cookieDomain[i].value,
-                        "path": cookiePath[i].value
-                    })
+                    this.ccStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value,"domain":cookieDomain[i].value,"path":cookiePath[i].value})
                 }
-
                 let headerKey = document.getElementsByClassName('headerName')
                 let headerValue = document.getElementsByClassName('headerValue')
                 for (let i = 0; i < headerKey.length; i++) {
                     this.hhStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
                 }
-
                 let paramsKey = document.getElementsByClassName('paramName')
                 let paramsValue = document.getElementsByClassName('paramValue')
                 for (let i = 0; i < paramsKey.length; i++) {
@@ -771,103 +920,147 @@
                 }
                 let pm;
                 let paramValue = $("#requestParam").val();
-                if (paramsKey.length != 0 && paramValue == '[]') {
-                    pm = JSON.stringify(this.pStore)
-                } else if (paramsKey.length == 0 && paramValue != '') {
+                if (paramsKey.length != 0 && paramValue == ''){
+                    pm = JSON.stringify(this.ppStore)
+                } else if (paramsKey.length == 0 && paramValue != ''){
                     pm = paramValue
                 } else {
                     pm = JSON.stringify(this.ppStore)
                 }
-
                 let self = this
-                if ($('#protocol').val() == 1) {
+
+                if ($("#onoffswitch").is(':checked')) {
                     if (!this.verityHttp()) {
-                        return
+                        return false;
                     }
-                    this.bus.$emit('loading', true)
+                    // if (!this.verityUserPassword()) {
+                    //     return false;
+                    // }
+                    this.bus.$emit('loading', true);
                     $.ajax({
                         url: this.$api.testUrl,
                         type: 'POST',
                         data: {
                             "url": $('#requestUrl').val(),
                             "protocolId": 1,
+                            "isCas": true,
                             "cookie": JSON.stringify(self.ccStore),
                             "header": JSON.stringify(self.hhStore),
                             "requestTypeId": $('#requestType').val(),
-                            "params": pm
+                            "timeOut":$('#timeOut').val(),
+                            "params": pm,
+                            "username":$("#username").val(),
+                            "password":$("#password").val()
                         },
                         success: function (response) {
                             if (response.code == 0) {
                                 self.bus.$emit('loading', false)
                                 $("#myModal").modal()
                                 try {
-                                    let result = new JSONFormat(response.data, 4).toString()
+                                    let result = new JSONFormat(response.data,4).toString()
                                     document.getElementById("writePlace").innerHTML = result;
-                                }
-                                catch (e) {
+                                }catch (e) {
                                     document.getElementById("writePlace").innerHTML = response.data
                                 }
 
-                            } else {
+                            }else{
                                 self.bus.$emit('loading', false)
                                 swal("Warning", response.msg, "warning")
                             }
                         },
-                        error: function () {
+                        error:function () {
                             self.bus.$emit('loading', false)
                         }
                     })
-                } else if ($('#protocol').val() == 2) {
-                    if (!this.verityDubbo()) {
-                        return false;
-                    }
-                    self.bus.$emit('loading', true)
-                    var jsonParam = {};
-                    var paramArray = new Array();
-                    jsonParam["paramType"] = $('#paramType').val();
-                    jsonParam["paramValue"] = $('#requestParam').val();
-                    paramArray.push(jsonParam);
+                }else {
+                    if (this.$script.protocolId == 1) {
+                        if (!this.verityHttp()) {
+                            return false;
+                        }
+                        this.bus.$emit('loading', true)
+                        $.ajax({
+                            url: this.$api.testUrl,
+                            type: 'POST',
+                            data: {
+                                "url": $('#requestUrl').val(),
+                                "protocolId": 1,
+                                "cookie": JSON.stringify(self.ccStore),
+                                "header": JSON.stringify(self.hhStore),
+                                "requestTypeId": $('#requestType').val(),
+                                "timeOut":$('#timeOut').val(),
+                                "params": pm
+                            },
+                            success: function (response) {
+                                if (response.code == 0) {
+                                    self.bus.$emit('loading', false)
+                                    $("#myModal").modal()
+                                    try {
+                                        let result = new JSONFormat(response.data,4).toString()
+                                        document.getElementById("writePlace").innerHTML = result;
+                                    }catch (e) {
+                                        document.getElementById("writePlace").innerHTML = response.data
+                                    }
 
-                    var jsonData = {};
-                    jsonData["address"] = $("#env").val();
-                    jsonData["interfaceName"] = $('#interface').val();
-                    jsonData["methodName"] = $('#methodName').val();
-                    jsonData["timeOut"] = $('#timeOut').val();
-                    jsonData["version"] = $('#interfaceVersion').val();
-                    jsonData["requestParamTypeArgs"] = paramArray;
-                    self.bus.$emit('loading', true)
+                                }else{
+                                    self.bus.$emit('loading', false)
+                                    swal("Warning", response.msg, "warning")
+                                }
+                            },
+                            error:function () {
+                                self.bus.$emit('loading', false)
+                            }
+                        })
+                    } else if (this.$script.protocolId == 2) {
+                        if (!this.verityDubbo()) {
+                            return;
+                        }
+                        var jsonParam = {};
+                        var paramArray = new Array();
+                        jsonParam["paramType"] = $('#paramType').val();
+                        jsonParam["paramValue"] = $('#requestParam').val();
+                        paramArray.push(jsonParam);
 
-                    $.ajax({
-                        type: "POST",
-                        url: self.$api.dubboTest,
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify(jsonData),
-                        dataType: "json",
-                        success: function (response) {
-                            console.log(response)
-                            if (response.code == 0) {
+                        var jsonData = {};
+                        jsonData["address"] = $("#env").val();
+                        jsonData["interfaceName"] = $('#interface').val();
+                        jsonData["methodName"] = $('#methodName').val();
+                        jsonData["timeOut"] = $('#timeOut').val();
+                        jsonData["version"] = $('#interfaceVersion').val();
+                        jsonData["requestParamTypeArgs"] = paramArray;
+
+                        self.bus.$emit('loading', true)
+                        $.ajax({
+                            type: "POST",
+                            url: self.$api.dubboTest,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(jsonData),
+                            dataType: "json",
+                            success: function (response) {
+                                console.log(response)
+                                if (response.code == 0) {
+                                    self.bus.$emit('loading', false)
+                                    $("#myModal").modal()
+                                    try {
+                                        let result = new JSONFormat(JSON.stringify(response.data), 4).toString()
+                                        document.getElementById("writePlace").innerHTML = result;
+                                    }catch (e) {
+                                        console.log(e)
+                                        document.getElementById("writePlace").innerHTML = response.data;
+                                    }
+                                }else {
+                                    self.bus.$emit('loading', false)
+                                    swal("Warning", response.message, "warning")
+                                }
+                            },
+                            error: function (message) {
                                 self.bus.$emit('loading', false)
                                 $("#myModal").modal()
-                                try {
-                                    let result = new JSONFormat(JSON.stringify(response.data), 4).toString()
-                                    document.getElementById("writePlace").innerHTML = result;
-                                } catch (e) {
-                                    console.log(e)
-                                    document.getElementById("writePlace").innerHTML = response.data;
-                                }
-                            } else {
-                                self.bus.$emit('loading', false)
-                                swal("Warning", response.msg, "warning")
+                                let result = new JSONFormat(JSON.stringify(message.responseJSON), 4).toString()
+                                document.getElementById("writePlace").innerHTML = result;
                             }
-                        },
-                        error: function (message) {
-                            self.bus.$emit('loading', false)
-                            $("#myModal").modal()
-                            let result = new JSONFormat(JSON.stringify(message.responseJSON), 4).toString()
-                            document.getElementById("writePlace").innerHTML = result;
-                        }
-                    });
+                        });
 
+                    }
                 }
             }
         }
@@ -1059,4 +1252,87 @@
 
     .json_array_brackets {
     }
+
+    .testswitch {
+        position: relative;
+        float: left;
+        width: 90px;
+        margin: 0;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select: none;
+    }
+
+    .testswitch-checkbox {
+        display: none;
+    }
+
+    .testswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #999999;
+        border-radius: 20px;
+    }
+
+    .testswitch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+
+    .testswitch-inner::before, .testswitch-inner::after {
+        display: block;
+        float: right;
+        width: 50%;
+        height: 30px;
+        padding: 0;
+        line-height: 30px;
+        font-size: 14px;
+        color: white;
+        font-family:
+                Trebuchet, Arial, sans-serif;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .testswitch-inner::after {
+        content: attr(data-on);
+        padding-left: 10px;
+        background-color: #00e500;
+        color: #FFFFFF;
+    }
+
+    .testswitch-inner::before {
+        content: attr(data-off);
+        padding-right: 10px;
+        background-color: #EEEEEE;
+        color: #999999;
+        text-align: right;
+    }
+
+    .testswitch-switch {
+        position: absolute;
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin: 4px;
+        background: #FFFFFF;
+        top: 0;
+        bottom: 0;
+        right: 56px;
+        border: 2px solid #999999;
+        border-radius: 20px;
+        transition: all 0.3s ease-in 0s;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-inner {
+        margin-left: 0;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-switch {
+        right: 0px;
+    }
+
 </style>

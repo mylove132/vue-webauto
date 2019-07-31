@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-                    <div style="float: left;margin-left: 350px;color: white;margin-top: -10px">单点登录</div>
+                    <div style="float: left;margin-left: 50px;color: white;margin-top: -10px">单点登录</div>
                     <div class="testswitch" style="margin-left: 40px;margin-top: -15px">
                         <input class="testswitch-checkbox" id="onoffswitch" type="checkbox" @click="isCasLogin">
                         <label class="testswitch-label" for="onoffswitch">
@@ -22,11 +22,9 @@
                             <span class="testswitch-switch"></span>
                         </label>
                     </div>
-                    </div>
-                </div>
-                <div class="col-12 tm-block-col" style="display: none" id="user">
-                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto" style="color: white">
-                        用户名：<input type="text" id="username"/><label style="margin-left: 20px">密码：</label><input type="text" id="password"/>
+                        <div style="display: none;color: white" id="user">
+                            用户名：<input type="text" id="username" style="border-radius: 5px" /><p></p><label style="margin-left: 260px">密码：</label><input type="text" id="password" style="border-radius: 5px"/>
+                        </div>
                     </div>
                 </div>
                 <div class="col-12 tm-block-col">
@@ -276,7 +274,7 @@
                 <p class="text-center text-white mb-0 px-4 small">
                     Copyright &copy; <b>2018</b> All rights reserved.
 
-                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="OKAY">OKAY</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
                 </p>
             </div>
         </footer>
@@ -408,6 +406,7 @@
             const self = this
             self.bus.$emit('loading', true)
             this.script_id = this.$route.query.script_id
+            $(".env").val(1);
             this.$fetch(this.$api.scriptUrl + this.script_id).then(response => {
                 if (response.code == 0) {
                     self.bus.$emit('loading', false)
@@ -426,6 +425,13 @@
                         $('#requestParam').val(script.params)
                         $('#ip').val(script.ip)
                         $('#port').val(script.port)
+
+                        if (script.username != null){
+                            $("#onoffswitch").prop("checked",true);
+                            $("#user").css('display','block');
+                            $("#username").val(script.username);
+                            $("#password").val(script.password)
+                        }
 
                         if (script.cookie != null) {
                             JSON.parse(script.cookie).forEach(function (cookie, index) {
@@ -711,7 +717,9 @@
                         ip: $('#ip').val(),
                         port: $('#port').val(),
                         projectId: this.$script.projectId,
-                        userId: localStorage.user_id
+                        userId: localStorage.user_id,
+                        username:$("#username").val(),
+                        password:$("#password").val()
                     })).then(response => {
                         if (response.code == 0) {
                             this.bus.$emit('loading', false)

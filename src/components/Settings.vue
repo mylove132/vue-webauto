@@ -166,7 +166,7 @@
                         <input type="text" style="float: left;margin-left: 200px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9"
                                id="search" placeholder="模糊匹配用户名" v-on:keyup="search">
                         <input type="button" value="SEARCH"
-                               style="margin-left: -20px;background-color: #f5a623;border-radius: 3px;color: white"
+                               style="margin-left: -10px;background-color: #f5a623;border-radius: 3px;color: white;"
                                @click="search">
                         <table class="table table-hover tm-table-small tm-product-table">
                             <thead>
@@ -619,7 +619,7 @@
                 this.$fetch(this.$api.roleUrl+"/"+localStorage.user_id).then(response => {
                     console.log(response)
                     if (response.code == 0){
-                        if (response.data<2){
+                        if (response.data<3){
                             swal("warning","没有权限修改用户权限","warning");
                             return;
                         }else {
