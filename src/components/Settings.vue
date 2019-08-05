@@ -494,15 +494,9 @@
                     swal("warning","系统名称不能为空","warning");
                     return;
                 }
-                if ($("#urlId").val() == "" || $("#urlId").val() == null){
-                    $("#urlId").focus();
-                    swal("warning","系统url不能为空","warning");
-                    return;
-                }
                 this.$put(this.$api.typeUrl,this.qs.stringify({
                     id:id,
-                    name:$("#typeId").val(),
-                    url:$("#urlId").val()
+                    name:$("#typeId").val()
                 })).then(response => {
                     if (response.code == 0){
                         swal("success","修改完成","success");

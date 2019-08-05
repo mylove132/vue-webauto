@@ -3,7 +3,7 @@
         <div class="col-md-2 side-nav" style="margin-left: 20px;margin-top: 50px">
             <div class="panel-group" id="accordion" style="color: white">
                 <div class="panel-heading panel yx">
-                    <a href="#" class="side-nav-item item-title" style="background-color:#567085;color: white" @click="showJmeterUse()">
+                    <a href="javascript:void(0);" class="side-nav-item item-title" style="background-color:#567085;color: white" @click="showJmeterUse()">
                         jmeter使用说明
                     </a>
                     <div class="item-body collapse" id='index'>
