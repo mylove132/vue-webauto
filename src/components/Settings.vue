@@ -143,9 +143,16 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0);" @click="editRequestType(requestType,index)" class="tm-product-delete-link">
+                                    <a href="javascript:void(0);" @click="editRequestType(requestType,index)" class="tm-product-delete-link" v-if="!requestType.status">
                                         <i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>
                                     </a>
+                                    <a href="javascript:void(0);" @click="saveRequestType(requestType)" class="tm-product-delete-link" v-else="!requestType.status">
+                                        <i class="fa fa-check tm-product-delete-icon" title="Align Left"></i>
+                                    </a>
+
+                                    <!--<a href="javascript:void(0);" @click="editRequestType(requestType,index)" class="tm-product-delete-link">-->
+                                        <!--<i class="fa fa-edit tm-product-delete-icon" title="Align Left"></i>-->
+                                    <!--</a>-->
                                 </td>
                                 <td v-show="requestType.status">
                                     <a href="javascript:void(0);" @click="cancelEditRequestType()" class="tm-product-delete-link">
@@ -576,6 +583,23 @@
             editRequestType:function (requestType,index) {
                 requestType.status = true;
                 this.$set(this.requestTypeList, index, requestType);
+            },
+            saveRequestType:function(requestType){
+                this.$put(this.$api.requestTypeUrl,this.qs.stringify({
+                    id:requestType.id,
+                    name:$("#requestTypeId").val()
+                })).then(response => {
+                    if(response.code == 0){
+                        swal("success","修改完成","success");
+                        this.$fetch(this.$api.requestTypeUrl).then(response => {
+                            if (response.code == 0){
+                                this.requestTypeList = response.data
+                            }
+                        });
+                    }
+                }).catch(resp => {
+                    swal("error","修改环境失败","error")
+                })
             },
             cancelEditRequestType:function(){
                 this.$fetch(this.$api.requestTypeUrl).then(response => {
