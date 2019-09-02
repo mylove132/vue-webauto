@@ -833,7 +833,7 @@
                 this.ccStore = []
                 this.hhStore = []
                 this.ppStore = []
-                let cookieKey = document.getElementsByClassName('cookieKey')
+                let cookieKey = document.getElementsByClassName('cookieName')
                 let cookieValue = document.getElementsByClassName('cookieValue')
                 let cookieDomain = document.getElementsByClassName('cookieDomain')
                 let cookiePath = document.getElementsByClassName('cookiePath')
