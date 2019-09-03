@@ -18,6 +18,7 @@ const base = {
     logUrl:'/api/common/watchLog',
     watchReport:"/api/common/watchReport",
     execScriptUrl:'/api/common/execScript',
+    findExecResult:"/api/common/findResult",
     reportDownload:'/api/common/download',
     taskUrl:"/api/scheduleJob",
     articleUrl:"/api/article",

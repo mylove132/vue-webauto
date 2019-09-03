@@ -275,9 +275,20 @@
                 window.open("http://"+ip+":19999","_blank")
             },
             runScript: function (id) {
+                const self = this;
                 this.$fetch(this.$api.execScriptUrl+"?scriptId="+id+"&userId="+localStorage.user_id).then(response => {
                     if (response.code == 0){
+                        const md5 = response.data.md5;
+                        console.log(md5)
                         swal("脚本开始执行","","success")
+                        const execTime = setInterval(function () {
+                            self.$fetch(self.$api.findExecResult+"?md5="+md5).then(resp => {
+                                if (resp.code == 0){
+                                    swal("脚本执行完成","","success")
+                                    clearInterval(execTime);
+                                }
+                            })
+                        },1000);
                     }else {
                         swal("",response.message,"warning")
                     }

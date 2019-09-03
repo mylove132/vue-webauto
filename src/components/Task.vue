@@ -168,10 +168,12 @@
                                                                         type="text"
                                                                         class="form-control validate"
                                                                         placeholder="请输入cron表达式"
-                                                                        style="color: white;margin-left: 0px;width: 300px;float: left;height: 50px;margin-top: -20px"
+                                                                        style="color: white;margin-left: 0px;width: 214px;float: left;height: 50px;margin-top: -20px"
                                                                 />
-                                                                <button class="form-group" @click="checkCron()" style="margin-left: 30px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
+                                                                <button class="form-group" @click="checkCron()" style="margin-left:20px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
+                                                                <a href="http://cron.qqe2.com/" target="_blank" style="margin-left:25px;float: left;height: 50px;margin-top: -20px;background-color: #062c33;color: white;border-radius: 5px;width: 90px;padding-top: 10px">cron生成器</a>
                                                             </div>
+
                                                         </div>
 
                                                     </div>
@@ -267,9 +269,10 @@
                                                                         type="text"
                                                                         class="form-control validate"
                                                                         placeholder="请输入cron表达式"
-                                                                        style="color: white;margin-left: 0px;width: 300px;float: left;height: 50px;margin-top: -20px"
+                                                                        style="color: white;margin-left: 0px;width: 214px;float: left;height: 50px;margin-top: -20px"
                                                                 />
-                                                                <button class="form-group" @click="checkEditCron()" style="margin-left: 30px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
+                                                                <button class="form-group" @click="checkEditCron()" style="margin-left: 20px;float: left;height: 50px;margin-top: -20px;background-color: #f6a735;color: white;border-radius: 5px">验证cron表达式</button>
+                                                                <a href="http://cron.qqe2.com/" target="_blank" style="margin-left:25px;float: left;height: 50px;margin-top: -20px;background-color: #062c33;color: white;border-radius: 5px;width: 90px;padding-top: 10px">cron生成器</a>
                                                             </div>
                                                         </div>
 
