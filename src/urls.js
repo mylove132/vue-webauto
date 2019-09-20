@@ -3,7 +3,6 @@ const base = {
     typeUrl:'/api/common/platform',
     requestTypeUrl:'/api/common/reqeustType',
     protocolUrl:'/api/common/protocol',
-    envUrl:'/api/common/env',
     projectUrl: '/api/project/',
     userUrl:'/api/user/',
     testUrl: '/api/common/testRequest',
@@ -26,6 +25,14 @@ const base = {
     checkCronUrl:"/api/common/checkCron",
     imgUrl:"/api/common/upload",
     categoryurl:"/api/category",
+
+
+    envUrl:'/api/common/env',
+
+    searchModuleByEnvId:'/api/search/moduleByEnvId',
+    searchModuleByProjectId:'/api/search/moduleByProjectId',
+    searchModuleByProjectIdAndEnvId:'/api/search/moduleByProjectIdAndEnvId',
+
     casLogin:"/api/case/caslogin",
     casProject:"/api/case/project",
     casModuleject:"/api/case/module",

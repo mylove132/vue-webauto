@@ -297,6 +297,21 @@
                     <div class="col-12 tm-block-col">
                         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                             <h2 class="tm-block-title">用例模块配置</h2>
+                            <select style="width: 150px;height: 40px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9;margin-bottom: 10px" id="select_env"
+                                    @change="filterModule">
+                                <option value="0">请选择环境</option>
+                                <option v-for="env in envList" :value="env.id">{{env.env}}</option>
+                            </select>
+                            <select style=" margin-bottom: 10px;width: 150px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="select_project"
+                                    @change="filterModule">
+                                <option value="0">请选择项目</option>
+                                <option v-for="project in caseProjectList" :value="project.id">{{project.name}}</option>
+                            </select>
+                            <input type="text" style="margin-bottom: 10px;width: 160px;height: 40px;margin-left: 100px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9"
+                                   id="searchModule" placeholder="模糊匹配模块名称" v-on:keyup="search">
+                            <input type="button" value="SEARCH"
+                                   style="height: 40px;background-color: #f5a623;border-radius: 3px;color: white;margin-bottom: 10px"
+                                   @click="search">
                             <table class="table table-hover tm-table-small tm-product-table" style=''>
                                 <thead>
                                 <tr>
@@ -312,6 +327,18 @@
                                 <tr v-for="(module,index) in caseModuleList">
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                                         {{module.id}}
+                                    </td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!module.status">
+                                        {{module.env.env}}
+                                    </td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!module.status">
+                                        <select></select>
+                                    </td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!module.status">
+                                        {{module.project.name}}
+                                    </td>
+                                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!module.status">
+                                        <select></select>
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!module.status">
                                         {{module.name}}
@@ -338,8 +365,8 @@
                                             <i class="fa fa-check tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
-                                    <td v-show="pro.status">
-                                        <a href="javascript:void(0);" @click="cancelEditPro()" class="tm-product-delete-link">
+                                    <td v-show="module.status">
+                                        <a href="javascript:void(0);" @click="cancelEditModule()" class="tm-product-delete-link">
                                             <i class="fa fa-thumbs-down tm-product-delete-icon" title="Align Left"></i>
                                         </a>
                                     </td>
@@ -527,6 +554,45 @@
             });
         },
         methods:{
+
+
+            filterModule:function(){
+                const self = this;
+                if ($("#select_project").val() == 0 && $("#select_env").val() != 0){
+                    this.$fetch(this.$api.searchModuleByEnvId+"?envId="+$("#select_env").val()).then(response => {
+                        if (response.code == 0){
+                            self.caseModuleList = response.data.list
+                        }else{
+                            swal("过滤错误",response.message,'error')
+                        }
+                    })
+                }else if($("#select_project").val() != 0 && $("#select_env").val() != 0 ) {
+                    this.$fetch(this.$api.searchModuleByProjectIdAndEnvId+"?envId="+$("#select_env").val()+"&projectId="+$("#select_project").val()).then(response => {
+                        if (response.code == 0){
+                            self.caseModuleList = response.data.list
+                        }else{
+                            swal("过滤错误",response.message,'error')
+                        }
+                    })
+                }else if($("#select_project").val() != 0 && $("#select_env").val() == 0 ) {
+                    this.$fetch(this.$api.searchModuleByProjectId+"?projectId="+$("#select_project").val()).then(response => {
+                        if (response.code == 0){
+                            self.caseModuleList = response.data.list
+                        }else{
+                            swal("过滤错误",response.message,'error')
+                        }
+                    })
+                }else {
+                    this.$fetch(this.$api.casModuleject).then(response => {
+                        if (response.code == 0){
+                            self.caseModuleList = response.data.list
+                        }else{
+                            swal("过滤错误",response.message,'error')
+                        }
+                    })
+                }
+            },
+
             addCaseProject:function(){
                 $("#addCaseProjectModal").modal()
             },
