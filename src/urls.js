@@ -17,6 +17,7 @@ const base = {
     generateReportUrl:"/api/common/generateReport",
     logUrl:'/api/common/watchLog',
     watchReport:"/api/common/watchReport",
+    report:"/html",
     execScriptUrl:'/api/common/execScript',
     findExecResult:"/api/common/findResult",
     reportDownload:'/api/common/download',
@@ -25,7 +26,9 @@ const base = {
     checkCronUrl:"/api/common/checkCron",
     imgUrl:"/api/common/upload",
     categoryurl:"/api/category",
-
+    casLogin:"/api/case/caslogin",
+    casProject:"/api/case/project",
+    casModuleject:"/api/case/module",
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 

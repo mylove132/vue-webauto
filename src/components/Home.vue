@@ -73,10 +73,8 @@
         </div>
         <div class="col-md-10" id="showIndex" style="display: block">
             <h1>welcome to okay jmeter web platform !!!</h1>
-
         </div>
     </div>
-
 </template>
 
 <script>

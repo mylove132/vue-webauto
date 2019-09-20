@@ -27,6 +27,12 @@ export default new Router({
             component: () => import( './components/Project.vue')
         },
         {
+            //meta:{requireAuth:true},
+            path: '/case',
+            name: 'case',
+            component: () => import( './components/Cases.vue')
+        },
+        {
            //meta:{requireAuth:true},
             path: '/report',
             name: 'report',

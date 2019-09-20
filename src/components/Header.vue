@@ -37,6 +37,12 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
+                        <router-link  class="nav-link" to="/case">
+                            <i class="far fa-clone"></i>
+                            用例中心
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/task">
                             <i class="fa fa-bell"></i>
                             定时任务

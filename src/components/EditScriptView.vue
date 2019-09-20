@@ -362,15 +362,6 @@
                 </div>
             </div>
         </div>
-        <footer class="tm-footer row tm-mt-small">
-            <div class="col-12 font-weight-light">
-                <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2018</b> All rights reserved.
-
-                    More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
-                </p>
-            </div>
-        </footer>
     </div>
 </template>
 
@@ -735,27 +726,38 @@
                     let cookieValue = document.getElementsByClassName('cookieValue')
                     let cookieDomain = document.getElementsByClassName('cookieDomain')
                     let cookiePath = document.getElementsByClassName('cookiePath')
-                    for (let i = 0; i < cookieKey.length; i++) {
-                        this.cStore.push({"cookieKey": cookieKey[i].value, "cookieValue": cookieValue[i].value,"domain":cookieDomain[i].value,"path":cookiePath[i].value})
+                    if (cookieKey.length > 0) {
+                        for (let i = 0; i < cookieKey.length; i++) {
+                            this.cStore.push({
+                                "cookieKey": cookieKey[i].value,
+                                "cookieValue": cookieValue[i].value,
+                                "domain": cookieDomain[i].value,
+                                "path": cookiePath[i].value
+                            })
+                        }
                     }
                     let headerKey = document.getElementsByClassName('headerName')
                     let headerValue = document.getElementsByClassName('headerValue')
-                    for (let i = 0; i < headerKey.length; i++) {
-                        this.hStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
+                    if(headerKey.length > 0) {
+                        for (let i = 0; i < headerKey.length; i++) {
+                            this.hStore.push({"headerKey": headerKey[i].value, "headerValue": headerValue[i].value})
+                        }
                     }
                     let paramsKey = document.getElementsByClassName('paramName')
                     let paramsValue = document.getElementsByClassName('paramValue')
-                    for (let i = 0; i < paramsKey.length; i++) {
-                        this.pStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
+                    if (paramsKey.length > 0) {
+                        for (let i = 0; i < paramsKey.length; i++) {
+                            this.pStore.push({"paramskey": paramsKey[i].value, "paramsvalue": paramsValue[i].value})
+                        }
                     }
                     let pm;
                     let paramValue = $("#requestParam").val();
-                    if (paramsKey.length != 0 && paramValue == '[]'){
+                    if (this.pStore.length != 0){
                         pm = JSON.stringify(this.pStore)
-                    } else if (paramsKey.length == 0 && paramValue != ''){
+                    } else if (this.pStore.length == 0 && paramValue != ''){
                         pm = paramValue
-                    } else {
-                        pm = JSON.stringify(this.pStore)
+                    } else if (this.pStore.length == 0 && paramValue == '') {
+                        pm = null
                     }
                     this.bus.$emit('loading', true);
                     this.$put(this.$api.scriptUrl, this.qs.stringify({

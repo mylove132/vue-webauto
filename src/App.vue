@@ -2,6 +2,7 @@
   <div id="app">
     <Header></Header>
     <router-view></router-view>
+    <Footer></Footer>
     <Loading></Loading>
   </div>
 </template>
@@ -9,11 +10,13 @@
 <script>
   import Header from './components/Header'
   import Loading from './components/Loading'
+  import Footer from './components/Footer'
     export default {
         name: "app",
         components:{
             Header,
-            Loading
+            Loading,
+            Footer
         }
         // created:function () {
         //     if (sessionStorage.getItem("store")) {

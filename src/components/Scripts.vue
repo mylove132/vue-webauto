@@ -34,7 +34,7 @@
                                 <tr>
                                     <th nowrap="nowrap" scope="col">项目</th>
                                     <th nowrap="nowrap" scope="col">用户</th>
-                                    <th nowrap="nowrap" scope="col">脚本名称</th>
+                                    <th nowrap="nowrap" scope="col">接口名称</th>
                                     <th nowrap="nowrap" scope="col">请求方式</th>
                                     <th nowrap="nowrap" scope="col">接口类型</th>
                                     <th nowrap="nowrap" scope="col">压测时长</th>
@@ -46,7 +46,7 @@
                                     <th nowrap="nowrap" scope="col">参数值</th>-->
                                     <th scope="col">删除</th>
                                     <th scope="col">编辑</th>
-                                    <th scope="col">运行</th>
+                                    <th scope="col">压测运行</th>
                                     <th scope="col">服务器</th>
                                 </tr>
                                 </thead>
@@ -132,16 +132,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
-        <footer class="tm-footer row tm-mt-small">
-            <div class="col-12 font-weight-light">
-                <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2018</b> All rights reserved.
-
-                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="OK教育">OK教育</a> - Collect
-                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
-                </p>
-            </div>
-        </footer>
     </div>
 </template>
 

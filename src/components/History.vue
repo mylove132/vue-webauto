@@ -100,16 +100,6 @@
                 </div>
             </div>
         </div>
-        <footer class="tm-footer row tm-mt-small">
-            <div class="col-12 font-weight-light">
-                <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2018</b> All rights reserved.
-
-                    More Templates <a href="http://okjiaoyu.cn/" target="_blank" title="OK教育">OK教育</a> - Collect
-                    from <a href="http://okjiaoyu.cn/" title="网页模板" target="_blank">OK教育</a>
-                </p>
-            </div>
-        </footer>
     </div>
 </template>
 
@@ -211,7 +201,7 @@
                 this.$fetch(this.$api.watchReport+"?id="+id).then(
                     response => {
                         if (response.code == 0){
-                            window.open(response.data.staticUrl+"/"+response.data.md5+"/index.html","_blank")
+                            window.open(this.$api.report+"/"+response.data.md5+"/index.html","_blank")
                         }else {
                             swal("报告不存在",response.message,"error")
                         }
