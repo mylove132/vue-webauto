@@ -308,10 +308,10 @@
                                 <option v-for="project in caseProjectList" :value="project.id">{{project.name}}</option>
                             </select>
                             <input type="text" style="margin-bottom: 10px;width: 160px;height: 40px;margin-left: 100px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9"
-                                   id="searchModule" placeholder="模糊匹配模块名称" v-on:keyup="search">
+                                   id="searchModule" placeholder="模糊匹配模块名称">
                             <input type="button" value="SEARCH"
                                    style="height: 40px;background-color: #f5a623;border-radius: 3px;color: white;margin-bottom: 10px"
-                                   @click="search">
+                                   @click="searchModule">
                             <table class="table table-hover tm-table-small tm-product-table" style=''>
                                 <thead>
                                 <tr>
@@ -332,13 +332,18 @@
                                         {{module.env.env}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!module.status">
-                                        <select></select>
+                                        <select style="width: 150px;height: 40px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9;margin-bottom: 10px" id="selectEnvStatus">
+                                            <option value="0">请选择环境</option>
+                                            <option v-for="env in envList" :value="env.id">{{env.env}}</option>
+                                        </select>
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!module.status">
                                         {{module.project.name}}
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-else="!module.status">
-                                        <select></select>
+                                        <select style=" margin-bottom: 10px;width: 150px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="selectProjectStatus">
+                                            <option v-for="project in caseProjectList" :value="project.id">{{project.name}}</option>
+                                        </select>
                                     </td>
                                     <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" v-if="!module.status">
                                         {{module.name}}
@@ -353,7 +358,7 @@
                                     <!--<input type="text" id="urlId" v-bind:value="type.url"/>-->
                                     <!--</td>-->
                                     <td>
-                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="delModule(module.id)">
+                                        <a href="javascript:void(0);" class="tm-product-delete-link" @click="delCaseModule(module.id)">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                         </a>
                                     </td>
@@ -373,7 +378,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="addCaseProject()">添加项目</a>
+                            <a href="javascript:void(0);" class="btn btn-primary btn-block text-uppercase mb-3" @click="addCaseModule()">添加模块</a>
                         </div>
                     </div>
                 </div>
@@ -479,6 +484,38 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" id="addCaseModuleModal" role="dialog" aria-labelledby="gridSystemModalLabel" >
+                <div class="modal-dialog modal-lg" role="document" style="width: 1200px">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #567086;">
+                            <h4 class="modal-title" id="gridSystemModalLabel6" style="color: white">添加用例模块</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body" style="background-color: #2c3e50;">
+                            <div class="row" style="margin-left: 150px;margin-top: 35px">
+                                <div class="col-md-10">
+                                    <select style="width: 150px;height: 40px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9;margin-bottom: 10px;margin-left: -150px" id="selectEnv"
+                                            @change="filterModule">
+                                        <option value="0">请选择环境</option>
+                                        <option v-for="env in envList" :value="env.id">{{env.env}}</option>
+                                    </select>
+                                    <select style=" margin-bottom: 10px;width: 150px;height: 40px;margin-left: 80px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9" id="selectProject"
+                                            @change="filterModule">
+                                        <option value="0">请选择项目</option>
+                                        <option v-for="project in caseProjectList" :value="project.id">{{project.name}}</option>
+                                    </select>
+                                    <input type="text" style="margin-bottom: 10px;width: 160px;height: 40px;margin-left: 100px;border-radius: 3px;background-color: #394f62;color: white;border: 2px solid #4084c9"
+                                           id="inputModule" placeholder="模块名称">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="background-color: #567086;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color:#ffeeba;border-radius: 10px">Close</button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 10px" @click="addCaseModuleSubmit">添加</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
         </div>
     </div>
 </template>
@@ -507,7 +544,7 @@
                     this.envList = response.data
                 }
             });
-            this.$fetch(this.$api.casModuleject).then(response => {
+            this.$fetch(this.$api.casModule).then(response => {
                 if (response.code == 0){
                     response.data.list.forEach(v=>{
                         v.status = false;
@@ -555,7 +592,18 @@
         },
         methods:{
 
-
+            searchModule:function(){
+                let self = this;
+                this.$fetch(this.$api.searchKeyword+"?keyword="+$("#searchModule").val()).then(
+                    response => {
+                        if (response.code == 0){
+                            self.caseModuleList = response.data.list
+                        }else{
+                            swal("搜索错误",response.message,'error')
+                        }
+                    }
+                )
+            },
             filterModule:function(){
                 const self = this;
                 if ($("#select_project").val() == 0 && $("#select_env").val() != 0){
@@ -583,7 +631,7 @@
                         }
                     })
                 }else {
-                    this.$fetch(this.$api.casModuleject).then(response => {
+                    this.$fetch(this.$api.casModule).then(response => {
                         if (response.code == 0){
                             self.caseModuleList = response.data.list
                         }else{
@@ -593,6 +641,110 @@
                 }
             },
 
+            addCaseModule:function(){
+                $("#addCaseModuleModal").modal()
+            },
+            delCaseModule:function(moduleId){
+                let self = this
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to delete this!",
+                    type: 'warning',
+                    background:'#EEEEE0',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#f5a623',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function(isConfirm) {
+                    if (isConfirm) {
+                        self.$del(self.$api.casModule+"?moduleId="+moduleId).then(response => {
+                            if (response.code == 0) {
+                                swal(
+                                    'Deleted!',
+                                    'this env have delete.',
+                                    'success'
+                                );
+                                self.$fetch(self.$api.casModule).then(response => {
+                                    if (response.code == 0){
+                                        self.caseModuleList = response.data.list
+                                    }
+                                });
+                            }
+                        })
+                    }
+                })
+
+            },
+            editModule:function(module,index){
+                module.status = true;
+                this.$set(this.caseModuleList, index, module);
+            },
+            saveModule:function(moduleId){
+                if ($("#selectEnvStatus").val() == 0){
+                    swal("请选择环境","请选择环境","warning")
+                    return;
+                }
+                if ($("#selectProjectStatus").val() == 0){
+                    swal("请选择项目","请选择项目","warning")
+                    return;
+                }
+                if ($("#moduleId").val() == 0){
+                    swal("请输入模块名称","请输入模块名称","warning")
+                    return;
+                }
+                const self = this;
+                self.$put(self.$api.casModule,self.qs.stringify({
+                    id:moduleId,
+                    name:$("#moduleId").val(),
+                    projectId:$("#selectProjectStatus").val(),
+                    envId:$("#selectEnvStatus").val()
+                })).then(response => {
+                    if (response.code == 0){
+                        swal("success","更新成功","success");
+                        this.$fetch(this.$api.casModule).then(response => {
+                            if (response.code == 0){
+                                self.caseModuleList = response.data.list;
+                            }
+                        });
+                    } else{
+                        swal("success",response.message,"error");
+                    }
+                })
+            },
+            addCaseModuleSubmit:function(){
+                if ($("#selectEnv").val() == 0){
+                    swal("请选择环境","请选择环境","warning")
+                    return;
+                }
+                if ($("#selectProject").val() == 0){
+                    swal("请选择项目","请选择项目","warning")
+                    return;
+                }
+                if ($("#inputModule").val() == 0){
+                    swal("请输入模块名称","请输入模块名称","warning")
+                    return;
+                }
+                const self = this;
+                this.$post(this.$api.casModule,this.qs.stringify({
+                    name:$("#inputModule").val(),
+                    projectId:$("#selectProject").val(),
+                    envId:$("#selectEnv").val()
+                })).then(
+                    response => {
+                        if (response.code == 0){
+                            $("#addCaseModuleModal").modal("hide")
+                            swal("success","添加成功","success");
+                            this.$fetch(this.$api.casModule).then(response => {
+                                if (response.code == 0){
+                                    self.caseModuleList = response.data.list;
+                                }
+                            });
+                        } else{
+                            swal("success",response.message,"error");
+                        }
+                    }
+                )
+            },
             addCaseProject:function(){
                 $("#addCaseProjectModal").modal()
             },
@@ -614,7 +766,6 @@
                 })
             },
             delPro:function(proId){
-
                 let self = this
                 swal({
                     title: 'Are you sure?',

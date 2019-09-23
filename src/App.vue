@@ -2,8 +2,9 @@
   <div id="app">
     <Header></Header>
     <router-view></router-view>
+      <Loading></Loading>
     <Footer></Footer>
-    <Loading></Loading>
+
   </div>
 </template>
 

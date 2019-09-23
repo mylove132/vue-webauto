@@ -29,13 +29,14 @@ const base = {
 
     envUrl:'/api/common/env',
 
+    searchKeyword:'/api/search/keyword',
     searchModuleByEnvId:'/api/search/moduleByEnvId',
     searchModuleByProjectId:'/api/search/moduleByProjectId',
     searchModuleByProjectIdAndEnvId:'/api/search/moduleByProjectIdAndEnvId',
 
     casLogin:"/api/case/caslogin",
     casProject:"/api/case/project",
-    casModuleject:"/api/case/module",
+    casModule:"/api/case/module",
     wsUrl : 'ws://127.0.0.1:8000/ws/deploy/tasks/'
 }
 
